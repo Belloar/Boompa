@@ -6,5 +6,7 @@ namespace Boompa.Entities.Identity
     {
         public string RoleName { get; set; }
         public string Description { get; set; }
+        public ICollection<UserRole> Roles = new HashSet<UserRole>();
+        
     }
 }

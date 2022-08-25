@@ -5,7 +5,6 @@
        Hatchling=1,
        Cadet,
        Private,
-
        Wizard,
 
     }

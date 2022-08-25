@@ -12,7 +12,19 @@ namespace Boompa.Entities
         public string LastName { get; set; }
         public string Email { get; set; }
         public int Age { get; set; }
+        public byte[] ProfilePicture { get; set; }
         public Rank Rank { get; set; }
-        public string Status { get; set; }
+        public int DairyId { get; set; }
+        public Diary Diary { get; set; }
+        public bool Status { get; set; }
+        public bool PaidInTickets { get; set; }
+        public bool PaidInCoins { get; set; }
+        public int NoOfTickets { get; set; }
+        public int NoOfCoins { get; set; }
+        public int ExpPoints { get; set; }
+        public HashSet<Category> ChallengedCategories { get; set; }
+        
+       
+
     }
 }
