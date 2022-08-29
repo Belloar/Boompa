@@ -9,7 +9,7 @@ namespace Boompa.Entities
         public User User { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string PhoneNumber
+        public string PhoneNumber { get; set; }
         public byte[] ProfilePicture { get; set; }
         
     }

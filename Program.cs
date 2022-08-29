@@ -1,8 +1,16 @@
+using Boompa.Context;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
+//var connectionString = builder.Configuration.GetConnectionString("MySqlString");
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseMySql(builder.Configuration.GetConnectionString("MySqlString"), new MySqlServerVersion(
+              new Version(8, 0, 29))));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

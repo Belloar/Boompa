@@ -22,7 +22,7 @@ namespace Boompa.Entities
         public int NoOfTickets { get; set; }
         public int NoOfCoins { get; set; }
         public int ExpPoints { get; set; }
-        public HashSet<Category> ChallengedCategories { get; set; }
+        public ICollection<Category> ChallengedCategories = new HashSet<Category>();
         
        
 
