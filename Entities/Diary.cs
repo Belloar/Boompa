@@ -9,7 +9,7 @@ namespace Boompa.Entities
         public User User { get; set; }
         public int TotalVists { get; set; }
         public string DisplayMessage { get; set; }
-        public Dictionary<Category, int> Vists { get; set; }
+        public Dictionary<Category,int> Vists { get; set; }
         public Dictionary<Category, int> CategoriesToday { get; set; }
         public int CoinsEarned { get; set; }
         public int TicketsEarned { get; set; }

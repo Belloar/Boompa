@@ -8,13 +8,13 @@ namespace Boompa.Entities
     {
         public int UserId { get; set; }
         public User User { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public int Age { get; set; }
+        public string School { get; set; }
         public byte[] ProfilePicture { get; set; }
         public Rank Rank { get; set; }
-        public int DairyId { get; set; }
+        public int DiaryId { get; set; }
         public Diary Diary { get; set; }
         public bool Status { get; set; }
         public bool PaidInTickets { get; set; }
