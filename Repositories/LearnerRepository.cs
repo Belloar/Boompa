@@ -14,7 +14,7 @@ namespace Boompa.Repositories
         {
             _context = context;
         }
-        public async Task<bool> CreateLearnerAsync(LearnerDTO.CreateRequestModel requestModel, CancellationToken cancellationToken,User user)
+        public async Task<int> CreateAsync(LearnerDTO.CreateRequestModel requestModel, CancellationToken cancellationToken,User user)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var learner = new Learner
@@ -27,8 +27,13 @@ namespace Boompa.Repositories
 
             };
             await _context.Learners.AddAsync(learner,cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
-            return true;
+            var result = await _context.SaveChangesAsync(cancellationToken);
+            return result;
+        }
+
+        public Task<int> DeleteAsync(int id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<Learner> GetLearnerAsync(int id)
@@ -46,9 +51,11 @@ namespace Boompa.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateLearnerAsync(LearnerDTO.CreateRequestModel requestModel, CancellationToken cancellationToken)
+        public Task<int> UpdateAsync(LearnerDTO.CreateRequestModel requestModel, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
+
+       
     }
 }

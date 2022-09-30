@@ -14,7 +14,13 @@ namespace Boompa.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Learner> Learners { get; set; }
+        public DbSet<Administrator> Administrators { get; set; }
         public DbSet<Diary> Diaries { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Option> Options { get; set; }
+        public DbSet<SourceMaterial> SourceMaterials { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
 
         protected internal virtual void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,9 +1,12 @@
-﻿namespace Boompa.Entities
+﻿using Boompa.Entities.Base;
+
+namespace Boompa.Entities
 {
-    public class SourceMaterial
+    public class SourceMaterial : AuditableEntity
     {
-        public int Id { get; set; }
+        public int CategoryId { get; set; }
+        public int QuestionId { get; set; }
         public string MediaType { get; set; }
-        public string Media { get; set; }
+        public string Path { get; set; }
     }
 }

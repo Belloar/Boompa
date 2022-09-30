@@ -6,7 +6,8 @@ namespace Boompa.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<Question> Questions { get; set; }
+        public ICollection<SourceMaterial> Materials { get; set; }
+        public ICollection<Question> Questions { get; set; }
         
          
     }
