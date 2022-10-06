@@ -7,6 +7,7 @@ namespace Boompa.Entities
         public int CategoryId { get; set; }
         public int QuestionId { get; set; }
         public string MediaType { get; set; }
+        public string Extension { get; set; }
         public string Path { get; set; }
     }
 }

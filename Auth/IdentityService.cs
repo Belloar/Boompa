@@ -1,4 +1,5 @@
-﻿using Boompa.Entities.Identity;
+﻿using BCrypt.Net;
+using Boompa.Entities.Identity;
 using Boompa.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -25,15 +26,11 @@ namespace Boompa.Auth
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 CreatedBy = model.UserName,
-                CreatedOn = DateTime.UtcNow,
-                IsDeleted = false,
-                DeletedBy = null,
-                DeletedOn = null,
-                LastModifiedBy = null,
-                LastModifiedOn = null,
+                UserRoles =
+                
             };
             if (CheckEmail(model.Email)) user.IsEmailConfirmed = true; else user.IsEmailConfirmed = false;
-            user.Password = model.Password;//Hashsalt
+            user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);//Hashsalt
             //Hashpassword here before assigning it
             return _repository.CreateAsync(user, cancellationToken);
         }
@@ -49,10 +46,10 @@ namespace Boompa.Auth
             }
             user.Email = model.Email;
             user.PhoneNumber = model.PhoneNumber;
-            user.LastModifiedBy = credentials.Username;
+            user.LastModifiedBy = credentials.UserName;
             user.LastModifiedOn = DateTime.UtcNow;
 
-            var result = await _repository.UpdateAsync(credentials.Userid, user, cancellationToken);
+            var result = await _repository.UpdateAsync(credentials.UserId, user, cancellationToken);
             return result;
 
         }
@@ -82,7 +79,7 @@ namespace Boompa.Auth
             throw new NotImplementedException();
         }
 
-        public async Task<IdentityDTO.ValidatedUserModel> ValidateUser(string email)
+        public async Task<IdentityDTO.ValidUserModel> ValidateUser(string email)
         {
             var user = await _repository.GetUserAsync(email);
             if (user == null)
@@ -90,10 +87,10 @@ namespace Boompa.Auth
                 return null;
 
             }
-            var model = new IdentityDTO.ValidatedUserModel
+            var model = new IdentityDTO.ValidUserModel
             {
-                Userid = user.Id,
-                Username = user.UserName,
+                UserId = user.Id,
+                UserName = user.UserName,
                 Email = user.Email,
             };
             return model;
@@ -104,22 +101,27 @@ namespace Boompa.Auth
             return result;
         }
 
-        public string GenerateToken(IdentityDTO.ValidatedUserModel validUser)
+        public async Task<string> GenerateToken(User validUser)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
             var credentials = new SigningCredentials(securityKey,SecurityAlgorithms.HmacSha256);
 
             IList<Claim> claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier,validUser.Username),
+                new Claim(ClaimTypes.NameIdentifier,validUser.UserName),
                 new Claim(ClaimTypes.Email,validUser.Email),
                     
             };
-            foreach (var role in validUser.Roles)
+            foreach (var userRole in validUser.UserRoles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role.Role.RoleName));
+                claims.Add(new Claim(ClaimTypes.Role, userRole.Role.RoleName));
             }
-            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: DateTime.UtcNow.AddMinutes(10), signingCredentials:credentials);
+            var token = new JwtSecurityToken(
+                _configuration["Jwt:Issuer"],
+                _configuration["Jwt:Audience"],
+                claims,
+                expires: DateTime.UtcNow.AddMinutes(10),
+                signingCredentials:credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
 
@@ -133,6 +135,11 @@ namespace Boompa.Auth
                 return null;
             }
             return user;
+        }
+
+        public Task<int> AddRoleAsync(string role, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -12,9 +12,10 @@ namespace Boompa.Auth
         Task<User> GetUserAsync(string checkString);
         Task<int> DeleteAsync(int id, CancellationToken cancellationToken);
         bool CheckEmail(string email);
-        Task<IdentityDTO.ValidatedUserModel> ValidateUser(string email);
-        string GenerateToken(IdentityDTO.ValidatedUserModel model);
+        Task<IdentityDTO.ValidUserModel> ValidateUser(string email);
+        Task<string> GenerateToken(User model);
         User AuthenticateUser(string username, string password);
+        Task<int>AddRoleAsync(string role, CancellationToken cancellationToken);
 
     }
 }

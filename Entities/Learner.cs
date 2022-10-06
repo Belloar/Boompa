@@ -8,8 +8,8 @@ namespace Boompa.Entities
     {
         public int UserId { get; set; }
         public User User { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public int Age { get; set; }
         public string School { get; set; }
         public byte[] ProfilePicture { get; set; }

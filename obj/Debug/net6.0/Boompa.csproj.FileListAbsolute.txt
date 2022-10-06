@@ -37,7 +37,6 @@ C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\MessagePack.dll
 C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\MessagePack.Annotations.dll
 C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\Microsoft.AspNetCore.Razor.Language.dll
 C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
-C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\Microsoft.Build.Locator.dll
 C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\Microsoft.CodeAnalysis.AnalyzerUtilities.dll
 C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\Microsoft.CodeAnalysis.dll
 C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\Microsoft.CodeAnalysis.CSharp.dll
@@ -264,3 +263,6 @@ C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\runtimes\win\lib\
 C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\BCrypt.Net-Next.dll
 C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\Microsoft.Build.dll
+C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\Microsoft.Build.Framework.dll
+C:\Users\ABD'RAHMAN BELLO\source\repos\Boompa\bin\Debug\net6.0\Microsoft.NET.StringTools.dll

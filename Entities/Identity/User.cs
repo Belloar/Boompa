@@ -12,6 +12,6 @@ namespace Boompa.Entities.Identity
         public bool IsEmailConfirmed { get; set; }
         public Learner Learner { get; set; } 
         public Administrator Administrator { get; set; }
-        public ICollection<UserRole> Roles = new HashSet<UserRole>();
+        public ICollection<UserRole> UserRoles = new HashSet<UserRole>();
     }
 }

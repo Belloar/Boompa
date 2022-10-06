@@ -10,11 +10,11 @@ namespace Boompa.Entities
         public int TotalVists { get; set; }
         public string DisplayMessage { get; set; }
         public string CategoryVisited { get; set; }
-        public int Visits { get; set; }
-       /* public Dictionary<string,int> CategoryVists { get; set; }
-        public Dictionary<string, int> CategoriesToday { get; set; }*/
+        public int VisitId { get; set; }
+        public List<Visit> Visit { get; set; }
         public int CoinsEarned { get; set; }
         public int TicketsEarned { get; set; }
-        public DateTime Duration { get; set; }
+        
+        
     }
 }
