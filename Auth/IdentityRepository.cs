@@ -1,4 +1,5 @@
-﻿using Boompa.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using Boompa.Context;
 using Boompa.DTO;
 using Boompa.Entities.Identity;
 
@@ -29,7 +30,8 @@ namespace Boompa.Auth
         public async Task<Role> GetRoleAsync(string role)
         {
            var result = _context.Roles.SingleOrDefault(r => r.RoleName.ToLower() == role.ToLower());
-            if (result == null) throw ArgumentNullException("");
+            if (result == null || result.IsDeleted == true) return null;
+            return result;
             
         }
         public Task<User> GetUserAsync(int id)
@@ -40,14 +42,18 @@ namespace Boompa.Auth
         {
             throw new NotImplementedException();
         }
-        public User GetUserAsync(string checkString, string password)
+        public async Task<User> GetUserAsync(string checkString, string password)
         {
             if(checkString.Contains('@'))
             {
-                return _context.Users.FirstOrDefault(x => x.Email.ToLower() == checkString.ToLower() && x.Password == password);
+                var user1 = _context.Users.FirstOrDefault(u => u.Email.ToLower() == checkString.ToLower());
+                if (user1 != null && BCrypt.Net.BCrypt.Verify(password, user1.Password)) return user1;
+                return null;
             }
-            return _context.Users.FirstOrDefault(x => x.UserName.ToLower() == checkString.ToLower() && x.Password == password);
-            
+            var user = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == checkString.ToLower());
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password)) return user;
+            return null;
+
         }
         public Task<IEnumerable<User>> GetUsersAsync()
         {
@@ -66,7 +72,10 @@ namespace Boompa.Auth
             return result;
 
         }
-        
 
+        public Task<int> UpdateUserRole(Role role, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

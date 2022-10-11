@@ -19,8 +19,8 @@ namespace Boompa.Entities
         public bool Status { get; set; }
         public bool PaidInTickets { get; set; }
         public bool PaidInCoins { get; set; }
-        public int NoOfTickets { get; set; }
-        public int NoOfCoins { get; set; }
+        public int TicketCount { get; set; }
+        public int CoinCount { get; set; }
         public int ExpPoints { get; set; }
         public ICollection<Category> ChallengedCategories = new HashSet<Category>();
         

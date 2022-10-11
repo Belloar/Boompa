@@ -9,7 +9,7 @@ namespace Boompa.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize("User")]
+    [Authorize]
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
@@ -24,11 +24,9 @@ namespace Boompa.Controllers
         [HttpGet]
         public async Task<IActionResult> UserLogin([FromQuery] IdentityDTO.UserLoginModel model)
         {
-            if(model == null)
-            {
-                return BadRequest("the input fields are required");
-            }
-            var user = _identityService.AuthenticateUser(model.CheckString, model.Password);
+            if(model == null) return BadRequest("the input fields are required");
+           
+            var user = await _identityService.AuthenticateUser(model.CheckString, model.Password);
             if(user == null)
             {
                 return NotFound($"A user with the username or email does not exist");
@@ -48,7 +46,8 @@ namespace Boompa.Controllers
             return Ok(validUser);
         }
         [HttpPost]
-        public async Task<IActionResult> Createuser([FromBody] IdentityDTO.CreateRequestModel model)
+        [AllowAnonymous]
+        public async Task<IActionResult> Createuser([FromForm] IdentityDTO.CreateRequestModel model)
         {
             if(model == null) return BadRequest("input credentials please");
             var cancellationToken = new CancellationToken();
