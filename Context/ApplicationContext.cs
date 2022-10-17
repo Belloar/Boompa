@@ -21,7 +21,10 @@ namespace Boompa.Context
         public DbSet<Diary> Diaries { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Option> Options { get; set; }
-        public DbSet<SourceMaterial> SourceMaterials { get; set; }
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<Photo> Photos { get; set; }
+        public DbSet<Audio> Audios { get; set; }
+        public DbSet<QuestionPhoto> QuestionPhotos { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Visit> Visits { get; set; }
 
@@ -48,7 +51,7 @@ namespace Boompa.Context
                 });
 
 
-            modelBuilder.Entity<User>()
+            /*modelBuilder.Entity<User>()
                  .HasData(
                 new User
                 {
@@ -59,10 +62,7 @@ namespace Boompa.Context
                     PhoneNumber = "05062222",
                     IsEmailConfirmed = true,
                     Hashsalt = Guid.NewGuid().ToString(),
-                    UserRoles = new HashSet<UserRole> {
-                        new UserRole { UserId = 1, RoleId = 1 }
 
-                    }
                 },
                 new User
                 {
@@ -73,12 +73,12 @@ namespace Boompa.Context
                     PhoneNumber = "05062222",
                     IsEmailConfirmed = true,
                     Hashsalt = Guid.NewGuid().ToString(),
-                    UserRoles = new HashSet<UserRole>
-                    {
-                        new UserRole { UserId = 2, RoleId = 1 }
 
-                    }
                 });
+            modelBuilder.Entity<UserRole>().HasData(
+                        new UserRole { Id = 1, UserId = 1, RoleId = 1 },
+                        new UserRole { Id = 2, UserId = 2, RoleId = 1 }
+                    );*/
         }
     }
 }

@@ -19,8 +19,7 @@ namespace Boompa.Controllers
         }
 
         [HttpPost]
-        [Authorize("Learner")]
-        public async Task<IActionResult> CreateLearner([FromBody] LearnerDTO.CreateRequestModel model)
+        public async Task<IActionResult> CreateLearner([FromForm] LearnerDTO.CreateRequestModel model)
         {
             var cancellationToken = new CancellationToken();
             if (model == null) return BadRequest("all fields must be filled");
@@ -28,7 +27,6 @@ namespace Boompa.Controllers
             {
                 var result = await _service.CreateLearner(model, cancellationToken);
                 return Ok("You have completed your profile setup");
-                
             }
             catch(ServiceException ex)
             {
@@ -37,7 +35,7 @@ namespace Boompa.Controllers
         }
 
 
-        [HttpDelete("{id}")]
+        [HttpPut("{id}")]
         [Authorize("Learner")]
         [Authorize("Administrator")]
         public async Task<IActionResult> DeleteLearner([FromQuery] int id)
@@ -53,13 +51,19 @@ namespace Boompa.Controllers
         [Authorize("Administrator")]
         public async Task<IActionResult> GetLearner([FromQuery]int id)
         {
-            var learner = await _service.GetLearner(id);
-            if (learner  == null) return NotFound("a user with this username or password does not exist");
-            return Ok(learner);
+            try
+            {
+                var learner = await _service.GetLearner(id);
+                return Ok(learner);
+            }
+            catch(ServiceException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
 
-        [HttpGet("{alpha:checkString}")]//revisit data types of controller variables
+        [HttpGet]//revisit data types of controller variables
         [Authorize("Learner")]
         [Authorize("Administrator")]
         public async Task<IActionResult> GetLearner([FromQuery] string checkString)
@@ -78,6 +82,14 @@ namespace Boompa.Controllers
                 return NotFound(ex.Message);
             }
         }
-       
+
+
+        [HttpGet]
+        [Authorize("Adminsitrator")]
+        public async Task<IActionResult> GetLearners()
+        {
+            var learners = await _service.GetLearners();
+            return Ok(learners);
+        }
     }
 }

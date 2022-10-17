@@ -10,8 +10,6 @@ namespace Boompa.Entities.Identity
         public string PhoneNumber { get; set; }
         public string Hashsalt { get; set; }
         public bool IsEmailConfirmed { get; set; }
-        public Learner Learner { get; set; } 
-        public Administrator Administrator { get; set; }
-        public ICollection<UserRole> UserRoles = new HashSet<UserRole>();
+        public ICollection<UserRole> Roles = new HashSet<UserRole>();
     }
 }

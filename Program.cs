@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Boompa.Auth;
+using Boompa.Interfaces.IRepository;
+using Boompa.Repositories;
+using Boompa.Services;
+using Boompa.Interfaces.IService;
+using Boompa.Implementations.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +18,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IIdentityRepository,IdentityRepository>();
 builder.Services.AddScoped <IIdentityService, IdentityService>();
+builder.Services.AddScoped<ILearnerRepository, LearnerRepository>();
+builder.Services.AddScoped<ILearnerService, LearnerService>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IAdminService,AdminService>();
+
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseMySql(builder.Configuration.GetConnectionString("MySqlString"), new MySqlServerVersion(
               new Version(8, 0, 29))));
 

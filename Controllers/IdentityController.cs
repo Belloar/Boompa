@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Boompa.Interfaces;
 using Boompa.Auth;
-
+using Boompa.Exceptions;
 
 namespace Boompa.Controllers
 {
@@ -39,21 +39,14 @@ namespace Boompa.Controllers
                 Token = await _identityService.GenerateToken(user),
                 Email = user.Email,
             };
-            foreach (var role in user.UserRoles)
+            foreach (var role in user.Roles)
             {
                 validUser.Roles.Add(role);
             }
             return Ok(validUser);
         }
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Createuser([FromForm] IdentityDTO.CreateRequestModel model)
-        {
-            if(model == null) return BadRequest("input credentials please");
-            var cancellationToken = new CancellationToken();
-            var result =  await _identityService.CreateAsync(model, cancellationToken);
-            if(result == 0) return BadRequest("I no sabi wetin sup comrade");//when i know what errors might occur rewrite this place
-            return Ok("account successfully created");
-        }
+
+
+        
     }
 }

@@ -18,31 +18,7 @@ namespace Boompa.Auth
             _repository = repository;
             _configuration = configuration;
         }
-        public Task<int> CreateAsync(IdentityDTO.CreateRequestModel model, CancellationToken cancellationToken)
-        {
-            var role = _repository.GetRoleAsync("user");
-            CheckEmail(model.Email);
-            var user = new User
-            {
-                UserName = model.UserName,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                CreatedBy = model.UserName,
-                Hashsalt = BCrypt.Net.BCrypt.GenerateSalt()
-                
-            };
-            if (CheckEmail(model.Email)) user.IsEmailConfirmed = true; else user.IsEmailConfirmed = false;
-            user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password,user.Hashsalt);
-            user.UserRoles = new HashSet<UserRole>
-                {
-                    new UserRole
-                    {
-                        RoleId = role.Id,
-                        UserId = user.Id
-                    }
-                };
-            return _repository.CreateAsync(user, cancellationToken);
-        }
+       
 
         public async Task<int> UpdateAsync(string email, IdentityDTO.UpdateRequestModel model, CancellationToken cancellationToken)
         {
@@ -91,14 +67,15 @@ namespace Boompa.Auth
                 UserId = user.Id,
                 UserName = user.UserName,
                 Email = user.Email,
-                Roles = user.UserRoles 
+                Roles = user.Roles 
             };
             return model;
         }
-        public bool CheckEmail(string email)
+        public  bool CheckUser(string email)
         {
-            var result = email.Contains('@');
+            var result =  _repository.CheckUser(email);
             return result;
+            
         }
         public Task<string> GenerateToken(User validUser)
         {
@@ -111,7 +88,7 @@ namespace Boompa.Auth
                 new Claim(ClaimTypes.Email,validUser.Email),
                     
             };
-            foreach (var userRole in validUser.UserRoles)
+            foreach (var userRole in validUser.Roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, userRole.Role.RoleName));
             }
@@ -139,12 +116,13 @@ namespace Boompa.Auth
             throw new NotImplementedException();
         }
 
-        public async Task<int> UpdateUserRole(string role, CancellationToken cancellationToken)
+        public async Task<int> UpdateUserRole(int id,string role, CancellationToken cancellationToken)
         {
             var newRole = await _repository.GetRoleAsync(role);
             if (newRole == null) throw new NotFoundException("this role does not exist or is already deleted");
-            var result = await _repository.UpdateUserRole(newRole,cancellationToken);
+            var result = await _repository.UpdateUserRole(id,newRole,cancellationToken);
             return result;
         }
+       
     }
 }

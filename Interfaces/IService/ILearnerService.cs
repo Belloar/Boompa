@@ -6,10 +6,10 @@ namespace Boompa.Interfaces.IService
     public interface ILearnerService
     {
         Task<int> CreateLearner(LearnerDTO.CreateRequestModel model,CancellationToken cancellationToken);
-        Task<IEnumerable<SourceMaterial>> ConversationCompiler(string MaterialName);
+        Task<IEnumerable<Article>> ConversationCompiler(string MaterialName);
         Task<int> DeleteLearner(int id,CancellationToken cancellationToken);
-        Task<IEnumerable<SourceMaterial>>LoadCategoryMaterials(string categoryName);
-        Task<SourceMaterial> GetMaterial(string MaterialName);
+        Task<IEnumerable<Article>>LoadCategoryMaterials(string categoryName);
+        Task<Article> GetMaterial(string MaterialName);
         Task<Learner> GetLearner(int id);
         Task<Learner> GetLearner(string checkString);
         Task<IEnumerable<Learner>> GetLearners();

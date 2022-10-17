@@ -1,6 +1,7 @@
 ﻿using Boompa.Auth;
 using Boompa.DTO;
 using Boompa.Entities;
+using Boompa.Entities.Identity;
 using Boompa.Exceptions;
 using Boompa.Interfaces.IRepository;
 using Boompa.Interfaces.IService;
@@ -10,36 +11,80 @@ namespace Boompa.Services
 {
     public class LearnerService : ILearnerService
     {
-        private readonly ILearnerRepository _learnerRepo;
-        private readonly IIdentityService _identityService;
-        public LearnerService(ILearnerRepository repository,IIdentityService identityService)
+        private readonly ILearnerRepository _learnerRepository;
+        private readonly IIdentityRepository _identityRepository;
+        public LearnerService(ILearnerRepository repository,IIdentityRepository identityRepository)
         {
-            _learnerRepo = repository;
-            _identityService = identityService;
+            _learnerRepository = repository;
+            _identityRepository = identityRepository;
         }
-        public Task<IEnumerable<SourceMaterial>> ConversationCompiler(string MaterialName)
+        public Task<IEnumerable<Article>> ConversationCompiler(string MaterialName)
         {
             throw new NotImplementedException();
         }
 
         public async Task<int> CreateLearner(LearnerDTO.CreateRequestModel model, CancellationToken cancellationToken)
         {
-            
-            var learner = new Learner
+            cancellationToken.ThrowIfCancellationRequested();
+            var role1 = await _identityRepository.GetRoleAsync("user");
+            var role2 = await _identityRepository.GetRoleAsync("learner");
+            if (_identityRepository.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
+
+            var user = new User
             {
-                UserId = model.UserId,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Age = model.Age,
-                CreatedBy = $"{model.FirstName} {model.LastName}"
+                UserName = model.UserName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                CreatedBy = model.UserName,
+                Hashsalt = BCrypt.Net.BCrypt.GenerateSalt(),
+                IsEmailConfirmed = true,
+                
 
             };
-            var result = await _learnerRepo.AddLearner(learner, cancellationToken);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, user.Hashsalt);
+            await _identityRepository.CreateAsync(user, cancellationToken);
+            user.Roles = new HashSet<UserRole>()
+            {
+                new UserRole
+                {
+                    User = user,
+                    RoleId = role1.Id,
+                    Role = role1,
+                    UserId = user.Id
+                },
+                new UserRole
+                {
+                    Role = role2,
+                    RoleId = role2.Id,
+                    User = user,
+                    UserId = user.Id
+                }
+            };
+            await _identityRepository.AddUserRole(user.Roles , cancellationToken);
+            var diary = new Diary()
+            {
+                UserId = user.Id,
+                User = user
+            };
+            var learner = new Learner
+            {
+                UserId = user.Id,
+                Age = model.Age,
+                DiaryId = diary.Id,
+                Diary = diary,
+                CreatedBy = model.UserName,
+                CreatedOn = DateTime.UtcNow,
+                CoinCount = 100,
+                TicketCount = 20
+            };
+
+            var result = await _learnerRepository.AddLearner(learner, cancellationToken);
+            if (result == 0) throw new ServiceException("unable to add learner");
             return result;
         }
         public async Task<int> DeleteLearner(int id, CancellationToken cancellationToken)
         {
-            var user = await _identityService.GetUserAsync(id);
+            var user = await _identityRepository.GetUserAsync(id);
             if (user == null) throw new IdentityException("a user with this username or email address does not exist");
             var deleteModel = new LearnerDTO.DeleteModel()
             {
@@ -48,37 +93,38 @@ namespace Boompa.Services
                 Deletedby = user.UserName,
                 DeletedOn = DateTime.UtcNow,
             };
-            var result = await _learnerRepo.DeleteLearner(deleteModel, cancellationToken);
+            var result = await _learnerRepository.DeleteLearner(deleteModel, cancellationToken);
             return result;
         }
 
-        public Task<Learner> GetLearner(int id)
+        public async Task<Learner> GetLearner(int id)
         {
-            var result = _learnerRepo.GetLearner(id);
-            if (result == null) return null;
+            var result = await _learnerRepository.GetLearner(id);
+            if (result == null || result.IsDeleted == true) throw new ServiceException("learner not found");
             return result;
         }
 
         public async Task<Learner> GetLearner(string checkString)
         {
-            var user = await _identityService.GetUserAsync(checkString);
-            if (user == null) throw new IdentityException("a user with this username or email does not exist");
-            var learner = await _learnerRepo.GetLearner(user.Id);
-            if (learner == null)  throw new ServiceException("this user is not a learner");
+            var user = await _identityRepository.GetUserAsync(checkString);
+            if (user == null || user.IsDeleted == true) throw new IdentityException("a learner with this username or email does not exist");
+            var learner = await _learnerRepository.GetLearner(user.Id);
+            if (learner == null)  throw new ServiceException("this learner does not exist");
             return learner;
         }
 
-        public Task<IEnumerable<Learner>> GetLearners()
+        public async Task<IEnumerable<Learner>> GetLearners()
+        {
+            var learners = await _learnerRepository.GetLearners();
+            return learners;
+        }
+
+        public Task<Article> GetMaterial(string MaterialName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<SourceMaterial> GetMaterial(string MaterialName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<SourceMaterial>> LoadCategoryMaterials(string categoryName)
+        public Task<IEnumerable<Article>> LoadCategoryMaterials(string categoryName)
         {
             throw new NotImplementedException();
         }

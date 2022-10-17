@@ -44,9 +44,9 @@ namespace Boompa.Repositories
             if (learner == null || learner.IsDeleted == true) throw new ServiceException("a learner with this username or email address does not exist");
             return learner;
         }
-        public Task<IEnumerable<Learner>> GetLearners(bool byStatus = false)
+        public async Task<IEnumerable<Learner>> GetLearners(bool byStatus = false)
         {
-            throw new NotImplementedException();
+            return byStatus ? _context.Learners.Where(l => l.Status == true).ToList() : _context.Learners.ToList(); 
         }
         public Task<int> UpdateLearner(int learnerId, LearnerDTO.UpdateRequestModel model, CancellationToken cancellationToken)
         {
