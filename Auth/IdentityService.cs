@@ -23,7 +23,7 @@ namespace Boompa.Auth
         public async Task<int> UpdateAsync(string email, IdentityDTO.UpdateRequestModel model, CancellationToken cancellationToken)
         {
             var user = new User();
-            var credentials = await AuthenticateUser(email);
+            var credentials = await _repository.GetUserAsync(email);
             if (credentials == null)
             {
                 return 0;
@@ -34,10 +34,11 @@ namespace Boompa.Auth
             user.LastModifiedBy = credentials.UserName;
             user.LastModifiedOn = DateTime.UtcNow;
 
-            var result = await _repository.UpdateAsync(credentials.UserId, user, cancellationToken);
+            var result = await _repository.UpdateAsync(credentials.Id, user, cancellationToken);
             return result;
 
         }
+       
         public Task<IEnumerable<User>> GetUsersAsync()
         {
             throw new NotImplementedException();
@@ -46,9 +47,10 @@ namespace Boompa.Auth
         {
             throw new NotImplementedException();
         }
-        public Task<User> GetUserAsync(string checkString)
+        public async Task<User> GetUserAsync(string searchString)
         {
-            throw new NotImplementedException();
+            var validUser = await _repository.GetUserAsync(searchString);
+            return validUser;
         }
         public Task<int> DeleteAsync(int id, CancellationToken cancellationToken)
         {
@@ -58,39 +60,24 @@ namespace Boompa.Auth
         {
             throw new NotImplementedException();
         }
-        public async Task<IdentityDTO.ValidUserModel> AuthenticateUser(string email)
-        {
-            var user = await _repository.GetUserAsync(email);
-            if (user == null) return null;
-            var model = new IdentityDTO.ValidUserModel
-            {
-                UserId = user.Id,
-                UserName = user.UserName,
-                Email = user.Email,
-                Roles = user.Roles 
-            };
-            return model;
-        }
-        public  bool CheckUser(string email)
-        {
-            var result =  _repository.CheckUser(email);
-            return result;
-            
-        }
-        public Task<string> GenerateToken(User validUser)
+        
+        
+        public Task<string> GenerateToken(IdentityDTO.ValidUser validUser)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
             var credentials = new SigningCredentials(securityKey,SecurityAlgorithms.HmacSha256);
 
             IList<Claim> claims = new List<Claim>()
             {
+                new Claim ("userId",validUser.UserId.ToString()),
                 new Claim(ClaimTypes.NameIdentifier,validUser.UserName),
-                new Claim(ClaimTypes.Email,validUser.Email),
+                new Claim(ClaimTypes.Email ,validUser.Email),
+                
                     
             };
             foreach (var userRole in validUser.Roles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, userRole.Role.RoleName));
+                claims.Add(new Claim(ClaimTypes.Role, userRole));
             }
             var token = new JwtSecurityToken(
                 _configuration["Jwt:Issuer"],
@@ -102,14 +89,33 @@ namespace Boompa.Auth
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
 
         }
-        public async Task<User> AuthenticateUser(string username, string password)
+        public async Task<IdentityDTO.ValidUser> AuthenticateUser(string searchString, string password)
         {
-            var user = await _repository.GetUserAsync(username, password);
-            if(user == null)
+            var isEmail = false;
+            var user = new User();
+            if (searchString.Contains('@')) isEmail = true;
+
+            if (isEmail) _ = await _repository.GetUserAsync(searchString,true);
+            user = await _repository.GetUserAsync(searchString);
+            if (user == null) throw new IdentityException("User doesn't exist");
+            if (!BCrypt.Net.BCrypt.Verify(password, user.Password)) throw new ServiceException("Invalid Username or Password");
+
+            //foreach(var userRole in user.Roles)
+            //{
+            //    var roleName = await _repository.GetRoleAsync(userRole.RoleId);
+            //}
+
+            var model = new IdentityDTO.ValidUser
             {
-                return null;
+                UserId = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+            };
+            foreach (var userRole in user.Roles)
+            {
+                model.Roles.Add(userRole.Role.RoleName);
             }
-            return user;
+            return model;
         }
         public Task<int> AddRoleAsync(string role, CancellationToken cancellationToken)
         {
@@ -123,6 +129,18 @@ namespace Boompa.Auth
             var result = await _repository.UpdateUserRole(id,newRole,cancellationToken);
             return result;
         }
-       
+        private static IEnumerable<Claim> GetClaims(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = handler.ReadJwtToken(token);
+
+            var claims = jwtSecurityToken.Claims;
+            return claims;
+        }
+
+        public Task<bool> CheckUser(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

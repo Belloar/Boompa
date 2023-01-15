@@ -11,8 +11,10 @@ namespace Boompa.Interfaces.IRepository
         Task<int> DeleteLearner(LearnerDTO.DeleteModel model,CancellationToken cancellationToken);
         Task<IEnumerable<Learner>> GetLearners(bool byStatus = false);
         Task<Learner> GetLearner(int id);
-        Task<int> UpdateLearner(int learnerId, LearnerDTO.UpdateRequestModel model, CancellationToken cancellationToken);
-        Task<int> UpdateLearner(int Userid, LearnerDTO.UpdateStatsModel model, CancellationToken cancellationToken);
+        Task<Learner> GetLearner(string searchString);
+
+        Task<int> UpdateLearner(Learner learner, CancellationToken cancellationToken);
+        
 
 
 

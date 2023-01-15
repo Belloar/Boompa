@@ -30,9 +30,9 @@ namespace Boompa.Auth
             return result;
         }
 
-        public bool CheckUser(string email)
+        public Task<bool> CheckUser(string email)
         {
-            return _context.Users.Any(u => u.Email.ToLower() == email.ToLower());
+            throw new NotImplementedException();
         }
 
         public async Task<int> CreateAsync(User user, CancellationToken cancellationToken)
@@ -53,27 +53,34 @@ namespace Boompa.Auth
             return result;
             
         }
-        public Task<User> GetUserAsync(int id)
+        public async Task<IEnumerable<string>> GetRoleAsync(int roleId)
         {
-            throw new NotImplementedException();
-        }
-        public Task<User> GetUserAsync(string checkString)
-        {
-            throw new NotImplementedException();
-        }
-        public async Task<User> GetUserAsync(string checkString, string password)
-        {
-            if(checkString.Contains('@'))
+            var roles = new List<string>();
+            var result =  _context.Roles.Where(r => r.Id == roleId).Select(r =>r);
+            if (result == null) return null;
+            foreach(var role in result)
             {
-                var user1 = _context.Users.FirstOrDefault(u => u.Email.ToLower() == checkString.ToLower());
-                if (user1 != null && BCrypt.Net.BCrypt.Verify(password, user1.Password)) return user1;
-                return null;
+                if (role.IsDeleted == true) continue;
+                roles.Add(role.RoleName);
             }
-            var user = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == checkString.ToLower());
-            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password)) return user;
-            return null;
+            return roles;
 
         }
+        public async Task<User> GetUserAsync(int id)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            return user;
+        }
+        public async Task<User> GetUserAsync(string searchString,bool isEmail)
+        {
+            if (isEmail) _ = _context.Users.FirstOrDefault(u => u.Email.ToLower() == searchString.ToLower());
+            var user =  _context.Users.FirstOrDefault(u => u.UserName.ToLower() == searchString.ToLower());
+            var userRoles = _context.UserRoles.Include(ur => ur.Role).Where(x => x.UserId == user.Id).Select(r => r) ;
+            foreach (var role in userRoles) user.Roles.Add(role);
+           
+            return user;
+        }
+       
         public Task<IEnumerable<User>> GetUsersAsync()
         {
             throw new NotImplementedException();

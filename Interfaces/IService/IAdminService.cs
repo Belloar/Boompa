@@ -7,8 +7,7 @@ namespace Boompa.Interfaces.IService
     public interface IAdminService
     {
         Task<int> CreateQuestionAsync(MaterialDTO.QuestionModel question,MaterialDTO.OptionModel option,CancellationToken cancellationToken);
-        Task<int> CreateAdminAsync(AdminDTO.CreateModel requestModel, CancellationToken cancellationToken);
-        Task<int> UpdateAdminAsync(AdminDTO.CreateModel requestModel, CancellationToken cancellationToken);
+        Task<int> CreateAdminAsync(AdminDTO.CreateModel model, CancellationToken cancellationToken);
         Task<int> CreateArticleAsync(MaterialDTO.ArticleModel article,CancellationToken cancellationToken);
         Task<int> CreateOptionAsync(MaterialDTO.OptionModel option, CancellationToken cancellationToken);
         Task<int> CreateChallengeAsync();
@@ -24,6 +23,7 @@ namespace Boompa.Interfaces.IService
         Task<Administrator> GetAdminAsync(string checkString);
         Task<IEnumerable<Learner>> GetLearnersAsync();
         Task<Learner> GetLearnerAsync(string name);
+        Task<int> UpdateAdminAsync(AdminDTO.UpdateModel model, CancellationToken cancellationToken);
         Task<int> UpdateQuestion();
         Task<int> UploadArticleAsync(IFormFile file,CancellationToken cancellationToken);
         Task<int> UploadImageAsync(IFormFile file, CancellationToken cancellationToken);

@@ -12,15 +12,17 @@ namespace Boompa.Implementations.Services
     {
         private readonly IAdminRepository _adminRepo;
         private readonly IIdentityRepository _identityRepo;
-            public AdminService(IAdminRepository repository,IIdentityRepository identityrepo)
+        private readonly ILearnerRepository _learnerRepository;
+            public AdminService(IAdminRepository repository, IIdentityRepository identityrepo, ILearnerRepository learnerRepository)
         {
             _adminRepo = repository;
             _identityRepo = identityrepo;
+            _learnerRepository = learnerRepository;
         }
         public async Task<int> CreateAdminAsync(AdminDTO.CreateModel model, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (_identityRepo.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
+            if (await _identityRepo.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
 
             var role1 = await _identityRepo.GetRoleAsync("user");
             var role2 = await _identityRepo.GetRoleAsync("Admin");
@@ -125,33 +127,44 @@ namespace Boompa.Implementations.Services
             throw new NotImplementedException();
         }
 
-        public Task<Administrator> GetAdminAsync(string adminName)
+        public async Task<Administrator> GetAdminAsync(string adminName)
         {
-            throw new NotImplementedException();
+            var admin = await _adminRepo.GetAdminAsync(adminName);
+            if (admin == null) throw new ServiceException("admin does not exist");
+            return admin;
         }
 
-        public Task<Administrator> GetAdminAsync(int id)
+        public async Task<Administrator> GetAdminAsync(int id)
         {
-            throw new NotImplementedException();
+            var admin = await _adminRepo.GetAdminAsync(id);
+            if (admin == null) throw new ServiceException("admin does not exist");
+            return admin;
         }
 
-        public Task<IEnumerable<Administrator>> GetAdminsAsync()
+        public async Task<IEnumerable<Administrator>> GetAdminsAsync()
         {
-            throw new NotImplementedException();
+            var admins = await _adminRepo.GetAdminsAsync();
+            if (admins == null) throw new ServiceException("An error occured while retrieving admins");
+            return admins;
         }
 
-        public Task<Learner> GetLearnerAsync(string name)
+        public async Task<Learner> GetLearnerAsync(string name)
         {
-            throw new NotImplementedException();
+            var learner = await _learnerRepository.GetLearner(name);
+            if (learner == null) throw new IdentityException("This learner does not exist");
+            return learner;
         }
 
         public Task<IEnumerable<Learner>> GetLearnersAsync()
         {
-            throw new NotImplementedException();
+            var result = _learnerRepository.GetLearners();
+            if (result == null) throw new ServiceException("An error was encountered during the process");
+            return result;
         }
 
-        public Task<int> UpdateAdminAsync(AdminDTO.CreateModel requestModel, CancellationToken cancellationToken)
+        public Task<int> UpdateAdminAsync(AdminDTO.UpdateModel model, CancellationToken cancellationToken)
         {
+            //cancellationToken.ThrowIfCancellationRequested();
             throw new NotImplementedException();
         }
 

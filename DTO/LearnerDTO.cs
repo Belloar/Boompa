@@ -1,10 +1,11 @@
 ﻿using Boompa.Entities;
+using Boompa.Enums;
 
 namespace Boompa.DTO
 {
     public class LearnerDTO
     {
-        public class CreateRequestModel
+        public class CreateRequest
         {
             public string UserName { get; set; }
             public string Password { get; set; }
@@ -13,19 +14,24 @@ namespace Boompa.DTO
             public int Age { get; set; }
             public string SchoolName { get; set; }
         }
-        public class UpdateRequestModel
+        public class UpdateInfo
         {
+            public string ModifierName { get; set; }
+            public int UserId { get; set; }
             public string? FirstName { get; set; }
             public string? LastName { get; set; }
             public string? Email { get; set; }
+            public string? School { get; set; }
             
         }
-        public class UpdateStatsModel
+        public class UpdateStats
         {
+            public int UserId { get; set; }
+            public int DiaryId { get; set; }
             public int TicketCount { get; set; }
             public int CoinCount { get; set; }
             public Visit Visit { get; set; }
-            public Diary Diary { get; set; }
+            
 
         }
         public class DeleteModel
@@ -35,13 +41,14 @@ namespace Boompa.DTO
             public string Deletedby { get; set; }
             public DateTime DeletedOn { get; set; }
         }
-        public class DisplayModel
+        public class LearnerInfo
         {
             public int UserId { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
-            public int CoinCount { get; set; }
-            public int TicketCount { get; set; }
+            public bool Status { get; set; }
+            public Rank Rank { get; set; }
+            public string? School { get; set; }
         }
     }
 }

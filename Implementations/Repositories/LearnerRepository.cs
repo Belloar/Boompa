@@ -44,18 +44,30 @@ namespace Boompa.Repositories
             if (learner == null || learner.IsDeleted == true) throw new ServiceException("a learner with this username or email address does not exist");
             return learner;
         }
+        public async Task<Learner> GetLearner(string searchString)
+        {
+            if (searchString.Contains('@'))
+            {
+                var _result = _context.Learners.FirstOrDefault(x => x.User.Email == searchString);
+            }
+            var result = _context.Learners.FirstOrDefault(x => x.User.UserName == searchString);
+            if (result == null) throw new IdentityException("this user does not exist or has been deleted");
+            return result;
+        }
         public async Task<IEnumerable<Learner>> GetLearners(bool byStatus = false)
         {
             return byStatus ? _context.Learners.Where(l => l.Status == true).ToList() : _context.Learners.ToList(); 
         }
-        public Task<int> UpdateLearner(int learnerId, LearnerDTO.UpdateRequestModel model, CancellationToken cancellationToken)
+        public async Task<int> UpdateLearner(Learner learner, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            _context.Update(learner);
+            var result = _context.SaveChanges();
+            return result;
+            
+
         }
 
-        public Task<int> UpdateLearner(int Userid, LearnerDTO.UpdateStatsModel model, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

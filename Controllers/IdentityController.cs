@@ -24,27 +24,18 @@ namespace Boompa.Controllers
         [HttpGet]
         public async Task<IActionResult> UserLogin([FromQuery] IdentityDTO.UserLoginModel model)
         {
-            if(model == null) return BadRequest("the input fields are required");
+            if(model == null) return BadRequest("No data received");
            
-            var user = await _identityService.AuthenticateUser(model.CheckString, model.Password);
-            if(user == null)
+            var validUser = await _identityService.AuthenticateUser(model.SearchString, model.Password);
+            if(validUser == null)
             {
                 return NotFound($"A user with the username or email does not exist");
             }
-            var validUser = new IdentityDTO.ValidUserModel
-            {
-                UserId = user.Id,
-                UserName = user.UserName,
-                IsAuthenticated = true,
-                Token = await _identityService.GenerateToken(user),
-                Email = user.Email,
-            };
-            foreach (var role in user.Roles)
-            {
-                validUser.Roles.Add(role);
-            }
-            return Ok(validUser);
+            
+            var token = await _identityService.GenerateToken(validUser);
+            return Ok(token);
         }
+
 
 
         

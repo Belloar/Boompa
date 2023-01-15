@@ -11,7 +11,7 @@ namespace Boompa.Interfaces.IRepository
         Task<IEnumerable<Administrator>> GetAdminsAsync();
         Task<Administrator> GetAdminAsync(int id);
         Task<Administrator> GetAdminAsync(string checkString);
-        Task<int> UpdateAdminAsync(AdminDTO.CreateModel requestModel, CancellationToken cancellationToken);
+        Task<int> UpdateAdminAsync(AdminDTO.UpdateModel requestModel, CancellationToken cancellationToken);
 
     }
 }

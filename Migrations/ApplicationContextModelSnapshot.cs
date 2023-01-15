@@ -266,7 +266,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2022, 10, 17, 22, 8, 9, 619, DateTimeKind.Utc).AddTicks(8133),
+                            CreatedOn = new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8276),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the base entity in the app",
                             IsDeleted = false,
@@ -276,7 +276,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedOn = new DateTime(2022, 10, 17, 22, 8, 9, 619, DateTimeKind.Utc).AddTicks(8137),
+                            CreatedOn = new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8280),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the user with authority to do certain stuff on user profiles",
                             IsDeleted = false,
@@ -286,7 +286,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedOn = new DateTime(2022, 10, 17, 22, 8, 9, 619, DateTimeKind.Utc).AddTicks(8138),
+                            CreatedOn = new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8281),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the reason this app is being developed",
                             IsDeleted = false,

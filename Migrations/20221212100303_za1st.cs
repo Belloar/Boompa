@@ -14,6 +14,34 @@ namespace Boompa.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Audios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    IsConvo = table.Column<bool>(type: "tinyint(1)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeletedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Mediatype = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Path = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Audios", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -64,6 +92,34 @@ namespace Boompa.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Options", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Photos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    QuestionId = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeletedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Mediatype = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Path = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Photos", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -129,16 +185,12 @@ namespace Boompa.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Questions",
+                name: "Articles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    ArticleName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -148,13 +200,17 @@ namespace Boompa.Migrations
                     DeletedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DeletedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Mediatype = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Path = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Questions", x => x.Id);
+                    table.PrimaryKey("PK_Articles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Questions_Categories_CategoryId",
+                        name: "FK_Articles_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
@@ -169,13 +225,13 @@ namespace Boompa.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    FirstName = table.Column<string>(type: "longtext", nullable: false)
+                    FirstName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LastName = table.Column<string>(type: "longtext", nullable: false)
+                    LastName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PhoneNumber = table.Column<string>(type: "longtext", nullable: false)
+                    PhoneNumber = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProfilePicture = table.Column<byte[]>(type: "longblob", nullable: false),
+                    ProfilePicture = table.Column<byte[]>(type: "longblob", nullable: true),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -207,11 +263,10 @@ namespace Boompa.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     TotalVists = table.Column<int>(type: "int", nullable: false),
-                    DisplayMessage = table.Column<string>(type: "longtext", nullable: false)
+                    DisplayMessage = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CategoryVisited = table.Column<string>(type: "longtext", nullable: false)
+                    CategoryVisited = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    VisitId = table.Column<int>(type: "int", nullable: false),
                     CoinsEarned = table.Column<int>(type: "int", nullable: false),
                     TicketsEarned = table.Column<int>(type: "int", nullable: false)
                 },
@@ -265,19 +320,18 @@ namespace Boompa.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "SourceMaterials",
+                name: "Questions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    QuestionId = table.Column<int>(type: "int", nullable: false),
-                    MediaType = table.Column<string>(type: "longtext", nullable: false)
+                    SourceMaterialId = table.Column<int>(type: "int", nullable: false),
+                    ArticleName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Extension = table.Column<string>(type: "longtext", nullable: false)
+                    Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Path = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ArticleId = table.Column<int>(type: "int", nullable: true),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -291,17 +345,16 @@ namespace Boompa.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SourceMaterials", x => x.Id);
+                    table.PrimaryKey("PK_Questions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SourceMaterials_Categories_CategoryId",
+                        name: "FK_Questions_Articles_ArticleId",
+                        column: x => x.ArticleId,
+                        principalTable: "Articles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Questions_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SourceMaterials_Questions_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -383,10 +436,67 @@ namespace Boompa.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "QuestionPhotos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    QuestionId = table.Column<int>(type: "int", nullable: false),
+                    PhotoId = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeletedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuestionPhotos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuestionPhotos_Photos_PhotoId",
+                        column: x => x.PhotoId,
+                        principalTable: "Photos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuestionPhotos_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "Description", "IsDeleted", "LastModifiedBy", "LastModifiedOn", "RoleName" },
+                values: new object[] { 1, null, new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8276), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "the base entity in the app", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "User" });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "Description", "IsDeleted", "LastModifiedBy", "LastModifiedOn", "RoleName" },
+                values: new object[] { 2, null, new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8280), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "the user with authority to do certain stuff on user profiles", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin" });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "Description", "IsDeleted", "LastModifiedBy", "LastModifiedOn", "RoleName" },
+                values: new object[] { 3, null, new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8281), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "the reason this app is being developed", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Learner" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Administrators_UserId",
                 table: "Administrators",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Articles_CategoryId",
+                table: "Articles",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Diaries_UserId",
@@ -404,19 +514,24 @@ namespace Boompa.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_QuestionPhotos_PhotoId",
+                table: "QuestionPhotos",
+                column: "PhotoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuestionPhotos_QuestionId",
+                table: "QuestionPhotos",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Questions_ArticleId",
+                table: "Questions",
+                column: "ArticleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Questions_CategoryId",
                 table: "Questions",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SourceMaterials_CategoryId",
-                table: "SourceMaterials",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SourceMaterials_QuestionId",
-                table: "SourceMaterials",
-                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
@@ -440,19 +555,25 @@ namespace Boompa.Migrations
                 name: "Administrators");
 
             migrationBuilder.DropTable(
+                name: "Audios");
+
+            migrationBuilder.DropTable(
                 name: "Learners");
 
             migrationBuilder.DropTable(
                 name: "Options");
 
             migrationBuilder.DropTable(
-                name: "SourceMaterials");
+                name: "QuestionPhotos");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
                 name: "Visits");
+
+            migrationBuilder.DropTable(
+                name: "Photos");
 
             migrationBuilder.DropTable(
                 name: "Questions");
@@ -464,10 +585,13 @@ namespace Boompa.Migrations
                 name: "Diaries");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Articles");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

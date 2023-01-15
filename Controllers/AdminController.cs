@@ -20,6 +20,7 @@ namespace Boompa.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAdmin([FromForm] AdminDTO.CreateModel model)
         {
             if(model == null)return BadRequest("please fill in credentials");
@@ -35,6 +36,56 @@ namespace Boompa.Controllers
                 return BadRequest(ex.Message);
             }
             catch(ServiceException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500,ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAdmin([FromBody] int UserId)
+        {
+            if (UserId == 0) return BadRequest("No id found");
+            try
+            {
+               var admin = await _service.GetAdminAsync(UserId);
+                return Ok(admin);
+                
+            }
+            catch(IdentityException  ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch(ServiceException ex)
+            {
+                return StatusCode(500,ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500,ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateAdmin([FromForm] AdminDTO.UpdateModel model)
+        {
+            if (model == null) return BadRequest("No data received");
+            try
+            {
+                var cancellationToken = new CancellationToken();
+                var result = await _service.UpdateAdminAsync(model, cancellationToken);
+                return Ok(result);
+            }
+            catch(ServiceException ex)
+            {
+                return StatusCode(500,ex.Message);
+            }
+            catch(IdentityException ex )
             {
                 return StatusCode(500, ex.Message);
             }

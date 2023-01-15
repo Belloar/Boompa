@@ -19,18 +19,16 @@ namespace Boompa.Auth
             public string? Email { get; set; }
             public string? PhoneNumber { get; set; }
         }
-        public class ValidUserModel
+        public class ValidUser
         {
             public int UserId { get; set; }
             public string UserName { get; set; }
             public string Email { get; set; }
-            public string Token { get; set; }
-            public bool IsAuthenticated { get; set; }
-            public ICollection<UserRole> Roles { get; set; }
+            public ICollection<string> Roles = new List<string>();
         }
         public class UserLoginModel
         {
-            public string CheckString { get; set; }
+            public string SearchString { get; set; }
             public string Password { get; set; }
         }
     }

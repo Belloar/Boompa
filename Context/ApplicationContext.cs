@@ -27,7 +27,7 @@ namespace Boompa.Context
         public DbSet<QuestionPhoto> QuestionPhotos { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Visit> Visits { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Role>().HasData(

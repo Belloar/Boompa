@@ -23,12 +23,12 @@ namespace Boompa.Services
             throw new NotImplementedException();
         }
 
-        public async Task<int> CreateLearner(LearnerDTO.CreateRequestModel model, CancellationToken cancellationToken)
+        public async Task<int> CreateLearner(LearnerDTO.CreateRequest model, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var role1 = await _identityRepository.GetRoleAsync("user");
             var role2 = await _identityRepository.GetRoleAsync("learner");
-            if (_identityRepository.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
+            if (await _identityRepository.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
 
             var user = new User
             {
@@ -104,19 +104,43 @@ namespace Boompa.Services
             return result;
         }
 
-        public async Task<Learner> GetLearner(string checkString)
+        public async Task<LearnerDTO.LearnerInfo> GetLearner(string checkString)
         {
             var user = await _identityRepository.GetUserAsync(checkString);
             if (user == null || user.IsDeleted == true) throw new IdentityException("a learner with this username or email does not exist");
             var learner = await _learnerRepository.GetLearner(user.Id);
+            var serviceLearner = new LearnerDTO.LearnerInfo
+            {
+                FirstName = learner.FirstName,
+                LastName = learner.LastName,
+                Status = learner.Status,
+                School = learner.School,
+                Rank = learner.Rank,
+
+            };
             if (learner == null)  throw new ServiceException("this learner does not exist");
-            return learner;
+            return serviceLearner ;
         }
 
         public async Task<IEnumerable<Learner>> GetLearners()
         {
             var learners = await _learnerRepository.GetLearners();
             return learners;
+        }
+        public async Task<IEnumerable<LearnerDTO.LearnerInfo>> GetLearnersInfo()
+        {
+            var learners = await _learnerRepository.GetLearners(true);
+            var result = learners.Select(learner => new LearnerDTO.LearnerInfo
+            {
+                FirstName = learner .FirstName,
+                LastName = learner.LastName,
+                Status = learner.Status,
+                School = learner.School,
+                Rank = learner.Rank,
+            }).ToList();
+
+            return result;
+            
         }
 
         public Task<Article> GetMaterial(string MaterialName)
@@ -129,19 +153,43 @@ namespace Boompa.Services
             throw new NotImplementedException();
         }
 
+        public Task<int> Play()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Question> QuestionSelector()
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateLearner(int learnerId, LearnerDTO.UpdateRequestModel model, CancellationToken cancellationToken)
+        public async Task<int> UpdateLearner(LearnerDTO.UpdateInfo model, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            var learner = await _learnerRepository.GetLearner(model.UserId);
+
+            learner.LastModifiedBy = model.ModifierName;
+            learner.LastModifiedOn= DateTime.UtcNow;
+            learner.School = model.School;
+            learner.FirstName = model.FirstName;
+            learner.LastName = model.LastName;
+
+            var result = await _learnerRepository.UpdateLearner(learner, cancellationToken);
+            return result;
         }
 
-        public Task<int> UpdateLearner(int Userid, LearnerDTO.UpdateStatsModel model, CancellationToken cancellationToken)
+        public async Task<int> UpdateLearner(LearnerDTO.UpdateStats model, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var learner = await _learnerRepository.GetLearner(model.UserId);
+            learner.CoinCount += model.CoinCount;
+            learner.TicketCount += model.TicketCount;
+
+            var result = await _learnerRepository.UpdateLearner(learner, cancellationToken);
+            return result;
+            
+
         }
     }
 }

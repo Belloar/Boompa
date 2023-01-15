@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Boompa.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221016220857_za3rd")]
-    partial class za3rd
+    [Migration("20221212100303_za1st")]
+    partial class za1st
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,7 +40,6 @@ namespace Boompa.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
@@ -53,15 +52,12 @@ namespace Boompa.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<byte[]>("ProfilePicture")
-                        .IsRequired()
                         .HasColumnType("longblob");
 
                     b.Property<int>("UserId")
@@ -72,6 +68,94 @@ namespace Boompa.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Administrators");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Article", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Mediatype")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Audio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool?>("IsConvo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Mediatype")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Audios");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Category", b =>
@@ -117,14 +201,12 @@ namespace Boompa.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CategoryVisited")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("CoinsEarned")
                         .HasColumnType("int");
 
                     b.Property<string>("DisplayMessage")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("TicketsEarned")
@@ -186,7 +268,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2022, 10, 16, 22, 8, 57, 136, DateTimeKind.Utc).AddTicks(3765),
+                            CreatedOn = new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8276),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the base entity in the app",
                             IsDeleted = false,
@@ -196,7 +278,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedOn = new DateTime(2022, 10, 16, 22, 8, 57, 136, DateTimeKind.Utc).AddTicks(3769),
+                            CreatedOn = new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8280),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the user with authority to do certain stuff on user profiles",
                             IsDeleted = false,
@@ -206,7 +288,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedOn = new DateTime(2022, 10, 16, 22, 8, 57, 136, DateTimeKind.Utc).AddTicks(3770),
+                            CreatedOn = new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8281),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the reason this app is being developed",
                             IsDeleted = false,
@@ -436,14 +518,59 @@ namespace Boompa.Migrations
                     b.ToTable("Options");
                 });
 
+            modelBuilder.Entity("Boompa.Entities.Photo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Mediatype")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Photos");
+                });
+
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int?>("ArticleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ArticleName")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("CategoryId")
@@ -474,20 +601,22 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("SourceMaterialId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
 
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.Article", b =>
+            modelBuilder.Entity("Boompa.Entities.QuestionPhoto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
@@ -502,10 +631,6 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Extension")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -515,24 +640,19 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("MediaType")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("PhotoId")
+                        .HasColumnType("int");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("PhotoId");
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("SourceMaterials");
+                    b.ToTable("QuestionPhotos");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Visit", b =>
@@ -570,6 +690,15 @@ namespace Boompa.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Article", b =>
+                {
+                    b.HasOne("Boompa.Entities.Category", null)
+                        .WithMany("Materials")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Boompa.Entities.Diary", b =>
@@ -623,6 +752,10 @@ namespace Boompa.Migrations
 
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
+                    b.HasOne("Boompa.Entities.Article", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("ArticleId");
+
                     b.HasOne("Boompa.Entities.Category", null)
                         .WithMany("Questions")
                         .HasForeignKey("CategoryId")
@@ -630,19 +763,23 @@ namespace Boompa.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Boompa.Entities.Article", b =>
+            modelBuilder.Entity("Boompa.Entities.QuestionPhoto", b =>
                 {
-                    b.HasOne("Boompa.Entities.Category", null)
-                        .WithMany("Materials")
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("Boompa.Entities.Photo", "Photo")
+                        .WithMany("Questions")
+                        .HasForeignKey("PhotoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Boompa.Entities.Question", null)
-                        .WithMany("ImagesPath")
+                    b.HasOne("Boompa.Entities.Question", "Question")
+                        .WithMany("Photos")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Photo");
+
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Visit", b =>
@@ -654,6 +791,11 @@ namespace Boompa.Migrations
                         .IsRequired();
 
                     b.Navigation("Diary");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Article", b =>
+                {
+                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Category", b =>
@@ -668,9 +810,14 @@ namespace Boompa.Migrations
                     b.Navigation("Visit");
                 });
 
+            modelBuilder.Entity("Boompa.Entities.Photo", b =>
+                {
+                    b.Navigation("Questions");
+                });
+
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
-                    b.Navigation("ImagesPath");
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

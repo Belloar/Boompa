@@ -42,7 +42,7 @@ namespace Boompa.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateAdminAsync(AdminDTO.CreateModel requestModel, CancellationToken cancellationToken)
+        public Task<int> UpdateAdminAsync(AdminDTO.UpdateModel requestModel, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
