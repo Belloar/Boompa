@@ -30,9 +30,10 @@ namespace Boompa.Auth
             return result;
         }
 
-        public Task<bool> CheckUser(string email)
+        public async Task<bool> CheckUser(string email)
         {
-            throw new NotImplementedException();
+            var result = _context.Users.Any(x => x.Email == email && x.IsDeleted == false);
+            return result;
         }
 
         public async Task<int> CreateAsync(User user, CancellationToken cancellationToken)
@@ -53,19 +54,12 @@ namespace Boompa.Auth
             return result;
             
         }
-        public async Task<IEnumerable<string>> GetRoleAsync(int roleId)
-        {
-            var roles = new List<string>();
-            var result =  _context.Roles.Where(r => r.Id == roleId).Select(r =>r);
-            if (result == null) return null;
-            foreach(var role in result)
-            {
-                if (role.IsDeleted == true) continue;
-                roles.Add(role.RoleName);
-            }
-            return roles;
+        //public async Task<IEnumerable<string>> GetUserRolesAsync(IEnumerable<int> roleId,int userId)
+        //{
+        //    var userRoles = _context.UserRoles.Where(x => x.UserId == userId).ToList();
+            
 
-        }
+        //}
         public async Task<User> GetUserAsync(int id)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == id);
@@ -73,11 +67,11 @@ namespace Boompa.Auth
         }
         public async Task<User> GetUserAsync(string searchString,bool isEmail)
         {
-            if (isEmail) _ = _context.Users.FirstOrDefault(u => u.Email.ToLower() == searchString.ToLower());
-            var user =  _context.Users.FirstOrDefault(u => u.UserName.ToLower() == searchString.ToLower());
-            var userRoles = _context.UserRoles.Include(ur => ur.Role).Where(x => x.UserId == user.Id).Select(r => r) ;
-            foreach (var role in userRoles) user.Roles.Add(role);
-           
+            if (isEmail) _ = _context.Users.SingleOrDefault(u => u.Email.ToLower() == searchString.ToLower());
+            var user =  _context.Users.SingleOrDefault(u => u.UserName.ToLower() == searchString.ToLower());
+            var userRoles = _context.UserRoles.Include(r => r.Role).Where(x => x.UserId == user.Id).Select(r => r) ;
+            foreach (var userRole in userRoles) user.Roles.Add(userRole);
+
             return user;
         }
        
@@ -109,6 +103,11 @@ namespace Boompa.Auth
             };
             await _context.UserRoles.AddAsync(newRole);
             return await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public Task<IEnumerable<string>> GetRolesAsync()
+        {
+            throw new NotImplementedException();
         }
 
        

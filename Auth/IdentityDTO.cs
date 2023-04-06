@@ -1,17 +1,18 @@
 ﻿using Boompa.Entities.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Boompa.Auth
 {
     public class IdentityDTO
     {
-        public class CreateRequestModel
-        {
-            public string UserName { get; set; }
-            public string Password { get; set; }
-            public string Email { get; set; }
-            public string PhoneNumber { get; set; }
+        //public class CreateRequestModel
+        //{
+        //    public string UserName { get; set; }
+        //    public string Password { get; set; }
+        //    public string Email { get; set; }
+        //    public string PhoneNumber { get; set; }
 
-        }
+        //}
         public class UpdateRequestModel
         {
             public string? UserName { get; set; }
@@ -28,7 +29,9 @@ namespace Boompa.Auth
         }
         public class UserLoginModel
         {
+            //[FromHeader]
             public string SearchString { get; set; }
+            //[FromHeader]
             public string Password { get; set; }
         }
     }

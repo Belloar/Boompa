@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Boompa.Interfaces;
 using Boompa.Auth;
 using Boompa.Exceptions;
+using Boompa.DTO;
 
 namespace Boompa.Controllers
 {
@@ -13,27 +14,37 @@ namespace Boompa.Controllers
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
-        //private readonly IHttpContextAccessor _context;
+        //private readonly IHttpContextAccessor _Httpcontext;
         public IdentityController(IIdentityService identityService)
         {
             _identityService = identityService;
-            //_context = context;
+            //_Httpcontext = httpContext;
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> UserLogin([FromQuery] IdentityDTO.UserLoginModel model)
+        [HttpGet("{username}/{password}")]
+        public async Task<IActionResult> UserLogin(string username,string password)
         {
-            if(model == null) return BadRequest("No data received");
-           
-            var validUser = await _identityService.AuthenticateUser(model.SearchString, model.Password);
-            if(validUser == null)
+            if( username == null && password == null) return BadRequest("No data received");
+            try
             {
-                return NotFound($"A user with the username or email does not exist");
+                var validUser = await _identityService.AuthenticateUser(username,password);
+                if (validUser == null)
+                {
+                    return NotFound($"A user with the username or email does not exist");
+                }
+                var response = new Responses.LoginResponse()
+                {
+                    StatusMessage = "success",
+                    Data = await _identityService.GenerateToken(validUser)
+                };
+                
+                return Ok(response);
             }
-            
-            var token = await _identityService.GenerateToken(validUser);
-            return Ok(token);
+            catch(IdentityException ex)
+            {
+                return StatusCode(500,ex.Message);
+            }
         }
 
 

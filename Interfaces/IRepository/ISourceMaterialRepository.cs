@@ -2,16 +2,18 @@
 {
     public interface ISourceMaterialRepository
     {
-        Task<int> CreateQuestionAsync();
-        Task<int> CreateArticleAsync();
-        Task<int> CreateOptionAsync();
-        Task<int> CreateChallengeAsync();
-        Task<int> CreateCategoryAsync();
+        Task<int> AddChallengeAsync();
+        Task<int> AddCategoryAsync();
+        Task<int> AddFileDeets(IEnumerable<IFormFile> files);
+        Task<int> AddQuestionAsync();
+        Task<int> AddOptionAsync();
+        Task<int> DeleteSourceMaterial();
         Task<int> DeleteQuestionAsync();
-        Task<int> DeleteArticleAsync(string articleName);
         Task<int> UpdateQuestion();
-        Task<int> UploadArticleAsync(IFormFile file);
-        Task<int> UploadImage(string filePath, string fileName);
+        //Task<int> UploadArticleAsync(IFormFile file);
+        //Task<int> CreateArticleAsync();
+        //Task<int> DeleteArticleAsync(string articleName);
         
+        //Task<int> UploadImage(string filePath, string fileName);
     }
 }

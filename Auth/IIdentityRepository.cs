@@ -15,7 +15,8 @@ namespace Boompa.Auth
         Task<int> DeleteAsync(int id, CancellationToken cancellationToken);
         Task<Role> AddRoleAsync(string role,CancellationToken cancellationToken);
         Task<Role> GetRoleAsync(string role);
-        Task<IEnumerable<string>> GetRoleAsync(int roleId);
+        Task<IEnumerable<string>> GetRolesAsync();
+       
         Task<int> UpdateUserRole(int id, Role role, CancellationToken cancellationToken);
         Task<int> AddUserRole(IEnumerable<UserRole> role, CancellationToken cancellationToken);
 

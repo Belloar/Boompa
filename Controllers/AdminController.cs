@@ -20,7 +20,7 @@ namespace Boompa.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAdmin([FromForm] AdminDTO.CreateModel model)
         {
             if(model == null)return BadRequest("please fill in credentials");
@@ -47,7 +47,7 @@ namespace Boompa.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAdmin([FromBody] int UserId)
+        public async Task<IActionResult> GetAdmin([FromQuery] int UserId)
         {
             if (UserId == 0) return BadRequest("No id found");
             try

@@ -138,9 +138,11 @@ namespace Boompa.Auth
             return claims;
         }
 
-        public Task<bool> CheckUser(string email)
+        public async Task<bool> CheckUser(string email)
         {
-            throw new NotImplementedException();
+            var exists = await _repository.CheckUser(email);
+            if (exists) throw new IdentityException("this user already exists");
+            return true;
         }
     }
 }

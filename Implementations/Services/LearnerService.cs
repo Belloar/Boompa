@@ -107,6 +107,7 @@ namespace Boompa.Services
         public async Task<LearnerDTO.LearnerInfo> GetLearner(string checkString)
         {
             var user = await _identityRepository.GetUserAsync(checkString);
+           
             if (user == null || user.IsDeleted == true) throw new IdentityException("a learner with this username or email does not exist");
             var learner = await _learnerRepository.GetLearner(user.Id);
             var serviceLearner = new LearnerDTO.LearnerInfo

@@ -262,13 +262,7 @@ namespace Boompa.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    TotalVists = table.Column<int>(type: "int", nullable: false),
-                    DisplayMessage = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CategoryVisited = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CoinsEarned = table.Column<int>(type: "int", nullable: false),
-                    TicketsEarned = table.Column<int>(type: "int", nullable: false)
+                    TotalVists = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -421,6 +415,8 @@ namespace Boompa.Migrations
                     DiaryId = table.Column<int>(type: "int", nullable: false),
                     CategoryVisited = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    CoinsEarned = table.Column<int>(type: "int", nullable: false),
+                    TicketsEarned = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateOnly>(type: "date", nullable: false),
                     Duration = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -476,17 +472,17 @@ namespace Boompa.Migrations
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "Description", "IsDeleted", "LastModifiedBy", "LastModifiedOn", "RoleName" },
-                values: new object[] { 1, null, new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8276), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "the base entity in the app", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "User" });
+                values: new object[] { 1, null, new DateTime(2023, 3, 27, 10, 18, 18, 247, DateTimeKind.Utc).AddTicks(9539), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "the base entity in the app", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "User" });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "Description", "IsDeleted", "LastModifiedBy", "LastModifiedOn", "RoleName" },
-                values: new object[] { 2, null, new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8280), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "the user with authority to do certain stuff on user profiles", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin" });
+                values: new object[] { 2, null, new DateTime(2023, 3, 27, 10, 18, 18, 247, DateTimeKind.Utc).AddTicks(9542), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "the user with authority to do certain stuff on user profiles", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin" });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "Description", "IsDeleted", "LastModifiedBy", "LastModifiedOn", "RoleName" },
-                values: new object[] { 3, null, new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8281), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "the reason this app is being developed", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Learner" });
+                values: new object[] { 3, null, new DateTime(2023, 3, 27, 10, 18, 18, 247, DateTimeKind.Utc).AddTicks(9543), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "the reason this app is being developed", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Learner" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Administrators_UserId",

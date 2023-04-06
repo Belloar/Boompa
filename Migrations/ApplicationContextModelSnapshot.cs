@@ -198,18 +198,6 @@ namespace Boompa.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("CategoryVisited")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("CoinsEarned")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DisplayMessage")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("TicketsEarned")
-                        .HasColumnType("int");
-
                     b.Property<int>("TotalVists")
                         .HasColumnType("int");
 
@@ -266,7 +254,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8276),
+                            CreatedOn = new DateTime(2023, 3, 27, 10, 18, 18, 247, DateTimeKind.Utc).AddTicks(9539),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the base entity in the app",
                             IsDeleted = false,
@@ -276,7 +264,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedOn = new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8280),
+                            CreatedOn = new DateTime(2023, 3, 27, 10, 18, 18, 247, DateTimeKind.Utc).AddTicks(9542),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the user with authority to do certain stuff on user profiles",
                             IsDeleted = false,
@@ -286,7 +274,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedOn = new DateTime(2022, 12, 12, 10, 3, 3, 327, DateTimeKind.Utc).AddTicks(8281),
+                            CreatedOn = new DateTime(2023, 3, 27, 10, 18, 18, 247, DateTimeKind.Utc).AddTicks(9543),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the reason this app is being developed",
                             IsDeleted = false,
@@ -663,6 +651,9 @@ namespace Boompa.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("CoinsEarned")
+                        .HasColumnType("int");
+
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
@@ -671,6 +662,9 @@ namespace Boompa.Migrations
 
                     b.Property<DateTime>("Duration")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int>("TicketsEarned")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

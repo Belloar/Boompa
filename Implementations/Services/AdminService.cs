@@ -72,10 +72,7 @@ namespace Boompa.Implementations.Services
             return result;
         }
 
-        public Task<int> CreateArticleAsync(MaterialDTO.ArticleModel article, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public Task<int> CreateCategoryAsync()
         {

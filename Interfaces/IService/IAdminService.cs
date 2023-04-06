@@ -8,7 +8,7 @@ namespace Boompa.Interfaces.IService
     {
         Task<int> CreateQuestionAsync(MaterialDTO.QuestionModel question,MaterialDTO.OptionModel option,CancellationToken cancellationToken);
         Task<int> CreateAdminAsync(AdminDTO.CreateModel model, CancellationToken cancellationToken);
-        Task<int> CreateArticleAsync(MaterialDTO.ArticleModel article,CancellationToken cancellationToken);
+        
         Task<int> CreateOptionAsync(MaterialDTO.OptionModel option, CancellationToken cancellationToken);
         Task<int> CreateChallengeAsync();
         Task<int> CreateCategoryAsync();
