@@ -32,7 +32,7 @@ namespace Boompa.Auth
 
         public async Task<bool> CheckUser(string email)
         {
-            var result = _context.Users.Any(x => x.Email == email && x.IsDeleted == false);
+            var result = await _context.Users.AnyAsync(x => x.Email == email && x.IsDeleted == false);
             return result;
         }
 
@@ -49,7 +49,7 @@ namespace Boompa.Auth
         }
         public async Task<Role> GetRoleAsync(string role)
         {
-           var result = _context.Roles.SingleOrDefault(r => r.RoleName.ToLower() == role.ToLower());
+           var result = await _context.Roles.SingleOrDefaultAsync(r => r.RoleName.ToLower() == role.ToLower());
             if (result == null || result.IsDeleted == true) return null;
             return result;
             
@@ -62,13 +62,13 @@ namespace Boompa.Auth
         //}
         public async Task<User> GetUserAsync(int id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             return user;
         }
         public async Task<User> GetUserAsync(string searchString,bool isEmail)
         {
-            if (isEmail) _ = _context.Users.SingleOrDefault(u => u.Email.ToLower() == searchString.ToLower());
-            var user =  _context.Users.SingleOrDefault(u => u.UserName.ToLower() == searchString.ToLower());
+            if (isEmail) _ =  _context.Users.SingleOrDefault(u => u.Email.ToLower() == searchString.ToLower());
+            var user =   _context.Users.SingleOrDefault(u => u.UserName.ToLower() == searchString.ToLower());
             var userRoles = _context.UserRoles.Include(r => r.Role).Where(x => x.UserId == user.Id).Select(r => r) ;
             foreach (var userRole in userRoles) user.Roles.Add(userRole);
 

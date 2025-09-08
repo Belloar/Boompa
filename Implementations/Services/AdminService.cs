@@ -60,7 +60,7 @@ namespace Boompa.Implementations.Services
             if (user == null) throw new IdentityException("this user does not exist");
 
 
-            var admin = new Administrator()
+            var admin = new Admin()
             {
                 User = user,
                 UserId = user.Id,
@@ -84,12 +84,12 @@ namespace Boompa.Implementations.Services
             throw new NotImplementedException();
         }
 
-        public Task<int> CreateOptionAsync(MaterialDTO.OptionModel option, CancellationToken cancellationToken)
+        public Task<int> CreateOptionAsync(ICollection<Option> options, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> CreateQuestionAsync(MaterialDTO.QuestionModel question, MaterialDTO.OptionModel option, CancellationToken cancellationToken)
+        public Task<int> CreateQuestionAsync(string question, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -124,21 +124,21 @@ namespace Boompa.Implementations.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Administrator> GetAdminAsync(string adminName)
+        public async Task<Admin> GetAdminAsync(string adminName)
         {
             var admin = await _adminRepo.GetAdminAsync(adminName);
             if (admin == null) throw new ServiceException("admin does not exist");
             return admin;
         }
 
-        public async Task<Administrator> GetAdminAsync(int id)
+        public async Task<Admin> GetAdminAsync(int id)
         {
             var admin = await _adminRepo.GetAdminAsync(id);
             if (admin == null) throw new ServiceException("admin does not exist");
             return admin;
         }
 
-        public async Task<IEnumerable<Administrator>> GetAdminsAsync()
+        public async Task<IEnumerable<Admin>> GetAdminsAsync()
         {
             var admins = await _adminRepo.GetAdminsAsync();
             if (admins == null) throw new ServiceException("An error occured while retrieving admins");

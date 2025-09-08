@@ -100,10 +100,6 @@ namespace Boompa.Auth
             if (user == null) throw new IdentityException("User doesn't exist");
             if (!BCrypt.Net.BCrypt.Verify(password, user.Password)) throw new ServiceException("Invalid Username or Password");
 
-            //foreach(var userRole in user.Roles)
-            //{
-            //    var roleName = await _repository.GetRoleAsync(userRole.RoleId);
-            //}
 
             var model = new IdentityDTO.ValidUser
             {

@@ -1,5 +1,5 @@
 ﻿using Boompa.Entities;
-using Boompa.Enums;
+//using Boompa.Enums;
 
 namespace Boompa.DTO
 {
@@ -47,7 +47,7 @@ namespace Boompa.DTO
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public bool Status { get; set; }
-            public Rank Rank { get; set; }
+            public string Rank { get; set; }
             public string? School { get; set; }
         }
     }

@@ -46,7 +46,7 @@ namespace Boompa.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAdmin([FromQuery] int UserId)
         {
             if (UserId == 0) return BadRequest("No id found");
@@ -71,7 +71,7 @@ namespace Boompa.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAdmin([FromForm] AdminDTO.UpdateModel model)
         {
             if (model == null) return BadRequest("No data received");

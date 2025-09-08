@@ -1,0 +1,341 @@
+[
+  {
+    "ContainingType": "Boompa.Controllers.AdminController",
+    "Method": "CreateAdmin",
+    "RelativePath": "api/Admin/CreateAdmin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.AdminController",
+    "Method": "GetAdmin",
+    "RelativePath": "api/Admin/GetAdmin",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.AdminController",
+    "Method": "UpdateAdmin",
+    "RelativePath": "api/Admin/UpdateAdmin",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "FirstName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "LastName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfilePicture",
+        "Type": "System.Byte[]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.IdentityController",
+    "Method": "UserLogin",
+    "RelativePath": "api/Identity/UserLogin/{username}/{password}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "password",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.LearnerController",
+    "Method": "CreateLearner",
+    "RelativePath": "api/Learner/CreateLearner",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Age",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "SchoolName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.LearnerController",
+    "Method": "DeleteLearner",
+    "RelativePath": "api/Learner/DeleteLearner/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "id",
+        "Type": "",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.LearnerController",
+    "Method": "GetLearner",
+    "RelativePath": "api/Learner/GetLearner",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "searchString",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.LearnerController",
+    "Method": "GetLearnerById",
+    "RelativePath": "api/Learner/GetLearnerById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.LearnerController",
+    "Method": "GetLearners",
+    "RelativePath": "api/Learner/GetLearners",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.LearnerController",
+    "Method": "GetLearnersInfo",
+    "RelativePath": "api/Learner/GetLearnersInfo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.LearnerController",
+    "Method": "TestMethod",
+    "RelativePath": "api/Learner/TestMethod/{username}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.LearnerController",
+    "Method": "UpdateLearner",
+    "RelativePath": "api/Learner/UpdateLearner",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateInfo",
+        "Type": "Boompa.DTO.LearnerDTO\u002BUpdateInfo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.LearnerController",
+    "Method": "UpdateLearnerStats",
+    "RelativePath": "api/Learner/UpdateLearnerStats",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "Boompa.DTO.LearnerDTO\u002BUpdateStats",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.SourceMaterialController",
+    "Method": "AddCategory",
+    "RelativePath": "api/SourceMaterial/AddCategory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "category",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.SourceMaterialController",
+    "Method": "AddSourceMaterial",
+    "RelativePath": "api/SourceMaterial/AddSourceMaterial",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Category",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SourceMaterialName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Text",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Creator",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "CreatedOn",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "Questions",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Boompa.DTO.MaterialDTO\u002BQuestionModel, Boompa, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "RawFiles",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.WeatherForecastController",
+    "Method": "Get",
+    "RelativePath": "WeatherForecast",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Boompa.WeatherForecast, Boompa, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetWeatherForecast"
+  }
+]

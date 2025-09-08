@@ -18,7 +18,7 @@ namespace Boompa.Services
             _learnerRepository = repository;
             _identityRepository = identityRepository;
         }
-        public Task<IEnumerable<Article>> ConversationCompiler(string MaterialName)
+        public Task<IEnumerable<SourceMaterial>> ConversationCompiler(string MaterialName)
         {
             throw new NotImplementedException();
         }
@@ -144,12 +144,12 @@ namespace Boompa.Services
             
         }
 
-        public Task<Article> GetMaterial(string MaterialName)
+        public Task<SourceMaterial > GetMaterial(string MaterialName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Article>> LoadCategoryMaterials(string categoryName)
+        public Task<IEnumerable<SourceMaterial >> LoadCategoryMaterials(string categoryName)
         {
             throw new NotImplementedException();
         }

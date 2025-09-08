@@ -1,19 +1,22 @@
-﻿namespace Boompa.Interfaces.IRepository
+﻿using Boompa.DTO;
+using Boompa.Entities;
+using Boompa.Enums;
+
+namespace Boompa.Interfaces.IRepository
 {
     public interface ISourceMaterialRepository
     {
+        
+        Task<int> AddSourceMaterial(SourceMaterial sourceMaterial);
         Task<int> AddChallengeAsync();
-        Task<int> AddCategoryAsync();
-        Task<int> AddFileDeets(IEnumerable<IFormFile> files);
-        Task<int> AddQuestionAsync();
-        Task<int> AddOptionAsync();
+        Task<int> AddFileDeets(List<SourceFileDetail> files);
+        Task<Question> AddQuestionAsync(Question model);
+        Task<int> AddOptionAsync(IEnumerable<Option> options);
         Task<int> DeleteSourceMaterial();
         Task<int> DeleteQuestionAsync();
+        Task<SourceMaterial> GetById(int id);
+        //Task<Category> GetCategoryByNameAsync(string categoryName);
         Task<int> UpdateQuestion();
-        //Task<int> UploadArticleAsync(IFormFile file);
-        //Task<int> CreateArticleAsync();
-        //Task<int> DeleteArticleAsync(string articleName);
         
-        //Task<int> UploadImage(string filePath, string fileName);
     }
 }

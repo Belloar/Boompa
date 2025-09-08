@@ -519,6 +519,8 @@ C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net6.0\runtime
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\Boompa.csproj.AssemblyReference.cache
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\Boompa.Properties.Resources.resources
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\Boompa.csproj.GenerateResource.cache
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\Boompa.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\Boompa.AssemblyInfoInputs.cache
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\Boompa.AssemblyInfo.cs
@@ -539,5 +541,3 @@ C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\refint\
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\Boompa.pdb
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\Boompa.genruntimeconfig.cache
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\ref\Boompa.dll
-C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\Boompa.Properties.Resources.resources
-C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net6.0\Boompa.csproj.GenerateResource.cache

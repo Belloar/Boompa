@@ -3,6 +3,7 @@ using System;
 using Boompa.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -16,14 +17,18 @@ namespace Boompa.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "9.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Boompa.Entities.Administrator", b =>
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("Boompa.Entities.Admin", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -65,95 +70,7 @@ namespace Boompa.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Administrators");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.Article", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Mediatype")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("Articles");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.Audio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool?>("IsConvo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Mediatype")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Audios");
+                    b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Category", b =>
@@ -161,6 +78,8 @@ namespace Boompa.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -198,6 +117,8 @@ namespace Boompa.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("TotalVists")
                         .HasColumnType("int");
 
@@ -211,11 +132,44 @@ namespace Boompa.Migrations
                     b.ToTable("Diaries");
                 });
 
+            modelBuilder.Entity("Boompa.Entities.SourceFileDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SourceMaterialId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("SourceMaterialId");
+
+                    b.ToTable("FileDetails");
+                });
+
             modelBuilder.Entity("Boompa.Entities.Identity.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -254,7 +208,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedOn = new DateTime(2023, 3, 27, 10, 18, 18, 247, DateTimeKind.Utc).AddTicks(9539),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the base entity in the app",
                             IsDeleted = false,
@@ -264,7 +218,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedOn = new DateTime(2023, 3, 27, 10, 18, 18, 247, DateTimeKind.Utc).AddTicks(9542),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the user with authority to do certain stuff on user profiles",
                             IsDeleted = false,
@@ -274,7 +228,7 @@ namespace Boompa.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedOn = new DateTime(2023, 3, 27, 10, 18, 18, 247, DateTimeKind.Utc).AddTicks(9543),
+                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the reason this app is being developed",
                             IsDeleted = false,
@@ -288,6 +242,8 @@ namespace Boompa.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -344,6 +300,8 @@ namespace Boompa.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
@@ -385,6 +343,8 @@ namespace Boompa.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
@@ -434,8 +394,9 @@ namespace Boompa.Migrations
                     b.Property<byte[]>("ProfilePicture")
                         .HasColumnType("longblob");
 
-                    b.Property<int>("Rank")
-                        .HasColumnType("int");
+                    b.Property<string>("Rank")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("School")
                         .HasColumnType("longtext");
@@ -463,6 +424,8 @@ namespace Boompa.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -504,63 +467,17 @@ namespace Boompa.Migrations
                     b.ToTable("Options");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.Photo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Mediatype")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Photos");
-                });
-
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("ArticleId")
-                        .HasColumnType("int");
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ArticleName")
+                    b.Property<string>("Answer")
+                        .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -592,18 +509,26 @@ namespace Boompa.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ArticleId");
-
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("SourceMaterialId");
 
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.QuestionPhoto", b =>
+            modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -626,19 +551,13 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("PhotoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PhotoId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("QuestionPhotos");
+                    b.ToTable("SourceMaterials");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Visit", b =>
@@ -646,6 +565,8 @@ namespace Boompa.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CategoryVisited")
                         .IsRequired()
@@ -673,7 +594,7 @@ namespace Boompa.Migrations
                     b.ToTable("Visits");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.Administrator", b =>
+            modelBuilder.Entity("Boompa.Entities.Admin", b =>
                 {
                     b.HasOne("Boompa.Entities.Identity.User", "User")
                         .WithMany()
@@ -682,15 +603,6 @@ namespace Boompa.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.Article", b =>
-                {
-                    b.HasOne("Boompa.Entities.Category", null)
-                        .WithMany("Materials")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Boompa.Entities.Diary", b =>
@@ -702,6 +614,21 @@ namespace Boompa.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.SourceFileDetail", b =>
+                {
+                    b.HasOne("Boompa.Entities.Question", null)
+                        .WithMany("Files")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Boompa.Entities.SourceMaterial", null)
+                        .WithMany("Images")
+                        .HasForeignKey("SourceMaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Boompa.Entities.Identity.UserRole", b =>
@@ -744,34 +671,11 @@ namespace Boompa.Migrations
 
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
-                    b.HasOne("Boompa.Entities.Article", null)
+                    b.HasOne("Boompa.Entities.SourceMaterial", null)
                         .WithMany("Questions")
-                        .HasForeignKey("ArticleId");
-
-                    b.HasOne("Boompa.Entities.Category", null)
-                        .WithMany("Questions")
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("SourceMaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Boompa.Entities.QuestionPhoto", b =>
-                {
-                    b.HasOne("Boompa.Entities.Photo", "Photo")
-                        .WithMany("Questions")
-                        .HasForeignKey("PhotoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Boompa.Entities.Question", "Question")
-                        .WithMany("Photos")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Photo");
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Visit", b =>
@@ -785,31 +689,21 @@ namespace Boompa.Migrations
                     b.Navigation("Diary");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.Article", b =>
-                {
-                    b.Navigation("Questions");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.Category", b =>
-                {
-                    b.Navigation("Materials");
-
-                    b.Navigation("Questions");
-                });
-
             modelBuilder.Entity("Boompa.Entities.Diary", b =>
                 {
                     b.Navigation("Visit");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.Photo", b =>
-                {
-                    b.Navigation("Questions");
-                });
-
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
-                    b.Navigation("Photos");
+                    b.Navigation("Files");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

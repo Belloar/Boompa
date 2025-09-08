@@ -38,7 +38,7 @@ namespace Boompa.Controllers
 
         [HttpPut("{id}")]
         //[Authorize(Roles = "Learner")]
-        //[Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteLearner([FromQuery] int id)
         {
             var cancellationToken = new CancellationToken();
@@ -47,9 +47,9 @@ namespace Boompa.Controllers
             throw new ServiceException();
         }
 
-        //warri no dey carry last
+        
         [HttpGet]
-        [Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetLearnerById([FromQuery] int id)
         {
             try
@@ -62,15 +62,24 @@ namespace Boompa.Controllers
                 return NotFound(ex.Message);
             }
         }
+
+        //[Authorize(Roles = "Admin")]
         [HttpGet("{username}")]
-       
+        
         public IActionResult TestMethod(string username)
         {
-            var result = new
+            try
             {
-                Answer = $"{username} is a welcome user"
-            };
-            return Ok(result);
+                var result = new
+                {
+                    Answer = $"{username} is a welcome user"
+                };
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(400, ex.Message);
+            }
 
         }
 
@@ -97,7 +106,7 @@ namespace Boompa.Controllers
 
 
         [HttpGet]
-        //[Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetLearners()
         {
             var learners = await _service.GetLearners();
@@ -105,7 +114,7 @@ namespace Boompa.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetLearnersInfo()
         {
             try

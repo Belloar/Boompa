@@ -6,7 +6,7 @@ using Boompa.Exceptions;
 using Boompa.Interfaces.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Boompa.Repositories
+namespace Boompa.Implementations.Repositories
 {
     public class LearnerRepository : ILearnerRepository
     {

@@ -4,7 +4,7 @@ using Boompa.Entities;
 using Boompa.Interfaces.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Boompa.Repositories
+namespace Boompa.Implementations.Repositories
 {
     public class AdminRepository : IAdminRepository
     {
@@ -14,9 +14,9 @@ namespace Boompa.Repositories
             _context = context;
         }
 
-        public async Task<int> AddAdminAsync(Administrator model, CancellationToken cancellationToken)
+        public async Task<int> AddAdminAsync(Admin model, CancellationToken cancellationToken)
         {
-            await _context.Administrators.AddAsync(model);
+            await _context.Admins.AddAsync(model);
             var result = await _context.SaveChangesAsync(cancellationToken);
             if(result == 0) return 0;
             return result;
@@ -27,17 +27,17 @@ namespace Boompa.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Administrator> GetAdminAsync(int id)
+        public Task<Admin> GetAdminAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Administrator> GetAdminAsync(string checkString)
+        public Task<Admin> GetAdminAsync(string checkString)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Administrator>> GetAdminsAsync()
+        public Task<IEnumerable<Admin>> GetAdminsAsync()
         {
             throw new NotImplementedException();
         }

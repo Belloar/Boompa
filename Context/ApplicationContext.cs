@@ -1,5 +1,6 @@
 ﻿using Boompa.Entities;
 using Boompa.Entities.Identity;
+//using Boompa.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Boompa.Context
@@ -17,15 +18,13 @@ namespace Boompa.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Learner> Learners { get; set; }
-        public DbSet<Administrator> Administrators { get; set; }
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Diary> Diaries { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<Option> Options { get; set; }
-        public DbSet<Article> Articles { get; set; }
-        public DbSet<Photo> Photos { get; set; }
-        public DbSet<Audio> Audios { get; set; }
-        public DbSet<QuestionPhoto> QuestionPhotos { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Option> Options { get; set; }
+        public DbSet<SourceMaterial> SourceMaterials { get; set; }
+        public DbSet<SourceFileDetail> FileDetails{ get; set; }
         public DbSet<Visit> Visits { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,19 +34,22 @@ namespace Boompa.Context
                 {
                     Id = 1,
                     RoleName = "User",
-                    Description = "the base entity in the app"
+                    Description = "the base entity in the app",
+                    CreatedOn = DateTime.MinValue,
                 },
                 new Role
                 {
                     Id = 2,
                     RoleName = "Admin",
-                    Description = "the user with authority to do certain stuff on user profiles"
+                    Description = "the user with authority to do certain stuff on user profiles",
+                    CreatedOn = DateTime.MinValue
                 },
                 new Role
                 {
                     Id = 3,
                     RoleName = "Learner",
-                    Description = "the reason this app is being developed"
+                    Description = "the reason this app is being developed",
+                    CreatedOn = DateTime.MinValue
                 });
 
 

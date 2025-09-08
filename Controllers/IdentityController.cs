@@ -36,7 +36,7 @@ namespace Boompa.Controllers
                 var response = new Responses.LoginResponse()
                 {
                     StatusMessage = "success",
-                    Data = await _identityService.GenerateToken(validUser)
+                    Data = validUser,
                 };
                 
                 return Ok(response);
