@@ -88,7 +88,7 @@
               "RelativeDocumentMoniker": "Entities\\QuestionFileDetail.cs",
               "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\QuestionFileDetail.cs",
               "RelativeToolTip": "Entities\\QuestionFileDetail.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-08T11:25:47.7Z",
               "EditorCaption": ""
@@ -127,8 +127,7 @@
               "RelativeToolTip": "Entities\\Question.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-16T12:03:28.686Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-16T12:03:28.686Z"
             },
             {
               "$type": "Document",
@@ -140,8 +139,7 @@
               "RelativeToolTip": "Controllers\\SourceMaterialController.cs",
               "ViewState": "AgIAABMAAAAAAAAAAAAQwCAAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-16T11:40:58.415Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-16T11:40:58.415Z"
             },
             {
               "$type": "Document",
@@ -153,8 +151,7 @@
               "RelativeToolTip": "Entities\\SourceMaterial.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-15T19:57:19.012Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-15T19:57:19.012Z"
             },
             {
               "$type": "Document",
@@ -190,8 +187,7 @@
               "RelativeToolTip": "Interfaces\\IRepository\\ISourceMaterialRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-16T11:25:09.673Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-16T11:25:09.673Z"
             },
             {
               "$type": "Document",
@@ -216,8 +212,7 @@
               "RelativeToolTip": "DTO\\FileDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-12T10:48:10.016Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-12T10:48:10.016Z"
             },
             {
               "$type": "Document",
@@ -227,7 +222,7 @@
               "RelativeDocumentMoniker": "Implementations\\Services\\SourceMaterialService.cs",
               "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Services\\SourceMaterialService.cs",
               "RelativeToolTip": "Implementations\\Services\\SourceMaterialService.cs",
-              "ViewState": "AgIAAKEAAAAAAAAAAAAWwKQAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAKQAAAAAAAAAAAAWwLIAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-15T19:57:32.872Z",
               "EditorCaption": ""
@@ -242,8 +237,7 @@
               "RelativeToolTip": "Context\\ApplicationContext.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAkwBMAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-31T00:04:13.632Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-31T00:04:13.632Z"
             },
             {
               "$type": "Document",
@@ -255,8 +249,7 @@
               "RelativeToolTip": "Implementations\\Repositories\\SourceMaterialRepository.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAAgwBwAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-15T19:57:25.777Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-15T19:57:25.777Z"
             }
           ]
         }
