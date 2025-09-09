@@ -30,7 +30,7 @@ namespace Boompa.DTO
         {
             public string Description { get; set; }
             public string Answer {  get; set; }
-            public ICollection<IFormFile> RawFiles { get; set; } = new HashSet<IFormFile> ();
+            public ICollection<IFormFile>? RawFiles { get; set; } = new HashSet<IFormFile> ();
         }
 
         

@@ -20,14 +20,22 @@ namespace Boompa.Implementations.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<int> AddFileDeets(List<SourceFileDetail> files)
+        public async Task<int> AddFileDetail(List<SourceFileDetail> files)
         {
             foreach(SourceFileDetail fileDeets in files)
             {
-                await _context.FileDetails.AddAsync(fileDeets);
+                await _context.SourceFileDetails.AddAsync(fileDeets);
             }
             return _context.SaveChanges();
 
+        }
+        public async Task<int> AddFileDetail(List<QuestionFileDetail> files)
+        {
+            foreach (var fileDeets in files)
+            {
+                await _context.QuestionFileDetails.AddAsync(fileDeets);
+            }
+            return _context.SaveChanges();
         }
 
         public async Task<int> AddOptionAsync(IEnumerable<Option> options)
@@ -39,12 +47,12 @@ namespace Boompa.Implementations.Repositories
             return _context.SaveChanges();
         }
 
-        public async Task<Question> AddQuestionAsync(Question model)
+        public async Task<int> AddQuestionAsync(Question model)
         {
             await _context.Questions.AddAsync(model);
             await _context.SaveChangesAsync();
-           var question =  _context.Questions.First(q => q.SourceMaterialId == model.SourceMaterialId);
-            return question;        
+           var questionId =  _context.Questions.First(q => q.SourceMaterialId == model.SourceMaterialId).Id;
+            return questionId;        
 
         }
 

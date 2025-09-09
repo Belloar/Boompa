@@ -12,7 +12,7 @@ namespace Boompa.Implementations.Services
     public class SourceMaterialService : ISourceMaterialService
     {
         private readonly ISourceMaterialRepository _sourceMatRepository;
-        private readonly Dictionary<string, string> MediaTypes = new Dictionary<string, string>()
+        /*private readonly Dictionary<string, string> MediaTypes = new Dictionary<string, string>()
         {
             [".txt"] = "texts",
             [".pdf"] = "texts",
@@ -40,7 +40,7 @@ namespace Boompa.Implementations.Services
             [".tiff"] ="image"
 
 
-        };
+        };*/
 
         
 
@@ -51,6 +51,7 @@ namespace Boompa.Implementations.Services
         
         public async Task<int> AddSourceMaterial(MaterialDTO.ArticleModel material)
         {
+            var result = 0;
             //the source material object is created
             var sourceMaterial = new SourceMaterial();
             if (material!= null)
@@ -69,20 +70,24 @@ namespace Boompa.Implementations.Services
             {
                 throw new ServiceException("sourceFiles not received");
             }
-            else
-            {
-                await AddFileDetails(material.RawFiles,sourceMaterial.Id,true);
-            }
-                var sourceMaterialId = await _sourceMatRepository.AddSourceMaterial(sourceMaterial);
-            
+
+            var sourceMaterialId = await _sourceMatRepository.AddSourceMaterial(sourceMaterial);
+            if (sourceMaterialId < 0) { throw new ServiceException("Failed to add source material to database"); }
+            var fileResult = await AddFileDetails(material.RawFiles, sourceMaterialId);
+
             //the source material is saved to the database and its id is returned
-            
-            if(material.Questions != null)
+
+            if (material.Questions != null)
             {
-                foreach (var question in material.Questions) 
+                await Task.Run(() =>
                 {
-                    await AddQuestion(question,sourceMaterialId);
-                }
+
+                    foreach (var question in material.Questions)
+                    {
+                        var result = AddQuestion(question, sourceMaterialId);
+
+                    }
+                });
             }
             else
             {
@@ -90,7 +95,7 @@ namespace Boompa.Implementations.Services
             }
 
 
-                return 1;
+                return result;
         }
 
         public Task<int> DeleteSourceMaterial()
@@ -125,14 +130,14 @@ namespace Boompa.Implementations.Services
                     Description = model.Description,
                     Answer = model.Answer,
                 };
-                if(model.RawFiles!= null)
-                {
-                await AddFileDetails(model.RawFiles, question.Id, false);
-                    
-                }
-                
                 var result = await _sourceMatRepository.AddQuestionAsync(question);
-                return question.SourceMaterialId;
+                if (result <= 0) { throw new ServiceException("Failed to add question to database"); }
+                if (model.RawFiles != null)
+                {
+                    var fileResult = await AddFileDetails(model.RawFiles, result, false);
+                    if (fileResult <= 0) { throw new ServiceException("Failed to add question files to database"); }
+                }
+                return result;
 
             }catch(Exception ex)
             {
@@ -162,44 +167,66 @@ namespace Boompa.Implementations.Services
             else { return result; }
         }*/
 
+
+        //Description:  Responsible for adding any media file to the to the local file system and sends the file's information to the repository
+        //
+        //Parameters: files sent from the front end, id(either for question or sourcematerial, forSource-used to detect whether the id is for question or sourcematerial)
+        //
+        //
+        //returns: 
         private async Task<int> AddFileDetails(ICollection<IFormFile> rawFiles,int Id,bool? forSource=true) 
         {
             var result = 0;
             if (rawFiles!= null && rawFiles.Count > 0)
             {
-                var prefix = Directory.GetCurrentDirectory();
-                var sourceFiles = new List<SourceFileDetail>();
-                foreach (var file in rawFiles)
+                if (forSource == false)
                 {
-                    var suffix = Path.Combine(prefix,file.ContentType) ;
-                    var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
-
-                    var sourceFile = new SourceFileDetail();
-                    sourceFile.SourceMaterialId = Id;
-                    sourceFile.FileType = file.ContentType;
-                    Directory.CreateDirectory(suffix);
-                    using (var stream = File.Create(basePath))
+                    var queFiles = new List<QuestionFileDetail>();
+                    foreach (var file in rawFiles)
                     {
-                        
-                        await file.CopyToAsync(stream);
-
-                    }
-                    sourceFile.Path = basePath;
-                    if (forSource == false)
-                    {
-                        var queFiles = new QuestionFileDetail()
+                        var prefix = Directory.GetCurrentDirectory();
+                        var suffix = Path.Combine(prefix, file.ContentType);
+                        var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
+                        Directory.CreateDirectory(suffix);
+                        using (var stream = File.Create(basePath))
+                        {
+                              file.CopyToAsync(stream);
+                        }
+                        var queFile = new QuestionFileDetail()
                         {
                             QuestionId = Id,
+                            FileType = file.ContentType,
+                            Path = basePath,
                         };
-                       
+                        queFiles.Add(queFile);
                     }
-                    else
-                    
+                    result = await _sourceMatRepository.AddFileDetail(queFiles);
+                }
+                else
+                {
+                    var sourceFiles = new List<SourceFileDetail>();
+                    foreach (var file in rawFiles)
+                    {
+                        var prefix = Directory.GetCurrentDirectory();
+                        var suffix = Path.Combine(prefix, file.ContentType);
+                        var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
+                        Directory.CreateDirectory(suffix);
+                        using (var stream = File.Create(basePath))
+                        {
+                              file.CopyToAsync(stream);
+                        }
+                        var sourceFile = new SourceFileDetail()
+                        {
+                            SourceMaterialId = Id,
+                            FileType = file.ContentType,
+                            Path = basePath,
+                        };
                         sourceFiles.Add(sourceFile);
-                    
+
+                    }
+                    result = await _sourceMatRepository.AddFileDetail(sourceFiles);
 
                 }
-                result=await _sourceMatRepository.AddFileDeets(sourceFiles);
             }
 
             

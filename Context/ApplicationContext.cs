@@ -24,7 +24,8 @@ namespace Boompa.Context
         public DbSet<Category> Categories { get; set; }
         public DbSet<Option> Options { get; set; }
         public DbSet<SourceMaterial> SourceMaterials { get; set; }
-        public DbSet<SourceFileDetail> FileDetails{ get; set; }
+        public DbSet<SourceFileDetail> SourceFileDetails{ get; set; }
+        public DbSet<QuestionFileDetail> QuestionFileDetails{ get; set; }
         public DbSet<Visit> Visits { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
