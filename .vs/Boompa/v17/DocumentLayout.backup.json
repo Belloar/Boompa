@@ -3,28 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\context\\applicationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:context\\applicationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\implementations\\services\\sourcematerialservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:implementations\\services\\sourcematerialservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\entities\\questionfiledetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:entities\\questionfiledetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\entities\\sourcefiledetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:entities\\sourcefiledetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\entities\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:entities\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\controllers\\sourcematerialcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:controllers\\sourcematerialcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\implementations\\services\\sourcematerialservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:implementations\\services\\sourcematerialservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\implementations\\repositories\\sourcematerialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:implementations\\repositories\\sourcematerialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\dto\\filedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:dto\\filedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\context\\applicationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:context\\applicationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\entities\\filedetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:entities\\filedetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\dto\\filedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:dto\\filedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\interfaces\\iservice\\isourcematerialservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -45,10 +53,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\dto\\learnerdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:dto\\learnerdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\entities\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:entities\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\interfaces\\irepository\\isourcematerialrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -78,7 +82,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 1,
+              "Title": "QuestionFileDetail.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\QuestionFileDetail.cs",
+              "RelativeDocumentMoniker": "Entities\\QuestionFileDetail.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\QuestionFileDetail.cs",
+              "RelativeToolTip": "Entities\\QuestionFileDetail.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T11:25:47.7Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -90,20 +107,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "SourceMaterialService.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Services\\SourceMaterialService.cs",
-              "RelativeDocumentMoniker": "Implementations\\Services\\SourceMaterialService.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Services\\SourceMaterialService.cs",
-              "RelativeToolTip": "Implementations\\Services\\SourceMaterialService.cs",
-              "ViewState": "AgIAAJMAAAAAAAAAAAAWwMsAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-15T19:57:32.872Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "MaterialDTO.cs",
               "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\DTO\\MaterialDTO.cs",
               "RelativeDocumentMoniker": "DTO\\MaterialDTO.cs",
@@ -115,7 +119,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 3,
+              "Title": "Question.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\Question.cs",
+              "RelativeDocumentMoniker": "Entities\\Question.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\Question.cs",
+              "RelativeToolTip": "Entities\\Question.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-16T12:03:28.686Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SourceMaterialController.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Controllers\\SourceMaterialController.cs",
+              "RelativeDocumentMoniker": "Controllers\\SourceMaterialController.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Controllers\\SourceMaterialController.cs",
+              "RelativeToolTip": "Controllers\\SourceMaterialController.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwCAAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-16T11:40:58.415Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "SourceMaterial.cs",
               "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\SourceMaterial.cs",
               "RelativeDocumentMoniker": "Entities\\SourceMaterial.cs",
@@ -128,7 +158,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "LearnerDTO.cs",
               "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\DTO\\LearnerDTO.cs",
               "RelativeDocumentMoniker": "DTO\\LearnerDTO.cs",
@@ -140,7 +170,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "ISourceMaterialService.cs",
               "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Interfaces\\IService\\ISourceMaterialService.cs",
               "RelativeDocumentMoniker": "Interfaces\\IService\\ISourceMaterialService.cs",
@@ -152,20 +182,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Question.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\Question.cs",
-              "RelativeDocumentMoniker": "Entities\\Question.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\Question.cs",
-              "RelativeToolTip": "Entities\\Question.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-16T12:03:28.686Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "ISourceMaterialRepository.cs",
               "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Interfaces\\IRepository\\ISourceMaterialRepository.cs",
               "RelativeDocumentMoniker": "Interfaces\\IRepository\\ISourceMaterialRepository.cs",
@@ -178,33 +195,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "FileDetail.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\FileDetail.cs",
-              "RelativeDocumentMoniker": "Entities\\FileDetail.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\FileDetail.cs",
-              "RelativeToolTip": "Entities\\FileDetail.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAbAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "SourceFileDetail.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\SourceFileDetail.cs",
+              "RelativeDocumentMoniker": "Entities\\SourceFileDetail.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\SourceFileDetail.cs",
+              "RelativeToolTip": "Entities\\SourceFileDetail.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAABqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-23T14:23:51.083Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SourceMaterialController.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Controllers\\SourceMaterialController.cs",
-              "RelativeDocumentMoniker": "Controllers\\SourceMaterialController.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Controllers\\SourceMaterialController.cs",
-              "RelativeToolTip": "Controllers\\SourceMaterialController.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAQwCEAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-16T11:40:58.415Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "FileDTO.cs",
               "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\DTO\\FileDTO.cs",
               "RelativeDocumentMoniker": "DTO\\FileDTO.cs",
@@ -218,6 +222,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "SourceMaterialService.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Services\\SourceMaterialService.cs",
+              "RelativeDocumentMoniker": "Implementations\\Services\\SourceMaterialService.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Services\\SourceMaterialService.cs",
+              "RelativeToolTip": "Implementations\\Services\\SourceMaterialService.cs",
+              "ViewState": "AgIAAKEAAAAAAAAAAAAWwKQAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-15T19:57:32.872Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "ApplicationContext.cs",
               "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Context\\ApplicationContext.cs",
               "RelativeDocumentMoniker": "Context\\ApplicationContext.cs",
@@ -230,7 +247,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "SourceMaterialRepository.cs",
               "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Repositories\\SourceMaterialRepository.cs",
               "RelativeDocumentMoniker": "Implementations\\Repositories\\SourceMaterialRepository.cs",

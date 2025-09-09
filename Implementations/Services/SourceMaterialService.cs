@@ -175,7 +175,7 @@ namespace Boompa.Implementations.Services
                     var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
 
                     var sourceFile = new SourceFileDetail();
-                    
+                    sourceFile.SourceMaterialId = Id;
                     sourceFile.FileType = file.ContentType;
                     Directory.CreateDirectory(suffix);
                     using (var stream = File.Create(basePath))
@@ -185,9 +185,13 @@ namespace Boompa.Implementations.Services
 
                     }
                     sourceFile.Path = basePath;
-                    if (forSource == true)
+                    if (forSource == false)
                     {
-                        sourceFile.SourceMaterialId = Id;
+                        var queFiles = new QuestionFileDetail()
+                        {
+                            QuestionId = Id,
+                        };
+                       
                     }
                     else
                     
