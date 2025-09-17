@@ -420,12 +420,6 @@
                     "type": "string",
                     "format": "date-time"
                   },
-                  "Questions": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/QuestionModel"
-                    }
-                  },
                   "RawFiles": {
                     "type": "array",
                     "items": {
@@ -449,9 +443,6 @@
                   "style": "form"
                 },
                 "CreatedOn": {
-                  "style": "form"
-                },
-                "Questions": {
                   "style": "form"
                 },
                 "RawFiles": {
@@ -488,6 +479,50 @@
             "application/*+json": {
               "schema": {
                 "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/SourceMaterial/AddQuestion": {
+      "post": {
+        "tags": [
+          "SourceMaterial"
+        ],
+        "parameters": [
+          {
+            "name": "sourceMaterialId",
+            "in": "header",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/QuestionModel"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "model": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -580,7 +615,7 @@
             "type": "string",
             "nullable": true
           },
-          "rawFiles": {
+          "queFiles": {
             "type": "array",
             "items": {
               "type": "string",

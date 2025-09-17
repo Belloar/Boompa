@@ -46,10 +46,10 @@ namespace Boompa.Implementations.Services
 
         public SourceMaterialService(ISourceMaterialRepository sourceMatRepository)
         {
-            _sourceMatRepository = sourceMatRepository;
+            _sourceMatRepository = sourceMatRepository;    /*********/
         }
         
-        public async Task<int> AddSourceMaterial(MaterialDTO.ArticleModel material)
+        public async Task<int> AddSourceMaterial(MaterialDTO.ArticleModel material)//, ICollection<MaterialDTO.QuestionModel> queModel
         {
             var result = 0;
             //the source material object is created
@@ -72,28 +72,10 @@ namespace Boompa.Implementations.Services
             }
 
             var sourceMaterialId = await _sourceMatRepository.AddSourceMaterial(sourceMaterial);
-            if (sourceMaterialId < 0) { throw new ServiceException("Failed to add source material to database"); }
+            if (sourceMaterialId <= 0) { throw new ServiceException("Failed to add source material to database"); }
             var fileResult = await AddFileDetails(material.RawFiles, sourceMaterialId);
-
-            //the source material is saved to the database and its id is returned
-
-            if (material.Questions != null)
-            {
-                await Task.Run(() =>
-                {
-
-                    foreach (var question in material.Questions)
-                    {
-                        var result = AddQuestion(question, sourceMaterialId);
-
-                    }
-                });
-            }
-            else
-            {
-                throw new ServiceException("No questions were provided for the source material");
-            }
-
+            
+            
 
                 return result;
         }
@@ -118,54 +100,44 @@ namespace Boompa.Implementations.Services
             
             throw new NotImplementedException();
         }
-        
-        
-        private async Task<int> AddQuestion(MaterialDTO.QuestionModel model,int sourceMaterialId)
+
+
+        public async Task<int> AddQuestion(ICollection<MaterialDTO.QuestionModel> model,int sourceMaterialId)
         {
             try
             {
-                var question = new Question()
+                var result = 0;
+                foreach (var question in model)
                 {
-                    SourceMaterialId = sourceMaterialId,
-                    Description = model.Description,
-                    Answer = model.Answer,
-                };
-                var result = await _sourceMatRepository.AddQuestionAsync(question);
-                if (result <= 0) { throw new ServiceException("Failed to add question to database"); }
-                if (model.RawFiles != null)
-                {
-                    var fileResult = await AddFileDetails(model.RawFiles, result, false);
-                    if (fileResult <= 0) { throw new ServiceException("Failed to add question files to database"); }
+                    var que = new Question()
+                    {
+                        Description = question.Description,
+                        Answer = question.Answer,
+                        SourceMaterialId = sourceMaterialId
+                    };
+                    
+                    result = await _sourceMatRepository.AddQuestionAsync(que);
+                    if (result <= 0) { throw new ServiceException("Failed to add question to database"); }
+                    if (question.QueFiles != null)
+                    {
+                        var fileResult = await AddFileDetails(question.QueFiles, result, false);
+                        if(fileResult <= 0) { throw new ServiceException("Failed to add question file details to database"); }
+                    }
                 }
                 return result;
 
             }catch(Exception ex)
             {
-                throw new ServiceException("Failed to add Question to database");
-            }
-        }
-        /*private async Task<SourceMaterial> CreateNewSource(SourceMaterial sourceMaterial)
-        {
-            try
-            {
-                return await _sourceMatRepository.AddSourceMaterial(sourceMaterial);
-                
-            }
-            catch(Exception ex)
-            {
                 throw new ServiceException(ex.Message);
             }
-           
-        }*/
+        }
 
-/*i feel this method will be good when a device can only play certain media types or the app will be configured to support only some types of media files e.g high quality files only,so i can later add some other checks later like "if a file is of a particular extension type do this and that instead of going deep into the code and end up breaking in the middle ".
-         */
-        /*private string GetMediaType(string extension)
-        {
-            var result = MediaTypes.GetValueOrDefault(extension);
-            if (result == null) { throw new ServiceException("Invalid file extension"); }
-            else { return result; }
-        }*/
+        
+
+
+
+
+
 
 
         //Description:  Responsible for adding any media file to the to the local file system and sends the file's information to the repository
@@ -243,5 +215,7 @@ namespace Boompa.Implementations.Services
 
             throw new NotImplementedException();
         }
+
+        
     }
 }

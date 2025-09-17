@@ -49,8 +49,8 @@ namespace Boompa.Implementations.Repositories
 
         public async Task<int> AddQuestionAsync(Question model)
         {
-            await _context.Questions.AddAsync(model);
-            await _context.SaveChangesAsync();
+             _context.Questions.Add(model);
+             _context.SaveChanges();
            var questionId =  _context.Questions.First(q => q.SourceMaterialId == model.SourceMaterialId).Id;
             return questionId;        
 
