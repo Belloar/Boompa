@@ -4,6 +4,7 @@ using Boompa.Entities;
 using Boompa.Entities.Identity;
 using Boompa.Exceptions;
 using Boompa.Interfaces.IRepository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Boompa.Implementations.Repositories
@@ -50,7 +51,7 @@ namespace Boompa.Implementations.Repositories
             {
                 var _result = _context.Learners.FirstOrDefault(x => x.User.Email == searchString);
             }
-            var result = _context.Learners.FirstOrDefault(x => x.User.UserName == searchString);
+            var result = _context.Learners.Include(d => d.Diary).ThenInclude(v => v.Visit).FirstOrDefault(x => x.User.UserName == searchString);
             if (result == null) throw new IdentityException("this user does not exist or has been deleted");
             return result;
         }

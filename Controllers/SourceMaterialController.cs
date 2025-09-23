@@ -1,5 +1,6 @@
 ﻿using Boompa.DTO;
 using Boompa.Entities;
+using Boompa.Implementations.Services;
 using Boompa.Interfaces.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,23 +23,12 @@ namespace Boompa.Controllers
         //[Authorize(Roles = "sub-creator")]
         [HttpPost]
         
-        public async Task<IActionResult> AddSourceMaterial([FromForm] MaterialDTO sourceMaterial)//,ICollection<MaterialDTO.QuestionModel> queModel || queModel == null ,queModel
+        public async Task<IActionResult> AddSourceMaterial([FromForm] MaterialDTO.ArticleModel sourceMaterial)
         {
-            var articleModel = new MaterialDTO.ArticleModel
-            {
-                Category = sourceMaterial.Category,
-                SourceMaterialName = sourceMaterial.SourceMaterialName,
-                Text = sourceMaterial.Text,
-                Creator = sourceMaterial.Creator,
-                CreatedOn = sourceMaterial.CreatedOn,
-                RawFiles = sourceMaterial.RawFiles,
-            };
-            
-
             try
             {
                 if(sourceMaterial== null ) { return BadRequest("Material not received by server"); }
-                var result = await _sourceMaterialService.AddSourceMaterial(articleModel);
+                var result = await _sourceMaterialService.AddSourceMaterial(sourceMaterial);
 
                 return Ok(result);
 
@@ -66,7 +56,7 @@ namespace Boompa.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddQuestion([FromForm] ICollection<MaterialDTO.QuestionModel> model, [FromHeader] int sourceMaterialId)
+        public async Task<IActionResult> AddQuestion([FromForm]MaterialDTO.QuestionModel model, [FromHeader] int sourceMaterialId)
         {
             if (model == null) { return BadRequest("Material not received"); }
             try
@@ -79,5 +69,26 @@ namespace Boompa.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSourceMaterial(string sourceMaterialName, string category)
+        {
+            if (sourceMaterialName == null) { return BadRequest("SourceMaterialName not provided"); }
+            try
+            {
+                var result  = await _sourceMaterialService.GetSourceMaterial(sourceMaterialName, category);
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while processing your request");
+            }
+        }
+
+        //[HttpGet]
+        //public async Task<IActionResult> GetSourceMaterialNames(string categoryName)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

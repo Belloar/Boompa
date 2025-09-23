@@ -3,18 +3,6 @@ namespace Boompa.DTO
 {
     public class MaterialDTO
     {
-        
-        public string Category { get; set; }
-        public string SourceMaterialName { get; set; }
-        public string Text { get; set; }
-        public string Creator { get; set; } 
-        public DateTime CreatedOn { get; set; } 
-        public ICollection<IFormFile>? RawFiles { get; set; } = new HashSet<IFormFile>();  
-        
-        
-
-
-
 
         public class ArticleModel
         {
@@ -23,6 +11,7 @@ namespace Boompa.DTO
 
             // the name of the article
             public string SourceMaterialName { get; set; }
+            public string Description { get; set; }
 
             // the content of the article
             public string Text { get; set; } 
@@ -36,6 +25,7 @@ namespace Boompa.DTO
             public string Description { get; set; }
             public string Answer {  get; set; }
             public ICollection<IFormFile>? QueFiles { get; set; } = new HashSet<IFormFile>();
+
         }
         
         public class OptionModel
@@ -48,6 +38,11 @@ namespace Boompa.DTO
             public string Description { get; set; }
             public string Answer { get; set; }
             
+        }
+        public class SourceDescriptor()
+        {
+            public string SourceName { get; set; }
+            public string SourceDescription { get; set; }
         }
 
 

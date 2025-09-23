@@ -29,9 +29,7 @@ namespace Boompa.Auth
         }
         public class UserLoginModel
         {
-            //[FromHeader]
             public string SearchString { get; set; }
-            //[FromHeader]
             public string Password { get; set; }
         }
     }

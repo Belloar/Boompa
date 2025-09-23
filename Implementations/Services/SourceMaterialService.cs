@@ -4,6 +4,7 @@ using Boompa.Exceptions;
 using Boompa.Interfaces.IRepository;
 using Boompa.Interfaces.IService;
 using Elfie.Serialization;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -11,7 +12,7 @@ namespace Boompa.Implementations.Services
 {
     public class SourceMaterialService : ISourceMaterialService
     {
-        private readonly ISourceMaterialRepository _sourceMatRepository;
+        private readonly ISourceMaterialRepository _sourceMaterialRepository;
         /*private readonly Dictionary<string, string> MediaTypes = new Dictionary<string, string>()
         {
             [".txt"] = "texts",
@@ -46,21 +47,23 @@ namespace Boompa.Implementations.Services
 
         public SourceMaterialService(ISourceMaterialRepository sourceMatRepository)
         {
-            _sourceMatRepository = sourceMatRepository;    /*********/
+            _sourceMaterialRepository = sourceMatRepository;    /*********/
         }
         
-        public async Task<int> AddSourceMaterial(MaterialDTO.ArticleModel material)//, ICollection<MaterialDTO.QuestionModel> queModel
+        public async Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material)//, ICollection<MaterialDTO.QuestionModel> queModel
         {
-            var result = 0;
+            var result = new Response.ProgressResponse();
+            var response = new Response();
             //the source material object is created
             var sourceMaterial = new SourceMaterial();
             if (material!= null)
             {
                 sourceMaterial.Name = material.SourceMaterialName;
+                sourceMaterial.Description = material.Description;
                 sourceMaterial.Category = material.Category;
                 sourceMaterial.Content = material.Text;
-                sourceMaterial.CreatedBy = material.Creator;
-                sourceMaterial.CreatedOn = material.CreatedOn;
+                sourceMaterial.CreatedBy = material.Creator; 
+                
             }
             else
             {
@@ -71,16 +74,20 @@ namespace Boompa.Implementations.Services
                 throw new ServiceException("sourceFiles not received");
             }
 
-            var sourceMaterialId = await _sourceMatRepository.AddSourceMaterial(sourceMaterial);
+            var sourceMaterialId = await _sourceMaterialRepository.AddSourceMaterial(sourceMaterial);//the source material id is expected here 
             if (sourceMaterialId <= 0) { throw new ServiceException("Failed to add source material to database"); }
-            var fileResult = await AddFileDetails(material.RawFiles, sourceMaterialId);
-            
+            else {response.StatusMessages.Add("Source material added successfully"); }
+
+            var fileResult = await AddLocalFileDetails(material.RawFiles, sourceMaterialId);
+            if(fileResult <= 0) { response.StatusMessages.Add("A problem occurred while saving files to device"); }
+            else { response.StatusMessages.Add("Files saved successfully"); }
+            result.Id = sourceMaterialId;
             
 
-                return result;
+                return response;
         }
 
-        public Task<int> DeleteSourceMaterial()
+        public Task<Response> DeleteSourceMaterial()
         {
 
 
@@ -90,41 +97,50 @@ namespace Boompa.Implementations.Services
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateQuestion(string model)
+        public Task<Response> UpdateQuestion(string model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateSourceMaterial(MaterialDTO rawMaterial)
+        public Task<Response> UpdateSourceMaterial(MaterialDTO rawMaterial)
         {
             
             throw new NotImplementedException();
         }
 
-
-        public async Task<int> AddQuestion(ICollection<MaterialDTO.QuestionModel> model,int sourceMaterialId)
+        /// <summary>
+        ///to be able to identify which file belongs to which question i'll change the name of the file to a key that will be unique to the question.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="queFiles"></param>
+        /// <param name="sourceMaterialId"></param>
+        /// <returns></returns>
+        /// <exception cref="ServiceException"></exception>
+        public async Task<Response> AddQuestion(MaterialDTO.QuestionModel question,int sourceMaterialId)
         {
             try
             {
                 var result = 0;
-                foreach (var question in model)
+                var response = new Response();
+                var que = new Question()
                 {
-                    var que = new Question()
-                    {
-                        Description = question.Description,
-                        Answer = question.Answer,
-                        SourceMaterialId = sourceMaterialId
-                    };
-                    
-                    result = await _sourceMatRepository.AddQuestionAsync(que);
-                    if (result <= 0) { throw new ServiceException("Failed to add question to database"); }
-                    if (question.QueFiles != null)
-                    {
-                        var fileResult = await AddFileDetails(question.QueFiles, result, false);
-                        if(fileResult <= 0) { throw new ServiceException("Failed to add question file details to database"); }
-                    }
+                    Description = question.Description,
+                    Answer = question.Answer,
+                    SourceMaterialId = sourceMaterialId
+                };
+
+                var questionId = await _sourceMaterialRepository.AddQuestionAsync(que);//this question id will be passed to the add option method i'll create sometime later
+                
+                if (question.QueFiles != null)
+                {
+                    var fileResult = await AddLocalFileDetails(question.QueFiles, questionId, false);
+                    if (fileResult <= 0) { response.StatusMessages.Add("A problem occurred while saving files to device"); }
                 }
-                return result;
+                //foreach (var question in model)
+                //{
+
+                //}
+                return response;
 
             }catch(Exception ex)
             {
@@ -132,21 +148,13 @@ namespace Boompa.Implementations.Services
             }
         }
 
-        
-
-
-
-
-
-
-
-        //Description:  Responsible for adding any media file to the to the local file system and sends the file's information to the repository
+        //Description:  Responsible for adding any media file to the local file system and sends the file's information to the repository
         //
         //Parameters: files sent from the front end, id(either for question or sourcematerial, forSource-used to detect whether the id is for question or sourcematerial)
         //
         //
         //returns: 
-        private async Task<int> AddFileDetails(ICollection<IFormFile> rawFiles,int Id,bool? forSource=true) 
+        private async Task<int> AddLocalFileDetails(ICollection<IFormFile> rawFiles,int Id,bool? forSource=true) 
         {
             var result = 0;
             if (rawFiles!= null && rawFiles.Count > 0)
@@ -157,14 +165,16 @@ namespace Boompa.Implementations.Services
                     foreach (var file in rawFiles)
                     {
                         var prefix = Directory.GetCurrentDirectory();
-                        var suffix = Path.Combine(prefix, file.ContentType);
+                        var ft = file.ContentType.Split('/')[0];
+                        var suffix = Path.Combine(prefix, ft);
                         var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
                         Directory.CreateDirectory(suffix);
-                        using (var stream = File.Create(basePath))
+                        //File.Move(basePath, $"{file.Name}");
+                        /*using (var stream = File.Create(basePath))
                         {
                               file.CopyToAsync(stream);
-                        }
-                        var queFile = new QuestionFileDetail()
+                        }*/
+                var queFile = new QuestionFileDetail()
                         {
                             QuestionId = Id,
                             FileType = file.ContentType,
@@ -172,7 +182,7 @@ namespace Boompa.Implementations.Services
                         };
                         queFiles.Add(queFile);
                     }
-                    result = await _sourceMatRepository.AddFileDetail(queFiles);
+                    result = await _sourceMaterialRepository.AddFileDetail(queFiles);
                 }
                 else
                 {
@@ -180,13 +190,14 @@ namespace Boompa.Implementations.Services
                     foreach (var file in rawFiles)
                     {
                         var prefix = Directory.GetCurrentDirectory();
-                        var suffix = Path.Combine(prefix, file.ContentType);
+                        var suffix = Path.Combine(prefix, file.ContentType.Split('/')[0]);
                         var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
                         Directory.CreateDirectory(suffix);
-                        using (var stream = File.Create(basePath))
+                        //File.Move(file., $"{file.Name}");
+                        /*using (var stream = File.Create(basePath))
                         {
-                              file.CopyToAsync(stream);
-                        }
+                              file (stream);
+                        }*/
                         var sourceFile = new SourceFileDetail()
                         {
                             SourceMaterialId = Id,
@@ -196,7 +207,7 @@ namespace Boompa.Implementations.Services
                         sourceFiles.Add(sourceFile);
 
                     }
-                    result = await _sourceMatRepository.AddFileDetail(sourceFiles);
+                    result = await _sourceMaterialRepository.AddFileDetail(sourceFiles);
 
                 }
             }
@@ -205,17 +216,25 @@ namespace Boompa.Implementations.Services
             return result;
         }
 
-        public async Task<int> AddCategory(string category)
+        public async Task<Response> AddCategory(string category)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<int> SaveFiles(List<SourceFileDetail> deets)
-        {
-
             throw new NotImplementedException();
         }
 
         
+
+        public Task<Response> GetAllSourceMaterials()
+        {
+            //(ICollection < MaterialDTO.SourceDescriptor >) is the return type i am planning for this method
+            throw new NotImplementedException();
+        }
+
+        public async Task<Response> GetSourceMaterial(string sourceMaterialName, string category)
+        {
+            var response = new Response();
+            if (sourceMaterialName == null || category == null) { throw new ServiceException("no identifier received"); }
+            response.Data = await _sourceMaterialRepository.GetSourceMaterial(sourceMaterialName,category);
+            return response;
+        }
     }
 }

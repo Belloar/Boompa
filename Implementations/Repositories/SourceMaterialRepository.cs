@@ -1,7 +1,9 @@
 ﻿using Boompa.Context;
 using Boompa.DTO;
 using Boompa.Entities;
+using Boompa.Exceptions;
 using Boompa.Interfaces.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Boompa.Implementations.Repositories
 {
@@ -50,8 +52,9 @@ namespace Boompa.Implementations.Repositories
         public async Task<int> AddQuestionAsync(Question model)
         {
              _context.Questions.Add(model);
-             _context.SaveChanges();
-           var questionId =  _context.Questions.First(q => q.SourceMaterialId == model.SourceMaterialId).Id;
+             var result = _context.SaveChanges();
+            if (result != 1) { throw new RepoException("Failed to add question to database"); }
+            var questionId =  _context.Questions.First(q => q.SourceMaterialId == model.SourceMaterialId).Id;
             return questionId;        
 
         }
@@ -84,6 +87,14 @@ namespace Boompa.Implementations.Repositories
         public Task<SourceMaterial> GetById(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<SourceMaterial> GetSourceMaterial(string sourceMaterialName,string category)
+        {
+            
+            var result = _context.SourceMaterials.Include(sm => sm.Questions).FirstOrDefault(sm => sm.Name.ToLower() == sourceMaterialName.ToLower());
+            if (result == null) { throw new RepoException("No material found with the provided name"); }
+            return result;
         }
 
         public Task<int> UpdateQuestion()

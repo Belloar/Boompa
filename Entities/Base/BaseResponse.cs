@@ -3,7 +3,7 @@
     public class BaseResponse
     {
         public int StatusCode { get; set; }
-        public string StatusMessage { get; set; }
-        public object Data { get; set; }
+        public ICollection<string> StatusMessages { get; set; } = new HashSet<string>();
+        public object? Data { get; set; }
     }
 }

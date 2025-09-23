@@ -410,6 +410,9 @@
                   "SourceMaterialName": {
                     "type": "string"
                   },
+                  "Description": {
+                    "type": "string"
+                  },
                   "Text": {
                     "type": "string"
                   },
@@ -434,6 +437,9 @@
                   "style": "form"
                 },
                 "SourceMaterialName": {
+                  "style": "form"
+                },
+                "Description": {
                   "style": "form"
                 },
                 "Text": {
@@ -511,22 +517,63 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "model": {
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Answer": {
+                    "type": "string"
+                  },
+                  "QueFiles": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/QuestionModel"
+                      "type": "string",
+                      "format": "binary"
                     }
                   }
                 }
               },
               "encoding": {
-                "model": {
+                "Description": {
+                  "style": "form"
+                },
+                "Answer": {
+                  "style": "form"
+                },
+                "QueFiles": {
                   "style": "form"
                 }
               }
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/SourceMaterial/GetSourceMaterial": {
+      "get": {
+        "tags": [
+          "SourceMaterial"
+        ],
+        "parameters": [
+          {
+            "name": "sourceMaterialName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -598,28 +645,6 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Visit"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "QuestionModel": {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "answer": {
-            "type": "string",
-            "nullable": true
-          },
-          "queFiles": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "binary"
             },
             "nullable": true
           }

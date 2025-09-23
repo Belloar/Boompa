@@ -16,6 +16,7 @@ namespace Boompa.Interfaces.IRepository
         Task<int> DeleteSourceMaterial();
         Task<int> DeleteQuestionAsync();
         Task<SourceMaterial> GetById(int id);
+        Task<SourceMaterial> GetSourceMaterial(string sourceMaterialName, string category);
         //Task<Category> GetCategoryByNameAsync(string categoryName);
         Task<int> UpdateQuestion();
         

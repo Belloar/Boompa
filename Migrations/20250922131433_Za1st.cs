@@ -110,6 +110,8 @@ namespace Boompa.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Content = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -188,6 +190,30 @@ namespace Boompa.Migrations
                     table.PrimaryKey("PK_Questions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Questions_SourceMaterials_SourceMaterialId",
+                        column: x => x.SourceMaterialId,
+                        principalTable: "SourceMaterials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "SourceFileDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    SourceMaterialId = table.Column<int>(type: "int", nullable: false),
+                    Path = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FileType = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SourceFileDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SourceFileDetails_SourceMaterials_SourceMaterialId",
                         column: x => x.SourceMaterialId,
                         principalTable: "SourceMaterials",
                         principalColumn: "Id",
@@ -291,12 +317,11 @@ namespace Boompa.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "FileDetails",
+                name: "QuestionFileDetails",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    SourceMaterialId = table.Column<int>(type: "int", nullable: false),
                     QuestionId = table.Column<int>(type: "int", nullable: false),
                     Path = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -305,17 +330,11 @@ namespace Boompa.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FileDetails", x => x.Id);
+                    table.PrimaryKey("PK_QuestionFileDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FileDetails_Questions_QuestionId",
+                        name: "FK_QuestionFileDetails_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FileDetails_SourceMaterials_SourceMaterialId",
-                        column: x => x.SourceMaterialId,
-                        principalTable: "SourceMaterials",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -421,16 +440,6 @@ namespace Boompa.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FileDetails_QuestionId",
-                table: "FileDetails",
-                column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FileDetails_SourceMaterialId",
-                table: "FileDetails",
-                column: "SourceMaterialId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Learners_DiaryId",
                 table: "Learners",
                 column: "DiaryId");
@@ -441,8 +450,18 @@ namespace Boompa.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_QuestionFileDetails_QuestionId",
+                table: "QuestionFileDetails",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Questions_SourceMaterialId",
                 table: "Questions",
+                column: "SourceMaterialId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SourceFileDetails_SourceMaterialId",
+                table: "SourceFileDetails",
                 column: "SourceMaterialId");
 
             migrationBuilder.CreateIndex(
@@ -471,13 +490,16 @@ namespace Boompa.Migrations
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "FileDetails");
-
-            migrationBuilder.DropTable(
                 name: "Learners");
 
             migrationBuilder.DropTable(
                 name: "Options");
+
+            migrationBuilder.DropTable(
+                name: "QuestionFileDetails");
+
+            migrationBuilder.DropTable(
+                name: "SourceFileDetails");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");

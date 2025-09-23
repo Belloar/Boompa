@@ -4,15 +4,18 @@ using Boompa.Entities.Identity;
 
 namespace Boompa.DTO
 {
-    public class Responses
+    public class Response : BaseResponse
     {
 
-        public class LoginResponse : BaseResponse
+        public class LoginResponse 
         {
             public string? JWT { get; set; }
-            public IdentityDTO.ValidUser Data { get; set; }
+            
         }
-
+        public class ProgressResponse 
+        {
+            public int Id { get; set; }
+        }
             
 
 

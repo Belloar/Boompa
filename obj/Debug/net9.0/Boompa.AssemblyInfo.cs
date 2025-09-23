@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Boompa")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9a950c2099fadfdc1d31038e7e6918182913e499")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+688239eee66456cec7f2cb1ab9f0aacf3374b0e5")]
 [assembly: System.Reflection.AssemblyProductAttribute("Boompa")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Boompa")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
