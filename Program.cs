@@ -14,7 +14,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//var connectionString = builder.Configuration.GetConnectionString("MySqlString");
+var connectionString = builder.Configuration.GetConnectionString("MySqlString");
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -50,6 +50,7 @@ builder.Services.AddSwaggerGen(options => {
         In = ParameterLocation.Header,
         Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
     });
+    
     options.AddSecurityRequirement(new OpenApiSecurityRequirement {
         {
             new OpenApiSecurityScheme {
@@ -83,7 +84,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Boompa v1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json","Boompa v1");
 
     });
 }

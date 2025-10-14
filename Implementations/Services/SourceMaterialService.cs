@@ -4,6 +4,7 @@ using Boompa.Exceptions;
 using Boompa.Interfaces.IRepository;
 using Boompa.Interfaces.IService;
 using Elfie.Serialization;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -11,8 +12,8 @@ namespace Boompa.Implementations.Services
 {
     public class SourceMaterialService : ISourceMaterialService
     {
-        private readonly ISourceMaterialRepository _sourceMatRepository;
-        private readonly Dictionary<string, string> MediaTypes = new Dictionary<string, string>()
+        private readonly ISourceMaterialRepository _sourceMaterialRepository;
+        /*private readonly Dictionary<string, string> MediaTypes = new Dictionary<string, string>()
         {
             [".txt"] = "texts",
             [".pdf"] = "texts",
@@ -40,26 +41,29 @@ namespace Boompa.Implementations.Services
             [".tiff"] ="image"
 
 
-        };
+        };*/
 
         
 
         public SourceMaterialService(ISourceMaterialRepository sourceMatRepository)
         {
-            _sourceMatRepository = sourceMatRepository;
+            _sourceMaterialRepository = sourceMatRepository;    /*********/
         }
         
-        public async Task<int> AddSourceMaterial(MaterialDTO.ArticleModel material)
+        public async Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material)//, ICollection<MaterialDTO.QuestionModel> queModel
         {
+            var result = new Response.ProgressResponse();
+            var response = new Response();
             //the source material object is created
             var sourceMaterial = new SourceMaterial();
             if (material!= null)
             {
                 sourceMaterial.Name = material.SourceMaterialName;
+                sourceMaterial.Description = material.Description;
                 sourceMaterial.Category = material.Category;
                 sourceMaterial.Content = material.Text;
-                sourceMaterial.CreatedBy = material.Creator;
-                sourceMaterial.CreatedOn = material.CreatedOn;
+                sourceMaterial.CreatedBy = material.Creator; 
+                
             }
             else
             {
@@ -69,31 +73,21 @@ namespace Boompa.Implementations.Services
             {
                 throw new ServiceException("sourceFiles not received");
             }
-            else
-            {
-                await AddFileDetails(material.RawFiles,sourceMaterial.Id,true);
-            }
-                var sourceMaterialId = await _sourceMatRepository.AddSourceMaterial(sourceMaterial);
-            
-            //the source material is saved to the database and its id is returned
-            
-            if(material.Questions != null)
-            {
-                foreach (var question in material.Questions) 
-                {
-                    await AddQuestion(question,sourceMaterialId);
-                }
-            }
-            else
-            {
-                throw new ServiceException("No questions were provided for the source material");
-            }
 
+            var sourceMaterialId = await _sourceMaterialRepository.AddSourceMaterial(sourceMaterial);//the source material id is expected here 
+            if (sourceMaterialId <= 0) { throw new ServiceException("Failed to add source material to database"); }
+            else {response.StatusMessages.Add("Source material added successfully"); }
 
-                return 1;
+            var fileResult = await AddLocalFileDetails(material.RawFiles, sourceMaterialId);
+            if(fileResult <= 0) { response.StatusMessages.Add("A problem occurred while saving files to device"); }
+            else { response.StatusMessages.Add("Files saved successfully"); }
+            result.Id = sourceMaterialId;
+            
+
+                return response;
         }
 
-        public Task<int> DeleteSourceMaterial()
+        public Task<Response> DeleteSourceMaterial()
         {
 
 
@@ -103,118 +97,144 @@ namespace Boompa.Implementations.Services
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateQuestion(string model)
+        public Task<Response> UpdateQuestion(string model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateSourceMaterial(MaterialDTO rawMaterial)
+        public Task<Response> UpdateSourceMaterial(MaterialDTO rawMaterial)
         {
             
             throw new NotImplementedException();
         }
-        
-        
-        private async Task<int> AddQuestion(MaterialDTO.QuestionModel model,int sourceMaterialId)
+
+        /// <summary>
+        ///to be able to identify which file belongs to which question i'll change the name of the file to a key that will be unique to the question.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="queFiles"></param>
+        /// <param name="sourceMaterialId"></param>
+        /// <returns></returns>
+        /// <exception cref="ServiceException"></exception>
+        public async Task<Response> AddQuestion(MaterialDTO.QuestionModel question,int sourceMaterialId)
         {
             try
             {
-                var question = new Question()
+                var result = 0;
+                var response = new Response();
+                var que = new Question()
                 {
-                    SourceMaterialId = sourceMaterialId,
-                    Description = model.Description,
-                    Answer = model.Answer,
+                    Description = question.Description,
+                    Answer = question.Answer,
+                    SourceMaterialId = sourceMaterialId
                 };
-                if(model.RawFiles!= null)
-                {
-                await AddFileDetails(model.RawFiles, question.Id, false);
-                    
-                }
+
+                var questionId = await _sourceMaterialRepository.AddQuestionAsync(que);//this question id will be passed to the add option method i'll create sometime later
                 
-                var result = await _sourceMatRepository.AddQuestionAsync(question);
-                return question.SourceMaterialId;
+                if (question.QueFiles != null)
+                {
+                    var fileResult = await AddLocalFileDetails(question.QueFiles, questionId, false);
+                    if (fileResult <= 0) { response.StatusMessages.Add("A problem occurred while saving files to device"); }
+                }
+                //foreach (var question in model)
+                //{
+
+                //}
+                return response;
 
             }catch(Exception ex)
             {
-                throw new ServiceException("Failed to add Question to database");
-            }
-        }
-        /*private async Task<SourceMaterial> CreateNewSource(SourceMaterial sourceMaterial)
-        {
-            try
-            {
-                return await _sourceMatRepository.AddSourceMaterial(sourceMaterial);
-                
-            }
-            catch(Exception ex)
-            {
                 throw new ServiceException(ex.Message);
             }
-           
-        }*/
+        }
 
-/*i feel this method will be good when a device can only play certain media types or the app will be configured to support only some types of media files e.g high quality files only,so i can later add some other checks later like "if a file is of a particular extension type do this and that instead of going deep into the code and end up breaking in the middle ".
-         */
-        /*private string GetMediaType(string extension)
-        {
-            var result = MediaTypes.GetValueOrDefault(extension);
-            if (result == null) { throw new ServiceException("Invalid file extension"); }
-            else { return result; }
-        }*/
-
-        private async Task<int> AddFileDetails(ICollection<IFormFile> rawFiles,int Id,bool? forSource=true) 
+        //Description:  Responsible for adding any media file to the local file system and sends the file's information to the repository
+        //
+        //Parameters: files sent from the front end, id(either for question or sourcematerial, forSource-used to detect whether the id is for question or sourcematerial)
+        //
+        //
+        //returns: 
+        private async Task<int> AddLocalFileDetails(ICollection<IFormFile> rawFiles,int Id,bool? forSource=true) 
         {
             var result = 0;
             if (rawFiles!= null && rawFiles.Count > 0)
             {
-                var prefix = Directory.GetCurrentDirectory();
-                var sourceFiles = new List<SourceFileDetail>();
-                foreach (var file in rawFiles)
+                if (forSource == false)
                 {
-                    var suffix = Path.Combine(prefix,file.ContentType) ;
-                    var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
-
-                    var sourceFile = new SourceFileDetail();
-                    sourceFile.SourceMaterialId = Id;
-                    sourceFile.FileType = file.ContentType;
-                    Directory.CreateDirectory(suffix);
-                    using (var stream = File.Create(basePath))
+                    var queFiles = new List<QuestionFileDetail>();
+                    foreach (var file in rawFiles)
                     {
-                        
-                        await file.CopyToAsync(stream);
-
-                    }
-                    sourceFile.Path = basePath;
-                    if (forSource == false)
-                    {
-                        var queFiles = new QuestionFileDetail()
+                        var prefix = Directory.GetCurrentDirectory();
+                        var ft = file.ContentType.Split('/')[0];
+                        var suffix = Path.Combine(prefix, ft);
+                        var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
+                        Directory.CreateDirectory(suffix);
+                        //File.Move(basePath, $"{file.Name}");
+                        /*using (var stream = File.Create(basePath))
+                        {
+                              file.CopyToAsync(stream);
+                        }*/
+                var queFile = new QuestionFileDetail()
                         {
                             QuestionId = Id,
+                            FileType = file.ContentType,
+                            Path = basePath,
                         };
-                       
+                        queFiles.Add(queFile);
                     }
-                    else
-                    
+                    result = await _sourceMaterialRepository.AddFileDetail(queFiles);
+                }
+                else
+                {
+                    var sourceFiles = new List<SourceFileDetail>();
+                    foreach (var file in rawFiles)
+                    {
+                        var prefix = Directory.GetCurrentDirectory();
+                        var suffix = Path.Combine(prefix, file.ContentType.Split('/')[0]);
+                        var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
+                        Directory.CreateDirectory(suffix);
+                        //File.Move(file., $"{file.Name}");
+                        /*using (var stream = File.Create(basePath))
+                        {
+                              file (stream);
+                        }*/
+                        var sourceFile = new SourceFileDetail()
+                        {
+                            SourceMaterialId = Id,
+                            FileType = file.ContentType,
+                            Path = basePath,
+                        };
                         sourceFiles.Add(sourceFile);
-                    
+
+                    }
+                    result = await _sourceMaterialRepository.AddFileDetail(sourceFiles);
 
                 }
-                result=await _sourceMatRepository.AddFileDeets(sourceFiles);
             }
 
             
             return result;
         }
 
-        public async Task<int> AddCategory(string category)
+        public async Task<Response> AddCategory(string category)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<int> SaveFiles(List<SourceFileDetail> deets)
-        {
+        
 
+        public Task<Response> GetAllSourceMaterials()
+        {
+            //(ICollection < MaterialDTO.SourceDescriptor >) is the return type i am planning for this method
             throw new NotImplementedException();
+        }
+
+        public async Task<Response> GetSourceMaterial(string sourceMaterialName, string category)
+        {
+            var response = new Response();
+            if (sourceMaterialName == null || category == null) { throw new ServiceException("no identifier received"); }
+            response.Data = await _sourceMaterialRepository.GetSourceMaterial(sourceMaterialName,category);
+            return response;
         }
     }
 }

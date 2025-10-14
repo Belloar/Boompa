@@ -410,6 +410,9 @@
                   "SourceMaterialName": {
                     "type": "string"
                   },
+                  "Description": {
+                    "type": "string"
+                  },
                   "Text": {
                     "type": "string"
                   },
@@ -419,12 +422,6 @@
                   "CreatedOn": {
                     "type": "string",
                     "format": "date-time"
-                  },
-                  "Questions": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/QuestionModel"
-                    }
                   },
                   "RawFiles": {
                     "type": "array",
@@ -442,6 +439,9 @@
                 "SourceMaterialName": {
                   "style": "form"
                 },
+                "Description": {
+                  "style": "form"
+                },
                 "Text": {
                   "style": "form"
                 },
@@ -449,9 +449,6 @@
                   "style": "form"
                 },
                 "CreatedOn": {
-                  "style": "form"
-                },
-                "Questions": {
                   "style": "form"
                 },
                 "RawFiles": {
@@ -492,6 +489,91 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/SourceMaterial/AddQuestion": {
+      "post": {
+        "tags": [
+          "SourceMaterial"
+        ],
+        "parameters": [
+          {
+            "name": "sourceMaterialId",
+            "in": "header",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Answer": {
+                    "type": "string"
+                  },
+                  "QueFiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Description": {
+                  "style": "form"
+                },
+                "Answer": {
+                  "style": "form"
+                },
+                "QueFiles": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/SourceMaterial/GetSourceMaterial": {
+      "get": {
+        "tags": [
+          "SourceMaterial"
+        ],
+        "parameters": [
+          {
+            "name": "sourceMaterialName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -563,28 +645,6 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Visit"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "QuestionModel": {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "answer": {
-            "type": "string",
-            "nullable": true
-          },
-          "rawFiles": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "binary"
             },
             "nullable": true
           }

@@ -25,20 +25,19 @@ namespace Boompa.Controllers
         [HttpGet("{username}/{password}")]
         public async Task<IActionResult> UserLogin(string username,string password)
         {
-            if( username == null && password == null) return BadRequest("No data received");
+            if (username == null && password == null) { return BadRequest("No data received"); }
             try
             {
-                var validUser = await _identityService.AuthenticateUser(username,password);
+                var response = new Response();
+
+                var validUser = await _identityService.AuthenticateUser(username, password);
                 if (validUser == null)
                 {
                     return NotFound($"A user with the username or email does not exist");
                 }
-                var response = new Responses.LoginResponse()
-                {
-                    StatusMessage = "success",
-                    Data = validUser,
-                };
-                
+                response.StatusCode = 200;
+                response.Data=validUser;
+                response.StatusMessages.Add($"Welcome {validUser.UserName}");
                 return Ok(response);
             }
             catch(IdentityException ex)

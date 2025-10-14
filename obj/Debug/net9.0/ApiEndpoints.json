@@ -273,6 +273,37 @@
   },
   {
     "ContainingType": "Boompa.Controllers.SourceMaterialController",
+    "Method": "AddQuestion",
+    "RelativePath": "api/SourceMaterial/AddQuestion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Answer",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "QueFiles",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "sourceMaterialId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.SourceMaterialController",
     "Method": "AddSourceMaterial",
     "RelativePath": "api/SourceMaterial/AddSourceMaterial",
     "HttpMethod": "POST",
@@ -286,6 +317,11 @@
       },
       {
         "Name": "SourceMaterialName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
         "Type": "System.String",
         "IsRequired": false
       },
@@ -305,13 +341,29 @@
         "IsRequired": false
       },
       {
-        "Name": "Questions",
-        "Type": "System.Collections.Generic.ICollection\u00601[[Boompa.DTO.MaterialDTO\u002BQuestionModel, Boompa, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Name": "RawFiles",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.SourceMaterialController",
+    "Method": "GetSourceMaterial",
+    "RelativePath": "api/SourceMaterial/GetSourceMaterial",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sourceMaterialName",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "RawFiles",
-        "Type": "System.Collections.Generic.ICollection\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "Name": "category",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],

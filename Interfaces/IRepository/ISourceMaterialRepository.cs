@@ -9,12 +9,14 @@ namespace Boompa.Interfaces.IRepository
         
         Task<int> AddSourceMaterial(SourceMaterial sourceMaterial);
         Task<int> AddChallengeAsync();
-        Task<int> AddFileDeets(List<SourceFileDetail> files);
-        Task<Question> AddQuestionAsync(Question model);
+        Task<int> AddFileDetail(List<SourceFileDetail> files);
+        Task<int> AddFileDetail(List<QuestionFileDetail> files);
+        Task<int> AddQuestionAsync(Question model);
         Task<int> AddOptionAsync(IEnumerable<Option> options);
         Task<int> DeleteSourceMaterial();
         Task<int> DeleteQuestionAsync();
         Task<SourceMaterial> GetById(int id);
+        Task<SourceMaterial> GetSourceMaterial(string sourceMaterialName, string category);
         //Task<Category> GetCategoryByNameAsync(string categoryName);
         Task<int> UpdateQuestion();
         

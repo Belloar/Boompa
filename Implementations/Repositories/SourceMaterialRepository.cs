@@ -1,7 +1,9 @@
 ﻿using Boompa.Context;
 using Boompa.DTO;
 using Boompa.Entities;
+using Boompa.Exceptions;
 using Boompa.Interfaces.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Boompa.Implementations.Repositories
 {
@@ -20,14 +22,22 @@ namespace Boompa.Implementations.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<int> AddFileDeets(List<SourceFileDetail> files)
+        public async Task<int> AddFileDetail(List<SourceFileDetail> files)
         {
             foreach(SourceFileDetail fileDeets in files)
             {
-                await _context.FileDetails.AddAsync(fileDeets);
+                await _context.SourceFileDetails.AddAsync(fileDeets);
             }
             return _context.SaveChanges();
 
+        }
+        public async Task<int> AddFileDetail(List<QuestionFileDetail> files)
+        {
+            foreach (var fileDeets in files)
+            {
+                await _context.QuestionFileDetails.AddAsync(fileDeets);
+            }
+            return _context.SaveChanges();
         }
 
         public async Task<int> AddOptionAsync(IEnumerable<Option> options)
@@ -39,12 +49,13 @@ namespace Boompa.Implementations.Repositories
             return _context.SaveChanges();
         }
 
-        public async Task<Question> AddQuestionAsync(Question model)
+        public async Task<int> AddQuestionAsync(Question model)
         {
-            await _context.Questions.AddAsync(model);
-            await _context.SaveChangesAsync();
-           var question =  _context.Questions.First(q => q.SourceMaterialId == model.SourceMaterialId);
-            return question;        
+             _context.Questions.Add(model);
+             var result = _context.SaveChanges();
+            if (result != 1) { throw new RepoException("Failed to add question to database"); }
+            var questionId =  _context.Questions.First(q => q.SourceMaterialId == model.SourceMaterialId).Id;
+            return questionId;        
 
         }
 
@@ -76,6 +87,14 @@ namespace Boompa.Implementations.Repositories
         public Task<SourceMaterial> GetById(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<SourceMaterial> GetSourceMaterial(string sourceMaterialName,string category)
+        {
+            
+            var result = _context.SourceMaterials.Include(sm => sm.Questions).FirstOrDefault(sm => sm.Name.ToLower() == sourceMaterialName.ToLower());
+            if (result == null) { throw new RepoException("No material found with the provided name"); }
+            return result;
         }
 
         public Task<int> UpdateQuestion()
