@@ -120,7 +120,146 @@
         }
       }
     },
-    "/api/Identity/UserLogin/{username}/{password}": {
+    "/api/Admin/AddSourceMaterial": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Category": {
+                    "type": "string"
+                  },
+                  "SourceMaterialName": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Text": {
+                    "type": "string"
+                  },
+                  "Creator": {
+                    "type": "string"
+                  },
+                  "CreatedOn": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "RawFiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Category": {
+                  "style": "form"
+                },
+                "SourceMaterialName": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "Text": {
+                  "style": "form"
+                },
+                "Creator": {
+                  "style": "form"
+                },
+                "CreatedOn": {
+                  "style": "form"
+                },
+                "RawFiles": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/GetLearnerById": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "header",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/GetLearner": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "searchString",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/GetLearnersInfo": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/GetLearners": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Identity/UserLogin": {
       "get": {
         "tags": [
           "Identity"
@@ -128,20 +267,30 @@
         "parameters": [
           {
             "name": "username",
-            "in": "path",
-            "required": true,
+            "in": "header",
             "schema": {
               "type": "string"
             }
           },
           {
             "name": "password",
-            "in": "path",
-            "required": true,
+            "in": "header",
             "schema": {
               "type": "string"
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Identity/GetUsers": {
+      "get": {
+        "tags": [
+          "Identity"
         ],
         "responses": {
           "200": {
@@ -157,50 +306,19 @@
         ],
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "UserName": {
-                    "type": "string"
-                  },
-                  "Password": {
-                    "type": "string"
-                  },
-                  "PhoneNumber": {
-                    "type": "string"
-                  },
-                  "Email": {
-                    "type": "string"
-                  },
-                  "Age": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "SchoolName": {
-                    "type": "string"
-                  }
-                }
-              },
-              "encoding": {
-                "UserName": {
-                  "style": "form"
-                },
-                "Password": {
-                  "style": "form"
-                },
-                "PhoneNumber": {
-                  "style": "form"
-                },
-                "Email": {
-                  "style": "form"
-                },
-                "Age": {
-                  "style": "form"
-                },
-                "SchoolName": {
-                  "style": "form"
-                }
+                "$ref": "#/components/schemas/CreateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRequest"
               }
             }
           }
@@ -220,18 +338,11 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -247,38 +358,28 @@
         "tags": [
           "Learner"
         ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
             }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Learner/TestMethod/{username}": {
-      "get": {
-        "tags": [
-          "Learner"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -294,7 +395,7 @@
         "parameters": [
           {
             "name": "searchString",
-            "in": "query",
+            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -523,6 +624,9 @@
                   "Answer": {
                     "type": "string"
                   },
+                  "Option": {
+                    "type": "string"
+                  },
                   "QueFiles": {
                     "type": "array",
                     "items": {
@@ -537,6 +641,9 @@
                   "style": "form"
                 },
                 "Answer": {
+                  "style": "form"
+                },
+                "Option": {
                   "style": "form"
                 },
                 "QueFiles": {
@@ -561,14 +668,35 @@
         "parameters": [
           {
             "name": "sourceMaterialName",
-            "in": "query",
+            "in": "header",
             "schema": {
               "type": "string"
             }
           },
           {
             "name": "category",
-            "in": "query",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/SourceMaterial/GetSourceMaterialNames": {
+      "get": {
+        "tags": [
+          "SourceMaterial"
+        ],
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -623,6 +751,32 @@
   },
   "components": {
     "schemas": {
+      "CreateRequest": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "age": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Diary": {
         "type": "object",
         "properties": {
@@ -675,6 +829,10 @@
             "nullable": true
           },
           "school": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
             "type": "string",
             "nullable": true
           }

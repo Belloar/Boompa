@@ -80,7 +80,6 @@ C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\System.
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\System.Reflection.MetadataLoadContext.dll
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\System.Text.Json.dll
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\af\Humanizer.resources.dll
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\ar\Humanizer.resources.dll
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\az\Humanizer.resources.dll
@@ -247,12 +246,6 @@ C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\scopedc
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\staticwebassets\msbuild.Boompa.Microsoft.AspNetCore.StaticWebAssets.props
-C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\staticwebassets\msbuild.Boompa.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\staticwebassets\msbuild.build.Boompa.props
-C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Boompa.props
-C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Boompa.props
-C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\staticwebassets.pack.json
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\Boompa.csproj.Up2Date
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\Boompa.dll
@@ -260,3 +253,14 @@ C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\refint\
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\Boompa.pdb
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\Boompa.genruntimeconfig.cache
 C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\ref\Boompa.dll
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\rjimswa.dswa.cache.json
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\obj\Debug\net9.0\staticwebassets.build.json.cache
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\AWSSDK.Core.dll
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\AWSSDK.S3.dll
+C:\Users\ABDUR-RAHMAN BELLO\source\repos\Belloar\Boompa\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll

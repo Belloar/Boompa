@@ -14,12 +14,12 @@ namespace Boompa.Implementations.Repositories
             _context = context;
         }
 
-        public async Task<int> AddAdminAsync(Admin model, CancellationToken cancellationToken)
+        public async Task AddAdminAsync(Admin model)
         {
-            await _context.Admins.AddAsync(model);
-            var result = await _context.SaveChangesAsync(cancellationToken);
-            if(result == 0) return 0;
-            return result;
+             await _context.Admins.AddAsync(model);
+            
+            //if(result == 0) return 0;
+            //return result;
         }
 
         public Task<int> DeleteAdminAsync(int id)
@@ -42,7 +42,7 @@ namespace Boompa.Implementations.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateAdminAsync(AdminDTO.UpdateModel requestModel, CancellationToken cancellationToken)
+        public Task<int> UpdateAdminAsync(AdminDTO.UpdateModel requestModel)
         {
             throw new NotImplementedException();
         }

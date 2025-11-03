@@ -17,10 +17,9 @@ namespace Boompa.Controllers
         private readonly ISourceMaterialService _sourceMaterialService;
         public SourceMaterialController(ISourceMaterialService sourceMaterialService) 
         {
-            _sourceMaterialService = sourceMaterialService;             /****************************/
+            _sourceMaterialService = sourceMaterialService;            
         }
-        //[Authorize(Roles ="creator")]
-        //[Authorize(Roles = "sub-creator")]
+        
         [HttpPost]
         
         public async Task<IActionResult> AddSourceMaterial([FromForm] MaterialDTO.ArticleModel sourceMaterial)
@@ -71,7 +70,7 @@ namespace Boompa.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSourceMaterial(string sourceMaterialName, string category)
+        public async Task<IActionResult> GetSourceMaterial([FromHeader]string sourceMaterialName, [FromHeader]string category)
         {
             if (sourceMaterialName == null) { return BadRequest("SourceMaterialName not provided"); }
             try
@@ -84,11 +83,20 @@ namespace Boompa.Controllers
                 return StatusCode(500, "An error occurred while processing your request");
             }
         }
+        
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetSourceMaterialNames(string categoryName)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        [HttpGet]
+        public async Task<IActionResult> GetSourceMaterialNames([FromHeader] string categoryName)
+        {
+            var response = new Response();
+            if (categoryName == null)
+            {
+                response.StatusCode = 500;
+                response.StatusMessages.Add("provide a Category name");
+                return BadRequest(response);
+            }
+            var result = await _sourceMaterialService.GetAllSourceMaterials(categoryName);
+            return Ok(result);
+        }
     }
 }

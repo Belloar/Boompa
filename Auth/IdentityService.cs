@@ -1,4 +1,5 @@
 ﻿using BCrypt.Net;
+using Boompa.DTO;
 using Boompa.Entities.Identity;
 using Boompa.Exceptions;
 using Boompa.Interfaces;
@@ -11,22 +12,24 @@ namespace Boompa.Auth
 {
     public class IdentityService : IIdentityService
     {
-        private readonly IIdentityRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
+        
         private readonly IConfiguration _configuration;
-        public IdentityService(IIdentityRepository repository,IConfiguration configuration)
+        public IdentityService(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
+            
             _configuration = configuration;
         }
        
 
-        public async Task<int> UpdateAsync(string email, IdentityDTO.UpdateRequestModel model, CancellationToken cancellationToken)
+        public async Task UpdateAsync(string email, IdentityDTO.UpdateRequestModel model)
         {
             var user = new User();
-            var credentials = await _repository.GetUserAsync(email);
+            var credentials = await _unitOfWork.Identity.GetUserAsync(email);
             if (credentials == null)
             {
-                return 0;
+                throw new ServiceException("user not found");
 
             }
             user.Email = model.Email;
@@ -34,14 +37,28 @@ namespace Boompa.Auth
             user.LastModifiedBy = credentials.UserName;
             user.LastModifiedOn = DateTime.UtcNow;
 
-            var result = await _repository.UpdateAsync(credentials.Id, user, cancellationToken);
-            return result;
+            await _unitOfWork.Identity.UpdateAsync(credentials.Id, user);
+            
 
         }
        
-        public Task<IEnumerable<User>> GetUsersAsync()
+        public async Task<Response> GetUsersAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = new Response();
+                var result = await _unitOfWork.Identity.GetUsersAsync();
+
+                response.StatusMessages.Add("Success");
+                response.Data = result;
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw new ServiceException($"{ex.Message},{ex.InnerException?.Message}");
+            }
+
         }
         public Task<User> GetUserAsync(int id)
         {
@@ -49,14 +66,14 @@ namespace Boompa.Auth
         }
         public async Task<User> GetUserAsync(string searchString)
         {
-            var validUser = await _repository.GetUserAsync(searchString);
+            var validUser = await _unitOfWork.Identity.GetUserAsync(searchString);
             return validUser;
         }
-        public Task<int> DeleteAsync(int id, CancellationToken cancellationToken)
+        public Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
-        public Task<int> UpdateAsync(int id, IdentityDTO.UpdateRequestModel model, CancellationToken cancellationToken)
+        public Task  UpdateAsync(int id, IdentityDTO.UpdateRequestModel model)
         {
             throw new NotImplementedException();
         }
@@ -83,7 +100,7 @@ namespace Boompa.Auth
                 _configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
                 claims,
-                expires: DateTime.UtcNow.AddMinutes(10),
+                expires: DateTime.UtcNow.AddMinutes(60),
                 signingCredentials:credentials);
 
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
@@ -95,8 +112,8 @@ namespace Boompa.Auth
             var user = new User();
             if (searchString.Contains('@')) isEmail = true;
 
-            if (isEmail) _ = await _repository.GetUserAsync(searchString,true);
-            user = await _repository.GetUserAsync(searchString);
+            if (isEmail) await _unitOfWork.Identity.GetUserAsync(searchString,true);
+            user = await _unitOfWork.Identity.GetUserAsync(searchString);
             if (user == null) throw new IdentityException("User doesn't exist");
             if (!BCrypt.Net.BCrypt.Verify(password, user.Password)) throw new ServiceException("Invalid Username or Password");
 
@@ -113,17 +130,17 @@ namespace Boompa.Auth
             }
             return model;
         }
-        public Task<int> AddRoleAsync(string role, CancellationToken cancellationToken)
+        public Task AddRoleAsync(string role)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<int> UpdateUserRole(int id,string role, CancellationToken cancellationToken)
+        public async Task UpdateUserRole(int id,string role)
         {
-            var newRole = await _repository.GetRoleAsync(role);
+            var newRole = await _unitOfWork.Identity.GetRoleAsync(role);
             if (newRole == null) throw new NotFoundException("this role does not exist or is already deleted");
-            var result = await _repository.UpdateUserRole(id,newRole,cancellationToken);
-            return result;
+             await _unitOfWork.Identity.UpdateUserRole(id,newRole);
+            
         }
         private static IEnumerable<Claim> GetClaims(string token)
         {
@@ -136,7 +153,7 @@ namespace Boompa.Auth
 
         public async Task<bool> CheckUser(string email)
         {
-            var exists = await _repository.CheckUser(email);
+            var exists = await _unitOfWork.Identity.CheckUser(email);
             if (exists) throw new IdentityException("this user already exists");
             return true;
         }

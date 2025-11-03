@@ -1,6 +1,52 @@
 [
   {
     "ContainingType": "Boompa.Controllers.AdminController",
+    "Method": "AddSourceMaterial",
+    "RelativePath": "api/Admin/AddSourceMaterial",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Category",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SourceMaterialName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Text",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Creator",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "CreatedOn",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "RawFiles",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.AdminController",
     "Method": "CreateAdmin",
     "RelativePath": "api/Admin/CreateAdmin",
     "HttpMethod": "POST",
@@ -43,6 +89,58 @@
   },
   {
     "ContainingType": "Boompa.Controllers.AdminController",
+    "Method": "GetLearner",
+    "RelativePath": "api/Admin/GetLearner",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "searchString",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.AdminController",
+    "Method": "GetLearnerById",
+    "RelativePath": "api/Admin/GetLearnerById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.AdminController",
+    "Method": "GetLearners",
+    "RelativePath": "api/Admin/GetLearners",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.AdminController",
+    "Method": "GetLearnersInfo",
+    "RelativePath": "api/Admin/GetLearnersInfo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.AdminController",
     "Method": "UpdateAdmin",
     "RelativePath": "api/Admin/UpdateAdmin",
     "HttpMethod": "GET",
@@ -74,8 +172,18 @@
   },
   {
     "ContainingType": "Boompa.Controllers.IdentityController",
+    "Method": "GetUsers",
+    "RelativePath": "api/Identity/GetUsers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.IdentityController",
     "Method": "UserLogin",
-    "RelativePath": "api/Identity/UserLogin/{username}/{password}",
+    "RelativePath": "api/Identity/UserLogin",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -83,12 +191,12 @@
       {
         "Name": "username",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       },
       {
         "Name": "password",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -102,34 +210,9 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "UserName",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Password",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "PhoneNumber",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Email",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Age",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "SchoolName",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "model",
+        "Type": "Boompa.DTO.LearnerDTO\u002BCreateRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -145,11 +228,6 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "id",
-        "Type": "",
         "IsRequired": true
       }
     ],
@@ -182,7 +260,7 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -205,22 +283,6 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Boompa.Controllers.LearnerController",
-    "Method": "TestMethod",
-    "RelativePath": "api/Learner/TestMethod/{username}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "username",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
     "ReturnTypes": []
   },
   {
@@ -286,6 +348,11 @@
       },
       {
         "Name": "Answer",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Option",
         "Type": "System.String",
         "IsRequired": false
       },
@@ -363,6 +430,22 @@
       },
       {
         "Name": "category",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.SourceMaterialController",
+    "Method": "GetSourceMaterialNames",
+    "RelativePath": "api/SourceMaterial/GetSourceMaterialNames",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryName",
         "Type": "System.String",
         "IsRequired": false
       }

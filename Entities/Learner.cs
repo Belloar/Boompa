@@ -12,7 +12,7 @@ namespace Boompa.Entities
         public string? LastName { get; set; }
         public int Age { get; set; }
         public string? School { get; set; }
-        public byte[]? ProfilePicture { get; set; }
+        public string? ProfilePicture { get; set; }
         public string Rank { get; set; } = "Hatchling";
         public int DiaryId { get; set; }
         public Diary? Diary { get; set; }

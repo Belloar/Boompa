@@ -25,7 +25,7 @@ namespace Boompa.Auth
             public int UserId { get; set; }
             public string UserName { get; set; }
             public string Email { get; set; }
-            public ICollection<string> Roles = new List<string>();
+            public ICollection<string>? Roles = new List<string>();
         }
         public class UserLoginModel
         {

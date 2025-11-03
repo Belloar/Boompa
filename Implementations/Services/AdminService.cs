@@ -3,6 +3,7 @@ using Boompa.DTO;
 using Boompa.Entities;
 using Boompa.Entities.Identity;
 using Boompa.Exceptions;
+using Boompa.Interfaces;
 using Boompa.Interfaces.IRepository;
 using Boompa.Interfaces.IService;
 
@@ -10,22 +11,28 @@ namespace Boompa.Implementations.Services
 {
     public class AdminService : IAdminService
     {
-        private readonly IAdminRepository _adminRepo;
-        private readonly IIdentityRepository _identityRepo;
-        private readonly ILearnerRepository _learnerRepository;
-            public AdminService(IAdminRepository repository, IIdentityRepository identityrepo, ILearnerRepository learnerRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ISourceMaterialService _sourceMaterialService;
+        
+        public AdminService(IUnitOfWork unitOfWork, ISourceMaterialService sourceMaterialService)
         {
-            _adminRepo = repository;
-            _identityRepo = identityrepo;
-            _learnerRepository = learnerRepository;
+            _unitOfWork = unitOfWork;
+           // _sourceMaterialService = sourceMaterialService;
+            
         }
-        public async Task<int> CreateAdminAsync(AdminDTO.CreateModel model, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            if (await _identityRepo.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
 
-            var role1 = await _identityRepo.GetRoleAsync("user");
-            var role2 = await _identityRepo.GetRoleAsync("Admin");
+        public Task<int> AddSourceMaterial(MaterialDTO.ArticleModel article)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<int> CreateAdminAsync(AdminDTO.CreateModel model)
+        {
+            
+            if (await _unitOfWork.Identity.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
+
+            var role1 = await _unitOfWork.Identity.GetRoleAsync("user");
+            var role2 = await _unitOfWork.Identity.GetRoleAsync("Admin");
             var user = new User
             {
                 UserName = model.UserName,
@@ -38,7 +45,7 @@ namespace Boompa.Implementations.Services
 
             };
             user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, user.Hashsalt);
-            await _identityRepo.CreateAsync(user, cancellationToken);
+            _unitOfWork.Identity.CreateAsync(user);
             user.Roles = new HashSet<UserRole>()
             {
                 new UserRole
@@ -56,7 +63,7 @@ namespace Boompa.Implementations.Services
                     UserId = user.Id
                 }
             };
-            await _identityRepo.AddUserRole(user.Roles, cancellationToken);
+             _unitOfWork.Identity.AddUserRole(user.Roles);
             if (user == null) throw new IdentityException("this user does not exist");
 
 
@@ -67,7 +74,8 @@ namespace Boompa.Implementations.Services
                 CreatedBy = model.UserName,
                 PhoneNumber = "0000"
             };
-            var result = await _adminRepo.AddAdminAsync(admin, cancellationToken);
+            _unitOfWork.Admins.AddAdminAsync(admin);
+            var result = await _unitOfWork.SaveChangesAsync();
             if (result == 0) throw new ServiceException("failed to create profile");
             return result;
         }
@@ -84,12 +92,12 @@ namespace Boompa.Implementations.Services
             throw new NotImplementedException();
         }
 
-        public Task<int> CreateOptionAsync(ICollection<Option> options, CancellationToken cancellationToken)
+        public Task<int> CreateOptionAsync(ICollection<Option> options)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> CreateQuestionAsync(string question, CancellationToken cancellationToken)
+        public Task<int> CreateQuestionAsync(string question)
         {
             throw new NotImplementedException();
         }
@@ -99,7 +107,7 @@ namespace Boompa.Implementations.Services
             throw new NotImplementedException();
         }
 
-        public Task<int> DeleteAdminAsync(int id, CancellationToken cancellationToken)
+        public Task<int> DeleteAdminAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -114,54 +122,54 @@ namespace Boompa.Implementations.Services
             throw new NotImplementedException();
         }
 
-        public Task<int> DeleteQuestionAsync(string articleName, int id, CancellationToken cancellationToken)
+        public Task<int> DeleteQuestionAsync(string articleName, int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> DeleteRoleAsync(string roleName, CancellationToken cancellationToken)
+        public Task<int> DeleteRoleAsync(string roleName)
         {
             throw new NotImplementedException();
         }
 
         public async Task<Admin> GetAdminAsync(string adminName)
         {
-            var admin = await _adminRepo.GetAdminAsync(adminName);
+            var admin = await _unitOfWork.Admins.GetAdminAsync(adminName);
             if (admin == null) throw new ServiceException("admin does not exist");
             return admin;
         }
 
         public async Task<Admin> GetAdminAsync(int id)
         {
-            var admin = await _adminRepo.GetAdminAsync(id);
+            var admin = await _unitOfWork.Admins.GetAdminAsync(id);
             if (admin == null) throw new ServiceException("admin does not exist");
             return admin;
         }
 
         public async Task<IEnumerable<Admin>> GetAdminsAsync()
         {
-            var admins = await _adminRepo.GetAdminsAsync();
+            var admins = await _unitOfWork.Admins.GetAdminsAsync();
             if (admins == null) throw new ServiceException("An error occured while retrieving admins");
             return admins;
         }
 
         public async Task<Learner> GetLearnerAsync(string name)
         {
-            var learner = await _learnerRepository.GetLearner(name);
+            var learner = await _unitOfWork.Learners.GetLearner(name);
             if (learner == null) throw new IdentityException("This learner does not exist");
             return learner;
         }
 
         public Task<IEnumerable<Learner>> GetLearnersAsync()
         {
-            var result = _learnerRepository.GetLearners();
+            var result = _unitOfWork.Learners.GetLearners();
             if (result == null) throw new ServiceException("An error was encountered during the process");
             return result;
         }
 
-        public Task<int> UpdateAdminAsync(AdminDTO.UpdateModel model, CancellationToken cancellationToken)
+        public Task<int> UpdateAdminAsync(AdminDTO.UpdateModel model)
         {
-            //cancellationToken.ThrowIfCancellationRequested();
+            
             throw new NotImplementedException();
         }
 
@@ -170,12 +178,12 @@ namespace Boompa.Implementations.Services
             throw new NotImplementedException();
         }
 
-        public Task<int> UploadArticleAsync(IFormFile file, CancellationToken cancellationToken)
+        public Task<int> UploadArticleAsync(IFormFile file)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> UploadImageAsync(IFormFile file, CancellationToken cancellationToken)
+        public Task<int> UploadImageAsync(IFormFile file)
         {
             throw new NotImplementedException();
         }

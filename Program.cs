@@ -1,6 +1,6 @@
 using Boompa.Context;
 using Microsoft.EntityFrameworkCore;
-//using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Boompa.Auth;
@@ -8,11 +8,14 @@ using Boompa.Interfaces.IRepository;
 using Boompa.Services;
 using Boompa.Interfaces.IService;
 using Boompa.Implementations.Services;
-using Microsoft.AspNetCore.Authorization;
 using Boompa.Implementations.Repositories;
 using Microsoft.OpenApi.Models;
+using Boompa.Interfaces;
+using Boompa.Implementations;
+using Boompa.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = new ServiceCollection();
 
 var connectionString = builder.Configuration.GetConnectionString("MySqlString");
 // Add services to the container.
@@ -26,12 +29,13 @@ builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAdminService,AdminService>();
 builder.Services.AddScoped<ISourceMaterialService, SourceMaterialService>();
 builder.Services.AddScoped<ISourceMaterialRepository, SourceMaterialRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseMySql(builder.Configuration.GetConnectionString("MySqlString"), new MySqlServerVersion(
               new Version(8, 0, 29))));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
+builder.Services.AddBBb2Storage(builder.Configuration);
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
 {
@@ -64,7 +68,7 @@ builder.Services.AddSwaggerGen(options => {
     });
 });
 
-/*builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
 {
     ValidateIssuer = true,
     ValidateAudience = true,
@@ -73,8 +77,9 @@ builder.Services.AddSwaggerGen(options => {
     ValidIssuer = builder.Configuration["Jwt:Issuer"],
     ValidAudience = builder.Configuration["Jwt:Audience"],
     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-});*/
+});
 
+builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -91,8 +96,9 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 app.UseCors();
 app.UseHttpsRedirection();
-//app.UseAuthentication();
-//app.UseAuthorization();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

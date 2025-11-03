@@ -13,6 +13,7 @@ namespace Boompa.Services
     {
         private readonly ILearnerRepository _learnerRepository;
         private readonly IIdentityRepository _identityRepository;
+        
         public LearnerService(ILearnerRepository repository,IIdentityRepository identityRepository)
         {
             _learnerRepository = repository;
@@ -23,9 +24,10 @@ namespace Boompa.Services
             throw new NotImplementedException();
         }
 
-        public async Task<int> CreateLearner(LearnerDTO.CreateRequest model, CancellationToken cancellationToken)
+        public async Task<int> CreateLearner(LearnerDTO.CreateRequest model)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            
+            
             var role1 = await _identityRepository.GetRoleAsync("user");
             var role2 = await _identityRepository.GetRoleAsync("learner");
             if (await _identityRepository.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
@@ -34,15 +36,15 @@ namespace Boompa.Services
             {
                 UserName = model.UserName,
                 Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
                 CreatedBy = model.UserName,
+                PhoneNumber = model.PhoneNumber,
                 Hashsalt = BCrypt.Net.BCrypt.GenerateSalt(),
                 IsEmailConfirmed = true,
                 
 
             };
             user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, user.Hashsalt);
-            await _identityRepository.CreateAsync(user, cancellationToken);
+            await _identityRepository.CreateAsync(user);
             user.Roles = new HashSet<UserRole>()
             {
                 new UserRole
@@ -60,7 +62,7 @@ namespace Boompa.Services
                     UserId = user.Id
                 }
             };
-            await _identityRepository.AddUserRole(user.Roles , cancellationToken);
+            await _identityRepository.AddUserRole(user.Roles);
             var diary = new Diary()
             {
                 UserId = user.Id,
@@ -78,11 +80,11 @@ namespace Boompa.Services
                 TicketCount = 20
             };
 
-            var result = await _learnerRepository.AddLearner(learner, cancellationToken);
+            var result = await _learnerRepository.AddLearner(learner);
             if (result == 0) throw new ServiceException("unable to add learner");
             return result;
         }
-        public async Task<int> DeleteLearner(int id, CancellationToken cancellationToken)
+        public async Task<int> DeleteLearner(int id)
         {
             var user = await _identityRepository.GetUserAsync(id);
             if (user == null) throw new IdentityException("a user with this username or email address does not exist");
@@ -93,7 +95,7 @@ namespace Boompa.Services
                 Deletedby = user.UserName,
                 DeletedOn = DateTime.UtcNow,
             };
-            var result = await _learnerRepository.DeleteLearner(deleteModel, cancellationToken);
+            var result = await _learnerRepository.DeleteLearner(deleteModel);
             return result;
         }
 
@@ -119,6 +121,10 @@ namespace Boompa.Services
                 Rank = learner.Rank,
 
             };
+            foreach (var userRole in user.Roles)
+            {
+                serviceLearner.Roles.Add(userRole.Role);
+            }
             if (learner == null)  throw new ServiceException("this learner does not exist");
             return serviceLearner ;
         }
@@ -126,6 +132,7 @@ namespace Boompa.Services
         public async Task<IEnumerable<Learner>> GetLearners()
         {
             var learners = await _learnerRepository.GetLearners();
+            if(learners == null) throw new ServiceException("no learners found");
             return learners;
         }
         public async Task<IEnumerable<LearnerDTO.LearnerInfo>> GetLearnersInfo()
@@ -164,9 +171,9 @@ namespace Boompa.Services
             throw new NotImplementedException();
         }
 
-        public async Task<int> UpdateLearner(LearnerDTO.UpdateInfo model, CancellationToken cancellationToken)
+        public async Task<int> UpdateLearner(LearnerDTO.UpdateInfo model)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            
             var learner = await _learnerRepository.GetLearner(model.UserId);
 
             learner.LastModifiedBy = model.ModifierName;
@@ -175,22 +182,18 @@ namespace Boompa.Services
             learner.FirstName = model.FirstName;
             learner.LastName = model.LastName;
 
-            var result = await _learnerRepository.UpdateLearner(learner, cancellationToken);
+            var result = await _learnerRepository.UpdateLearner(learner);
             return result;
         }
 
-        public async Task<int> UpdateLearner(LearnerDTO.UpdateStats model, CancellationToken cancellationToken)
+        public async Task<int> UpdateLearner(LearnerDTO.UpdateStats model)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var learner = await _learnerRepository.GetLearner(model.UserId);
             learner.CoinCount += model.CoinCount;
             learner.TicketCount += model.TicketCount;
 
-            var result = await _learnerRepository.UpdateLearner(learner, cancellationToken);
+            var result = await _learnerRepository.UpdateLearner(learner);
             return result;
-            
-
         }
     }
 }

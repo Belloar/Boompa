@@ -7,18 +7,19 @@ namespace Boompa.Interfaces.IRepository
     public interface ISourceMaterialRepository
     {
         
-        Task<int> AddSourceMaterial(SourceMaterial sourceMaterial);
-        Task<int> AddChallengeAsync();
-        Task<int> AddFileDetail(List<SourceFileDetail> files);
-        Task<int> AddFileDetail(List<QuestionFileDetail> files);
-        Task<int> AddQuestionAsync(Question model);
-        Task<int> AddOptionAsync(IEnumerable<Option> options);
-        Task<int> DeleteSourceMaterial();
-        Task<int> DeleteQuestionAsync();
+        Task AddSourceMaterial(SourceMaterial sourceMaterial);
+        Task AddChallengeAsync();
+        Task AddCloudSourceFile(CloudSourceFileDetails cloudSourceFile);
+        Task AddCloudEvalFile(CloudEvalFileDetails cloudEvalFile);
+        Task AddFileDetail(List<SourceFileDetail> files);
+        Task AddFileDetail(List<QuestionFileDetail> files);
+        Task AddQuestionAsync(Question model);
+        Task<ICollection<MaterialDTO.SourceDescriptor>> GetAllSourceMaterials(string categoryName);
+        Task DeleteSourceMaterial();
+        Task DeleteQuestionAsync();
         Task<SourceMaterial> GetById(int id);
         Task<SourceMaterial> GetSourceMaterial(string sourceMaterialName, string category);
-        //Task<Category> GetCategoryByNameAsync(string categoryName);
-        Task<int> UpdateQuestion();
+        Task UpdateQuestion();
         
     }
 }
