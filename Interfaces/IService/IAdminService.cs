@@ -6,28 +6,22 @@ namespace Boompa.Interfaces.IService
 {
     public interface IAdminService
     {
-        //Task<int> CreateQuestionAsync(MaterialDTO.QuestionModel question,MaterialDTO.OptionModel option,CancellationToken cancellationToken);
-        Task<int> CreateAdminAsync(AdminDTO.CreateModel model, CancellationToken cancellationToken);
-        
-        //Task<int> CreateOptionAsync(MaterialDTO.OptionModel option, CancellationToken cancellationToken);
+        Task<int> AddSourceMaterial(MaterialDTO.ArticleModel article);
+        Task<int> CreateAdminAsync(AdminDTO.CreateModel model);
         Task<int> CreateChallengeAsync();
         Task<int> CreateCategoryAsync();
         Task<int> CreateRoleAsync(Role role);
-        Task<int> DeleteAdminAsync(int id, CancellationToken cancellationToken);
-        Task<int> DeleteQuestionAsync(string articleName,int id,CancellationToken cancellationToken);
-        //Task<int> DeleteArticleAsync(string articleName);
+        Task<int> DeleteAdminAsync(int id);
+        Task<int> DeleteQuestionAsync(string articleName,int id);
         Task<int> DeleteCategoryAsync(string categoryName);
-        Task<int> DeleteRoleAsync(string roleName,CancellationToken cancellationToken);
+        Task<int> DeleteRoleAsync(string roleName);
         Task<IEnumerable<Admin>> GetAdminsAsync();
         Task<Admin> GetAdminAsync(int id);
         Task<Admin> GetAdminAsync(string checkString);
         Task<IEnumerable<Learner>> GetLearnersAsync();
         Task<Learner> GetLearnerAsync(string name);
-        Task<int> UpdateAdminAsync(AdminDTO.UpdateModel model, CancellationToken cancellationToken);
+        Task<int> UpdateAdminAsync(AdminDTO.UpdateModel model);
         Task<int> UpdateQuestion();
-        //Task<int> UploadArticleAsync(IFormFile file,CancellationToken cancellationToken);
-        //Task<int> UploadImageAsync(IFormFile file, CancellationToken cancellationToken);
-
-
+        
     }
 }

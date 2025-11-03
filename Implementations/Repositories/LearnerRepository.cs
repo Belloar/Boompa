@@ -17,17 +17,17 @@ namespace Boompa.Implementations.Repositories
             _context = context;
         }
 
-        public async Task<int> AddLearner(Learner model, CancellationToken cancellationToken)
+        public async Task<int> AddLearner(Learner model)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+           
 
-            await _context.Learners.AddAsync(model, cancellationToken);
-            var result = await _context.SaveChangesAsync(cancellationToken);
+            await _context.Learners.AddAsync(model);
+            var result = await _context.SaveChangesAsync();
             return result;
         }
-        public async Task<int> DeleteLearner(LearnerDTO.DeleteModel model, CancellationToken cancellationToken)
+        public async Task<int> DeleteLearner(LearnerDTO.DeleteModel model)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            
 
             var learner = _context.Learners.FirstOrDefault(x => x.UserId == model.UserId ) ;
             if (learner == null) throw new ServiceException("this user is not a learner");
@@ -36,7 +36,7 @@ namespace Boompa.Implementations.Repositories
             learner.DeletedBy = model.Deletedby;
 
             _context.Learners.Update(learner);
-            return await _context.SaveChangesAsync(cancellationToken);
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<Learner> GetLearner(int id)
@@ -59,9 +59,9 @@ namespace Boompa.Implementations.Repositories
         {
             return byStatus ? _context.Learners.Where(l => l.Status == true).ToList() : _context.Learners.ToList(); 
         }
-        public async Task<int> UpdateLearner(Learner learner, CancellationToken cancellationToken)
+        public async Task<int> UpdateLearner(Learner learner)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            
             _context.Update(learner);
             var result = _context.SaveChanges();
             return result;

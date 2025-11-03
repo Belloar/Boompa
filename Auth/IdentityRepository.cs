@@ -13,21 +13,21 @@ namespace Boompa.Auth
             _context = context;
         }
 
-        public Task<Role> AddRoleAsync(string role, CancellationToken cancellationToken)
+        public Task<Role> AddRoleAsync(string role)
         {
             throw new NotImplementedException();
         }
-        public async Task<int> AddUserRole(IEnumerable<UserRole> userRole, CancellationToken cancellationToken)
+        public async Task AddUserRole(IEnumerable<UserRole> userRole)
         {
             var result = 0;
             foreach(var role in userRole)
             {
                 _context.UserRoles.Add(role);
-                result = await _context.SaveChangesAsync(cancellationToken);
-                if (result == 0) return 0;
+                //result = await _context.SaveChangesAsync();
+                //if (result == 0) return 0;
             }
             
-            return result;
+            
         }
 
         public async Task<bool> CheckUser(string email)
@@ -36,14 +36,14 @@ namespace Boompa.Auth
             return result;
         }
 
-        public async Task<int> CreateAsync(User user, CancellationToken cancellationToken)
+        public async Task CreateAsync(User user)
         {
-            await AddUserRole(user.Roles, cancellationToken);
-            await _context.Users.AddAsync(user, cancellationToken);
-            var result = await _context.SaveChangesAsync(cancellationToken);
-            return result;
+            await AddUserRole(user.Roles);
+            await _context.Users.AddAsync(user);
+            //var result = await _context.SaveChangesAsync();
+            //return result;
         }
-        public Task<int> DeleteAsync(int id, CancellationToken cancellationToken)
+        public Task DeleteAsync(int id )
         {
             throw new NotImplementedException();
         }
@@ -69,40 +69,45 @@ namespace Boompa.Auth
         {
             if (isEmail) _ =  _context.Users.SingleOrDefault(u => u.Email.ToLower() == searchString.ToLower());
             var user =   _context.Users.SingleOrDefault(u => u.UserName.ToLower() == searchString.ToLower());
-            var userRoles = _context.UserRoles.Include(r => r.Role).Where(x => x.UserId == user.Id).Select(r => r) ;
-            foreach (var userRole in userRoles) user.Roles.Add(userRole);
+            var userRoles = _context.UserRoles.Include(r => r.Role).Where(x => x.UserId == user.Id).Select(r => r);
+            foreach (var userRole in userRoles)
+            {
+                user.Roles.Add(userRole);
+            }
 
             return user;
         }
        
-        public Task<IEnumerable<User>> GetUsersAsync()
+        public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            throw new NotImplementedException();
+           var result = await  _context.Users.Select(u => u).ToListAsync();
+            return result;
+
         }
-        public async Task<int> UpdateAsync(int id, User updatedUser, CancellationToken cancellationToken)
+        public async Task UpdateAsync(int id, User updatedUser)
         {
             var user = _context.Users.FirstOrDefault(x => x.Id == id);
-            if (user == null) return 0;
+            //if (user == null) return 0;
             user.PhoneNumber = updatedUser.PhoneNumber;
             user.Email = updatedUser.Email;
             user.Password = updatedUser.Password;
 
             _context.Users.Update(user);
-            var result = await _context.SaveChangesAsync(cancellationToken);
-            return result;
+            //var result = await _context.SaveChangesAsync();
+            //return result;
 
         }
 
-        public async Task<int> UpdateUserRole(int id,Role role, CancellationToken cancellationToken)
+        public async Task UpdateUserRole(int id,Role role)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+                
             var newRole = new UserRole
             {
                 UserId = id,
                 RoleId = role.Id,
             };
             await _context.UserRoles.AddAsync(newRole);
-            return await _context.SaveChangesAsync(cancellationToken);
+            //return await _context.SaveChangesAsync();
         }
 
         public Task<IEnumerable<string>> GetRolesAsync()

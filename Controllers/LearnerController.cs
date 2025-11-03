@@ -13,20 +13,20 @@ namespace Boompa.Controllers
     [ApiController]
     public class LearnerController : ControllerBase
     {
-        private readonly ILearnerService _service;
+        private readonly ILearnerService _learnerService;
         public LearnerController(ILearnerService service)
         {
-            _service = service;
+            _learnerService = service;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateLearner([FromForm] LearnerDTO.CreateRequest model)
+        public async Task<IActionResult> CreateLearner([FromBody] LearnerDTO.CreateRequest model)
         {
-            var cancellationToken = new CancellationToken();
+            
             if (model == null) return BadRequest("all fields must be filled");
             try
             {
-                var result = await _service.CreateLearner(model, cancellationToken);
+                var result = await _learnerService.CreateLearner(model);
                 return Ok("You have completed your profile setup");
             }
             catch (ServiceException ex)
@@ -37,24 +37,24 @@ namespace Boompa.Controllers
 
 
         [HttpPut("{id}")]
-        //[Authorize(Roles = "Learner")]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteLearner([FromQuery] int id)
+        [Authorize(Roles = "Learner,admin")]
+        
+        public async Task<IActionResult> DeleteLearner(int id)
         {
-            var cancellationToken = new CancellationToken();
-            var result = await _service.DeleteLearner(id, cancellationToken);
+            
+            var result = await _learnerService.DeleteLearner(id);
             if (result != 0) return Ok("profile deleted");
             throw new ServiceException();
         }
 
         
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetLearnerById([FromQuery] int id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetLearnerById([FromBody] int id)
         {
             try
             {
-                var learner = await _service.GetLearner(id);
+                var learner = await _learnerService.GetLearner(id);
                 return Ok(learner);
             }
             catch (ServiceException ex)
@@ -63,35 +63,13 @@ namespace Boompa.Controllers
             }
         }
 
-        //[Authorize(Roles = "Admin")]
-        [HttpGet("{username}")]
-        
-        public IActionResult TestMethod(string username)
+
+        [HttpGet]
+        public async Task<IActionResult> GetLearner([FromHeader] string searchString)
         {
             try
             {
-                var result = new
-                {
-                    Answer = $"{username} is a welcome user"
-                };
-                return Ok(result);
-            }
-            catch(Exception ex)
-            {
-                return StatusCode(400, ex.Message);
-            }
-
-        }
-
-
-        [HttpGet]//revisit data types of controller variables
-        //[Authorize(Roles ="Learner")]
-        
-        public async Task<IActionResult> GetLearner([FromQuery] string searchString)
-        {
-            try
-            {
-                var learner = await _service.GetLearner(searchString);
+                var learner = await _learnerService.GetLearner(searchString);
                 return Ok(learner);
             }
             catch (ServiceException ex)
@@ -106,20 +84,19 @@ namespace Boompa.Controllers
 
 
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetLearners()
         {
-            var learners = await _service.GetLearners();
+            var learners = await _learnerService.GetLearners();
             return Ok(learners);
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
+        
         public async Task<IActionResult> GetLearnersInfo()
         {
             try
             {
-                var learnersInfo = await _service.GetLearnersInfo();
+                var learnersInfo = await _learnerService.GetLearnersInfo();
                 return Ok(learnersInfo);
             }
             catch (ServiceException ex)
@@ -129,13 +106,13 @@ namespace Boompa.Controllers
         }
 
         [HttpPut]
-        //[Authorize(Roles = "learner")]
+        [Authorize(Roles = "learner")]
         public async Task<IActionResult> UpdateLearner([FromBody] LearnerDTO.UpdateInfo updateInfo)
         {
             try
             {
-                var cancellationToken = new CancellationToken();
-                var result = await _service.UpdateLearner(updateInfo, cancellationToken);
+                
+                var result = await _learnerService.UpdateLearner(updateInfo);
                 if (result == 1) return Ok("update successful");
                 return BadRequest(result);
             }
@@ -152,8 +129,8 @@ namespace Boompa.Controllers
 
             try
             {
-                var cancellationToken = new CancellationToken();
-                var result = await _service.UpdateLearner(model, cancellationToken);
+                
+                var result = await _learnerService.UpdateLearner(model);
                 if (result == 1) return NoContent();
                 return BadRequest("An error occured during the process");
             }

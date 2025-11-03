@@ -1,4 +1,5 @@
 ﻿using Boompa.Entities;
+using Boompa.Entities.Identity;
 //using Boompa.Enums;
 
 namespace Boompa.DTO
@@ -9,19 +10,20 @@ namespace Boompa.DTO
         {
             public string UserName { get; set; }
             public string Password { get; set; }
-            public string PhoneNumber { get; set; }
             public string Email { get; set; }
             public int Age { get; set; }
-            public string SchoolName { get; set; }
+            public string PhoneNumber { get; set; }
+            
         }
         public class UpdateInfo
         {
             public string ModifierName { get; set; }
             public int UserId { get; set; }
-            public string? FirstName { get; set; }
-            public string? LastName { get; set; }
-            public string? Email { get; set; }
-            public string? School { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Email { get; set; }
+            public string School { get; set; }
+            public string PhoneNumber { get; set; }
             
         }
         public class UpdateStats
@@ -49,6 +51,7 @@ namespace Boompa.DTO
             public bool Status { get; set; }
             public string Rank { get; set; }
             public string? School { get; set; }
+            public ICollection<Role> Roles { get; set; } = new HashSet<Role>();
         }
     }
 }

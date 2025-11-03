@@ -10,7 +10,7 @@ namespace Boompa.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
@@ -21,22 +21,35 @@ namespace Boompa.Controllers
             //_Httpcontext = httpContext;
         }
 
+        
+
+        //var options = new CookieOptions
+        //{
+        //    Domain = "www.google.com",
+        //    Path = "/",
+        //    HttpOnly = true,
+        //    Expires = DateTime.Today.AddDays(7)
+        //};
+        [HttpGet]
         [AllowAnonymous]
-        [HttpGet("{username}/{password}")]
-        public async Task<IActionResult> UserLogin(string username,string password)
+        public async Task<IActionResult> UserLogin([FromHeader]string username,[FromHeader]string password)
         {
+            
             if (username == null && password == null) { return BadRequest("No data received"); }
             try
             {
                 var response = new Response();
-
+                string token = null;
                 var validUser = await _identityService.AuthenticateUser(username, password);
-                if (validUser == null)
+                if (validUser != null) {token = await _identityService.GenerateToken(validUser); }
+
+                else
                 {
                     return NotFound($"A user with the username or email does not exist");
+
                 }
-                response.StatusCode = 200;
-                response.Data=validUser;
+                    response.StatusCode = 200;
+                response.Data=token;
                 response.StatusMessages.Add($"Welcome {validUser.UserName}");
                 return Ok(response);
             }
@@ -48,6 +61,15 @@ namespace Boompa.Controllers
 
 
 
-        
+        [HttpGet]
+        public async Task<IActionResult> GetUsers()
+        {
+            var result = await _identityService.GetUsersAsync();
+            return Ok(result);
+        }
+
+
+
+
     }
 }

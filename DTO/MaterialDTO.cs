@@ -24,10 +24,12 @@ namespace Boompa.DTO
         {
             public string Description { get; set; }
             public string Answer {  get; set; }
+            public string Option {  get; set; }
             public ICollection<IFormFile>? QueFiles { get; set; } = new HashSet<IFormFile>();
 
         }
-        
+
+        public record CreateOrder(int Id, Learner Learner, IEnumerable<IFormFile> Images);
         public class OptionModel
         {
             public string Text { get; set; }

@@ -5,20 +5,20 @@ namespace Boompa.Auth
 {
     public interface IIdentityRepository
     {
-        Task<int> CreateAsync(User user, CancellationToken cancellationToken);
+        Task CreateAsync(User user);
         Task<bool> CheckUser(string email);
-        Task<int> UpdateAsync(int id, User user, CancellationToken cancellationToken);
+        Task UpdateAsync(int id, User user);
         Task<IEnumerable<User>> GetUsersAsync();
         Task<User> GetUserAsync(int id);
         Task<User> GetUserAsync(string searchString, bool isEmail = false);
         
-        Task<int> DeleteAsync(int id, CancellationToken cancellationToken);
-        Task<Role> AddRoleAsync(string role,CancellationToken cancellationToken);
+        Task DeleteAsync(int id);
+        Task<Role> AddRoleAsync(string role);
         Task<Role> GetRoleAsync(string role);
         Task<IEnumerable<string>> GetRolesAsync();
        
-        Task<int> UpdateUserRole(int id, Role role, CancellationToken cancellationToken);
-        Task<int> AddUserRole(IEnumerable<UserRole> role, CancellationToken cancellationToken);
+        Task UpdateUserRole(int id, Role role);
+        Task AddUserRole(IEnumerable<UserRole> role);
 
 
     }
