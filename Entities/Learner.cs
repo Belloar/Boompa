@@ -7,7 +7,7 @@ namespace Boompa.Entities
     public class Learner:AuditableEntity
     {
         public int UserId { get; set; }
-        public User User { get; set; }
+        public User User { get; set; }//navigation property
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public int Age { get; set; }

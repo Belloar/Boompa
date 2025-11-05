@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Boompa.Context
 {
-    public class ApplicationContext:DbContext
+    public class BoompaContext:DbContext
     {
       
-        public ApplicationContext(DbContextOptions options) : base(options)
+        public BoompaContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -26,8 +26,8 @@ namespace Boompa.Context
         public DbSet<CloudSourceFileDetails> CloudSourceFileDetails { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<SourceMaterial> SourceMaterials { get; set; }
-        public DbSet<SourceFileDetail> SourceFileDetails{ get; set; }
-        public DbSet<QuestionFileDetail> QuestionFileDetails{ get; set; }
+        //public DbSet<SourceFileDetail> SourceFileDetails{ get; set; }
+        //public DbSet<QuestionFileDetail> QuestionFileDetails{ get; set; }
         public DbSet<Visit> Visits { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)

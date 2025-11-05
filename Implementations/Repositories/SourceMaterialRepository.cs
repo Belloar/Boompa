@@ -9,8 +9,8 @@ namespace Boompa.Implementations.Repositories
 {
     public class SourceMaterialRepository : ISourceMaterialRepository
     {
-        private readonly ApplicationContext _context;
-        public SourceMaterialRepository(ApplicationContext context)
+        private readonly BoompaContext _context;
+        public SourceMaterialRepository(BoompaContext context)
         {
             _context = context;
         }
@@ -29,33 +29,34 @@ namespace Boompa.Implementations.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task AddFileDetail(List<SourceFileDetail> files)
-        {
-            foreach (SourceFileDetail fileDeets in files)
-            {
-                 _context.SourceFileDetails.Add(fileDeets);
-            }
+        //public async Task AddFileDetail(List<SourceFileDetail> files)
+        //{
+        //    foreach (SourceFileDetail fileDeets in files)
+        //    {
+        //         _context.SourceFileDetails.Add(fileDeets);
+        //    }
             
 
-        }
-        public async Task AddFileDetail(List<QuestionFileDetail> files)
-        {
-            foreach (var fileDeets in files)
-            {
-                 _context.QuestionFileDetails.Add(fileDeets);
-            }
+        //}
+        //public async Task AddFileDetail(List<QuestionFileDetail> files)
+        //{
+        //    foreach (var fileDeets in files)
+        //    {
+        //         _context.QuestionFileDetails.Add(fileDeets);
+        //    }
             
-        }
-        public async Task AddQuestionAsync(Question model)
+        //}
+        public async Task<Question> AddQuestionAsync(Question model)
         {
             _context.Questions.Add(model);
-            
+            return model;
 
         }
 
-        public async Task AddSourceMaterial(SourceMaterial sourceMaterial)
+        public async Task<SourceMaterial> AddSourceMaterial(SourceMaterial sourceMaterial)
         {
             _context.SourceMaterials.Add(sourceMaterial);
+            return sourceMaterial;
             
         }
         
@@ -93,7 +94,7 @@ namespace Boompa.Implementations.Repositories
         public async Task<SourceMaterial> GetSourceMaterial(string sourceMaterialName, string category)
         {
 
-            var result = _context.SourceMaterials.Include(sm => sm.Files).Include(sm => sm.Questions).ThenInclude(q => q.Files).FirstOrDefault(sm => sm.Name.ToLower() == sourceMaterialName.ToLower());
+            var result = _context.SourceMaterials.Include(sm => sm.CloudSourceFileDetails).Include(s => s.Questions).ThenInclude(q => q.CloudEvalFileDetails).FirstOrDefault(sm => sm.Name.ToLower() == sourceMaterialName.ToLower());
             if (result == null) { throw new RepoException("No material found with the provided name"); }
             return result;
         }

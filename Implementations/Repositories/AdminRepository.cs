@@ -8,8 +8,8 @@ namespace Boompa.Implementations.Repositories
 {
     public class AdminRepository : IAdminRepository
     {
-        private readonly ApplicationContext _context;
-        public AdminRepository(ApplicationContext context)
+        private readonly BoompaContext _context;
+        public AdminRepository(BoompaContext context)
         {
             _context = context;
         }

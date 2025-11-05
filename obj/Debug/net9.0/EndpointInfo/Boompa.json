@@ -259,6 +259,18 @@
         }
       }
     },
+    "/api/Admin/TestEndpoint": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Identity/UserLogin": {
       "get": {
         "tags": [

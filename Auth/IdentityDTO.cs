@@ -32,5 +32,7 @@ namespace Boompa.Auth
             public string SearchString { get; set; }
             public string Password { get; set; }
         }
+
+        public record UsersResponseModel(string UserName, ICollection<string>Roles, string Email, DateTime CreatedOn, bool IsDeleted );
     }
 }
