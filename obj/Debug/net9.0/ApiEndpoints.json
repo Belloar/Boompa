@@ -141,6 +141,16 @@
   },
   {
     "ContainingType": "Boompa.Controllers.AdminController",
+    "Method": "TestEndpoint",
+    "RelativePath": "api/Admin/TestEndpoint",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.AdminController",
     "Method": "UpdateAdmin",
     "RelativePath": "api/Admin/UpdateAdmin",
     "HttpMethod": "GET",

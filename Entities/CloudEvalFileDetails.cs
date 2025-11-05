@@ -6,6 +6,7 @@ namespace Boompa.Entities
     {
         public string Key { get; set; }
         public int QuestionId { get; set; }
+        public Question Question { get; set; }
         public string FileType { get; set; }
     }
 }

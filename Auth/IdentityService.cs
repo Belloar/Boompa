@@ -4,6 +4,7 @@ using Boompa.Entities.Identity;
 using Boompa.Exceptions;
 using Boompa.Interfaces;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -13,13 +14,12 @@ namespace Boompa.Auth
     public class IdentityService : IIdentityService
     {
         private readonly IUnitOfWork _unitOfWork;
-        
         private readonly IConfiguration _configuration;
         public IdentityService(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
-            
             _configuration = configuration;
+            
         }
        
 
@@ -46,11 +46,26 @@ namespace Boompa.Auth
         {
             try
             {
+                
                 var response = new Response();
-                var result = await _unitOfWork.Identity.GetUsersAsync();
+                var users = await _unitOfWork.Identity.GetUsersAsync();
+                var responseModel = new List<IdentityDTO.UsersResponseModel>();
+
+                foreach (var user in users)
+                {
+                    var roles = new List<string>();
+                    if(user.Roles != null)
+                    {
+                        foreach (var role in user.Roles)
+                        {
+                            roles.Add(role.Role.RoleName);
+                        }
+                    }
+                    responseModel.Add(new IdentityDTO.UsersResponseModel(user.UserName, roles, user.Email, user.CreatedOn, user.IsDeleted));
+                }
 
                 response.StatusMessages.Add("Success");
-                response.Data = result;
+                response.Data = users;
                 return response;
             }
             catch (Exception ex)

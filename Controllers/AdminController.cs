@@ -163,6 +163,13 @@ namespace Boompa.Controllers
             return Ok(learners);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> TestEndpoint()
+        {
+            var response = new Response();
+            return Ok(response);
+        }
+
         
 
     }

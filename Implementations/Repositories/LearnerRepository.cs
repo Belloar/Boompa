@@ -11,8 +11,8 @@ namespace Boompa.Implementations.Repositories
 {
     public class LearnerRepository : ILearnerRepository
     {
-        private readonly ApplicationContext _context;
-        public LearnerRepository(ApplicationContext context)
+        private readonly BoompaContext _context;
+        public LearnerRepository(BoompaContext context)
         {
             _context = context;
         }

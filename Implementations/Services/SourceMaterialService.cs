@@ -37,37 +37,28 @@ namespace Boompa.Implementations.Services
                 sourceMaterial.Description = material.Description;
                 sourceMaterial.Category = material.Category;
                 sourceMaterial.Content = material.Text;
-                sourceMaterial.CreatedBy = material.Creator; 
-
-                
+                sourceMaterial.CreatedBy = material.Creator;
             }
             else
             {
                 throw new ServiceException("No source material was provided");
             }
+
             if (material.RawFiles == null)
             {
-                throw new ServiceException("sourceFiles not received");
+                response.StatusMessages.Add("no files were received");
             }
 
-            await _unitOfWork.SourceMaterials.AddSourceMaterial(sourceMaterial);
-            await AddSourceFiles(material.RawFiles);
-            //the source material id is expected here 
-            //if (sourceMaterialId <= 0) { throw new ServiceException("Failed to add source material to database"); }
-            //else {response.StatusMessages.Add("Source material added successfully"); }
-
-            //var fileResult = await AddLocalFileDetails(material.RawFiles, sourceMaterialId);
-
+            var source = await _unitOfWork.SourceMaterials.AddSourceMaterial(sourceMaterial);
+            await AddSourceFiles(material.RawFiles, source);
+            await _unitOfWork.SaveChangesAsync();
             
-            //if(fileResult <= 0) { response.StatusMessages.Add("A problem occurred while saving files to device"); }
-            //else { response.StatusMessages.Add("Files saved successfully"); }
-            //response.Data = sourceMaterialId;
             
 
                 return response;
         }
 
-        public async Task AddSourceFiles(ICollection<IFormFile> files)
+        private async Task AddSourceFiles(ICollection<IFormFile> files, SourceMaterial sourceMaterial)
         {
             try
             {
@@ -75,13 +66,15 @@ namespace Boompa.Implementations.Services
                 {
                     var cloudFile = new CloudSourceFileDetails()
                     {
+                        SourceMaterial = sourceMaterial,
                         Key = file.FileName,
                         FileType = file.ContentType
                     };
                     await _unitOfWork.SourceMaterials.AddCloudSourceFile(cloudFile);
+                    
 
                 }
-
+                await _unitOfWork.SaveChangesAsync();
                 await _cloudService.UploadFilesAsync(files);
             }
             catch(Exception ex)
@@ -106,14 +99,7 @@ namespace Boompa.Implementations.Services
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        ///to be able to identify which file belongs to which question i'll change the name of the file to a key that will be unique to the question.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="queFiles"></param>
-        /// <param name="sourceMaterialId"></param>
-        /// <returns></returns>
-        /// <exception cref="ServiceException"></exception>
+        
         public async Task<Response> AddQuestion(MaterialDTO.QuestionModel question,int sourceMaterialId)
         {
             try
@@ -128,11 +114,11 @@ namespace Boompa.Implementations.Services
                     SourceMaterialId = sourceMaterialId
                 };
 
-                await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
+                var ques = await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
                 
                 if (question.QueFiles != null)
                 {
-                     await AddEvalFiles(question.QueFiles);
+                     await AddEvalFiles(question.QueFiles,ques);
                     
                 }
                 
@@ -150,62 +136,62 @@ namespace Boompa.Implementations.Services
         //
         //
         //returns: 
-        private async Task<int> AddLocalFileDetails(ICollection<IFormFile> rawFiles,int Id,bool forSource=true) 
-        {
-            var result = 0;
-            if (rawFiles!= null && rawFiles.Count > 0)
-            {
-                if (forSource == false)
-                {
-                    var queFiles = new List<QuestionFileDetail>();
-                    foreach (var file in rawFiles)
-                    {
-                        //await _cloudService.UploadFileAsync(file);
-                        var prefix = Directory.GetCurrentDirectory();
-                        var ft = file.ContentType.Split('/')[0];
-                        var suffix = Path.Combine(prefix, ft);
-                        var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
-                        Directory.CreateDirectory(suffix);
+        //private async Task<int> AddLocalFileDetails(ICollection<IFormFile> rawFiles,int Id,bool forSource=true) 
+        //{
+        //    var result = 0;
+        //    if (rawFiles!= null && rawFiles.Count > 0)
+        //    {
+        //        if (forSource == false)
+        //        {
+        //            var queFiles = new List<QuestionFileDetail>();
+        //            foreach (var file in rawFiles)
+        //            {
+        //                //await _cloudService.UploadFileAsync(file);
+        //                var prefix = Directory.GetCurrentDirectory();
+        //                var ft = file.ContentType.Split('/')[0];
+        //                var suffix = Path.Combine(prefix, ft);
+        //                var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
+        //                Directory.CreateDirectory(suffix);
                         
-                        var queFile = new QuestionFileDetail()
-                        {
-                            QuestionId = Id,
-                            FileType = file.ContentType,
-                            Path = basePath,
-                        };
-                        queFiles.Add(queFile);
-                    }
-                     await _unitOfWork.SourceMaterials.AddFileDetail(queFiles);
-                }
-                else
-                {
-                    var sourceFiles = new List<SourceFileDetail>();
+        //                var queFile = new QuestionFileDetail()
+        //                {
+        //                    QuestionId = Id,
+        //                    FileType = file.ContentType,
+        //                    Path = basePath,
+        //                };
+        //                queFiles.Add(queFile);
+        //            }
+        //             await _unitOfWork.SourceMaterials.AddFileDetail(queFiles);
+        //        }
+        //        else
+        //        {
+        //            var sourceFiles = new List<SourceFileDetail>();
                     
-                    foreach (var file in rawFiles)
-                    {
-                        //await _cloudService.UploadFileAsync (file);
-                        var prefix = Directory.GetCurrentDirectory();
-                        var suffix = Path.Combine(prefix, file.ContentType.Split('/')[0]);
-                        var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
-                        Directory.CreateDirectory(suffix);
+        //            foreach (var file in rawFiles)
+        //            {
+        //                //await _cloudService.UploadFileAsync (file);
+        //                var prefix = Directory.GetCurrentDirectory();
+        //                var suffix = Path.Combine(prefix, file.ContentType.Split('/')[0]);
+        //                var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
+        //                Directory.CreateDirectory(suffix);
                         
-                        var sourceFile = new SourceFileDetail()
-                        {
-                            SourceMaterialId = Id,
-                            FileType = file.ContentType,
-                            Path = basePath,
-                        };
-                        sourceFiles.Add(sourceFile);
+        //                var sourceFile = new SourceFileDetail()
+        //                {
+        //                    SourceMaterialId = Id,
+        //                    FileType = file.ContentType,
+        //                    Path = basePath,
+        //                };
+        //                sourceFiles.Add(sourceFile);
 
-                    }
-                    await _unitOfWork.SourceMaterials.AddFileDetail(sourceFiles);
+        //            }
+        //            await _unitOfWork.SourceMaterials.AddFileDetail(sourceFiles);
 
-                }
-            }
+        //        }
+        //    }
 
             
-            return result;
-        }
+        //    return result;
+        //}
 
         private async Task UploadFilesAsync(ICollection<IFormFile> files)
         {
@@ -283,26 +269,32 @@ namespace Boompa.Implementations.Services
                         Options = question.Option,
 
                     };
-                    //Questions.Add(que);
-                     await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
+                    
+                     var qus = await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
                     if(question.QueFiles != null)
                     {
-                        await AddEvalFiles(question.QueFiles);
+                        await AddEvalFiles(question.QueFiles,qus);
                     }
                     else
                     {
                         response.StatusMessages.Add("No files added for this question");
                     }
-
-                    //if (question.QueFiles != null)
-                    //{
-                    //    var fileResult = await AddLocalFileDetails(question.QueFiles, questionId, false);
-                    //    if (fileResult <= 0) { response.StatusMessages.Add("A problem occurred while saving files to device"); }
-                    //}
-                    
-                   
                 }
+
+                var result = await _unitOfWork.SaveChangesAsync();
+                if(result >= 1)
+                {
                     return response;
+                }
+                else
+                {
+                    response.StatusCode = 500;
+                    response.StatusMessages.Add("one or more problems occurred");
+                    return response;
+                }
+
+                    
+
             }
             catch (Exception ex)
             {
@@ -311,12 +303,13 @@ namespace Boompa.Implementations.Services
             }
         }
 
-        private async Task AddEvalFiles(ICollection<IFormFile> evalFiles)
+        private async Task AddEvalFiles(ICollection<IFormFile> evalFiles,Question question)
         {
             foreach (var file in evalFiles)
             {
                 var cloudFile = new CloudEvalFileDetails()
                 {
+                    Question = question,
                     Key = file.FileName,
                     FileType = file.ContentType
                 };

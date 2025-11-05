@@ -2,13 +2,14 @@
 using Boompa.Context;
 using Boompa.DTO;
 using Boompa.Entities.Identity;
+using Boompa.Exceptions;
 
 namespace Boompa.Auth
 {
     public class IdentityRepository : IIdentityRepository
     {
-        private readonly ApplicationContext _context;
-        public IdentityRepository(ApplicationContext context)
+        private readonly BoompaContext _context;
+        public IdentityRepository(BoompaContext context)
         {
             _context = context;
         }
@@ -80,8 +81,15 @@ namespace Boompa.Auth
        
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
-           var result = await  _context.Users.Select(u => u).ToListAsync();
-            return result;
+            try
+            {
+                var result = await _context.Users.Select(u => u).ToListAsync();
+                return result;
+            }
+            catch(Exception ex)
+            {
+                throw new IdentityException(ex.Message);
+            }
 
         }
         public async Task UpdateAsync(int id, User updatedUser)

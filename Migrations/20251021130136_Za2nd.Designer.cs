@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Boompa.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
+    [DbContext(typeof(BoompaContext))]
     [Migration("20251021130136_Za2nd")]
     partial class Za2nd
     {
