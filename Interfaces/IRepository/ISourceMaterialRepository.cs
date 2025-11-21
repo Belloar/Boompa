@@ -1,6 +1,6 @@
 ﻿using Boompa.DTO;
 using Boompa.Entities;
-using Boompa.Enums;
+
 
 namespace Boompa.Interfaces.IRepository
 {
@@ -9,11 +9,9 @@ namespace Boompa.Interfaces.IRepository
         
         Task<SourceMaterial> AddSourceMaterial(SourceMaterial sourceMaterial);
         Task AddChallengeAsync();
-        Task AddCloudSourceFile(CloudSourceFileDetails cloudSourceFile);
-        Task AddCloudEvalFile(CloudEvalFileDetails cloudEvalFile);
-        //Task AddFileDetail(List<SourceFileDetail> files);
-        //Task AddFileDetail(List<QuestionFileDetail> files);
-        Task<Question> AddQuestionAsync(Question model);
+        Task<Question> AddQuestionAsync(Question model,string sourceName, string category);
+        Task<bool> CategoryExists(string categoryName);
+        Task<Category> GetCategory(string categoryName);
         Task<ICollection<MaterialDTO.SourceDescriptor>> GetAllSourceMaterials(string categoryName);
         Task DeleteSourceMaterial();
         Task DeleteQuestionAsync();

@@ -7,7 +7,7 @@ namespace Boompa.Interfaces.IService
         
         Task<Response> AddCategory(string category);
         Task<Response> AddQuestion(MaterialDTO.QuestionModel model,int sourceMaterialId);
-        Task<Response> AddQuestion(IEnumerable<MaterialDTO.QuestionModel> models);
+        Task<Response> AddQuestion(ICollection<MaterialDTO.QuestionModel> models,string sourceMaterialName, string category);
         Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material);
         Task<Response> DeleteSourceMaterial();
         Task<Response> GetAllSourceMaterials(string categoryName);

@@ -197,16 +197,6 @@
         "tags": [
           "Admin"
         ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "header",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -247,11 +237,72 @@
         }
       }
     },
-    "/api/Admin/GetLearners": {
+    "/api/Admin/GetLearners/{skipCount}": {
       "get": {
         "tags": [
           "Admin"
         ],
+        "parameters": [
+          {
+            "name": "skipCount",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/AddQuestions": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "sourceMaterialName",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "questions": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/QuestionModel"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "questions": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -353,8 +404,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
@@ -370,28 +420,6 @@
         "tags": [
           "Learner"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "OK"
@@ -420,10 +448,21 @@
         }
       }
     },
-    "/api/Learner/GetLearners": {
+    "/api/Learner/GetLearners/{skipCount}": {
       "get": {
         "tags": [
           "Learner"
+        ],
+        "parameters": [
+          {
+            "name": "skipCount",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -789,28 +828,26 @@
         },
         "additionalProperties": false
       },
-      "Diary": {
+      "QuestionModel": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
+          "description": {
+            "type": "string",
+            "nullable": true
           },
-          "userId": {
-            "type": "integer",
-            "format": "int32"
+          "answer": {
+            "type": "string",
+            "nullable": true
           },
-          "user": {
-            "$ref": "#/components/schemas/User"
+          "option": {
+            "type": "string",
+            "nullable": true
           },
-          "totalVists": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "visit": {
+          "queFiles": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Visit"
+              "type": "string",
+              "format": "binary"
             },
             "nullable": true
           }
@@ -823,10 +860,6 @@
           "modifierName": {
             "type": "string",
             "nullable": true
-          },
-          "userId": {
-            "type": "integer",
-            "format": "int32"
           },
           "firstName": {
             "type": "string",
@@ -854,13 +887,9 @@
       "UpdateStats": {
         "type": "object",
         "properties": {
-          "userId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "diaryId": {
-            "type": "integer",
-            "format": "int32"
+          "categoryVisited": {
+            "type": "string",
+            "nullable": true
           },
           "ticketCount": {
             "type": "integer",
@@ -870,105 +899,13 @@
             "type": "integer",
             "format": "int32"
           },
-          "visit": {
-            "$ref": "#/components/schemas/Visit"
-          }
-        },
-        "additionalProperties": false
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "createdBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModifiedBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastModifiedOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "deletedOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "deletedBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "isDeleted": {
-            "type": "boolean"
-          },
-          "userName": {
-            "type": "string",
-            "nullable": true
-          },
-          "password": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "hashsalt": {
-            "type": "string",
-            "nullable": true
-          },
-          "isEmailConfirmed": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "Visit": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "diaryId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "diary": {
-            "$ref": "#/components/schemas/Diary"
-          },
-          "categoryVisited": {
-            "type": "string",
-            "nullable": true
-          },
-          "coinsEarned": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "ticketsEarned": {
-            "type": "integer",
-            "format": "int32"
+          "duration": {
+            "type": "number",
+            "format": "double"
           },
           "date": {
             "type": "string",
             "format": "date"
-          },
-          "duration": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "additionalProperties": false

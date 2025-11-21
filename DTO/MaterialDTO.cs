@@ -29,7 +29,15 @@ namespace Boompa.DTO
 
         }
 
-        public record CreateOrder(int Id, Learner Learner, IEnumerable<IFormFile> Images);
+        public class ConsumptionModel()
+        {
+            public string Category { get; set; }
+            public string MaterialName { get; set; }
+            public string Content { get; set; }
+            public ICollection<Question> Questions { get; set; }
+            public ICollection<IFormFile>? SourceFiles { get; set; }
+            
+        }
         public class OptionModel
         {
             public string Text { get; set; }

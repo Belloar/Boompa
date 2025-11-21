@@ -39,12 +39,12 @@ namespace Boompa.Auth
 
         public async Task CreateAsync(User user)
         {
-            await AddUserRole(user.Roles);
+            //await AddUserRole(user.Roles);
             await _context.Users.AddAsync(user);
             //var result = await _context.SaveChangesAsync();
             //return result;
         }
-        public Task DeleteAsync(int id )
+        public Task DeleteAsync(Guid id )
         {
             throw new NotImplementedException();
         }
@@ -61,20 +61,23 @@ namespace Boompa.Auth
             
 
         //}
-        public async Task<User> GetUserAsync(int id)
+        public async Task<User> GetUserAsync(Guid id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             return user;
         }
         public async Task<User> GetUserAsync(string searchString,bool isEmail)
         {
-            if (isEmail) _ =  _context.Users.SingleOrDefault(u => u.Email.ToLower() == searchString.ToLower());
-            var user =   _context.Users.SingleOrDefault(u => u.UserName.ToLower() == searchString.ToLower());
-            var userRoles = _context.UserRoles.Include(r => r.Role).Where(x => x.UserId == user.Id).Select(r => r);
-            foreach (var userRole in userRoles)
+            if (isEmail)
             {
-                user.Roles.Add(userRole);
+                return _context.Users.SingleOrDefault(u => u.Email.ToLower() == searchString.ToLower());
             }
+            var user =   _context.Users.SingleOrDefault(u => u.UserName.ToLower() == searchString.ToLower());
+            //var userRoles = _context.UserRoles.Include(r => r.Role).Where(x => x.UserId == user.Id).Select(r => r);
+            //foreach (var userRole in userRoles)
+            //{
+            //    user.Roles.Add(userRole);
+            //}
 
             return user;
         }
@@ -83,7 +86,12 @@ namespace Boompa.Auth
         {
             try
             {
-                var result = await _context.Users.Select(u => u).ToListAsync();
+                var result = await _context.Users.Select(u => new User
+                {
+                    UserName = u.UserName,
+                    Email = u.Email,
+                    
+                }).ToListAsync();
                 return result;
             }
             catch(Exception ex)
@@ -92,11 +100,11 @@ namespace Boompa.Auth
             }
 
         }
-        public async Task UpdateAsync(int id, User updatedUser)
+        public async Task UpdateAsync(Guid id, User updatedUser)
         {
             var user = _context.Users.FirstOrDefault(x => x.Id == id);
             //if (user == null) return 0;
-            user.PhoneNumber = updatedUser.PhoneNumber;
+            
             user.Email = updatedUser.Email;
             user.Password = updatedUser.Password;
 
@@ -106,7 +114,7 @@ namespace Boompa.Auth
 
         }
 
-        public async Task UpdateUserRole(int id,Role role)
+        public async Task UpdateUserRole(Guid id,Role role)
         {
                 
             var newRole = new UserRole

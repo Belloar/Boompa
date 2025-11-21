@@ -1,14 +1,16 @@
-﻿namespace Boompa.Entities
+﻿using Boompa.Entities.Base;
+
+namespace Boompa.Entities
 {
-    public class Visit
+    public class Visit : BaseEntity
     {
-        public int Id { get; set; }
-        public int DiaryId { get; set; }
-        public Diary Diary { get; set; }
-        public string CategoryVisited { get; set; }
+        public Guid CategoryId { get; set; }
+        public Category Category { get; set; } = default!;
+        public Guid LearnerId { get; set; }
+        public Learner Learner { get; set; } = default!;
         public int CoinsEarned { get; set; }
         public int TicketsEarned { get; set; }
         public DateOnly Date { get; set; }
-        public DateTime Duration { get; set; }
+        public double Duration { get; set; }
     }
 }

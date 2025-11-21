@@ -15,14 +15,7 @@ namespace Boompa.Implementations.Repositories
             _context = context;
         }
 
-        public async Task AddCloudSourceFile(CloudSourceFileDetails cloudFile)
-        {
-             _context.CloudSourceFileDetails.Add(cloudFile);
-        }
-        public async Task AddCloudEvalFile(CloudEvalFileDetails evalFile)
-        {
-            _context.CloudEvalFiles.Add(evalFile);
-        }
+       
 
         public Task AddChallengeAsync()
         {
@@ -46,8 +39,11 @@ namespace Boompa.Implementations.Repositories
         //    }
             
         //}
-        public async Task<Question> AddQuestionAsync(Question model)
+        public async Task<Question> AddQuestionAsync(Question model,string sourceName,string category)
         {
+            var source = await GetSource(sourceName, category);
+            model.SourceMaterialId = source.Id;
+            
             _context.Questions.Add(model);
             return model;
 
@@ -73,12 +69,12 @@ namespace Boompa.Implementations.Repositories
 
         public async Task<ICollection<MaterialDTO.SourceDescriptor>> GetAllSourceMaterials(string categoryName)
         {
-            var result = new List<MaterialDTO.SourceDescriptor>();
-            var fetcher = await Task.FromResult<ICollection<MaterialDTO.SourceDescriptor>>(_context.SourceMaterials.Where(sm => sm.Category == categoryName).Select(sm => new MaterialDTO.SourceDescriptor
+            
+            var fetcher =_context.SourceMaterials.Where(sm => sm.Category.Name == categoryName).Select(sm => new MaterialDTO.SourceDescriptor
             {
                 SourceName = sm.Name,
                 SourceDescription = sm.Description,
-            }).ToList());
+            }).ToList();
             if (fetcher == null)
             {
                 throw new RepoException("failed to get materials");
@@ -94,7 +90,29 @@ namespace Boompa.Implementations.Repositories
         public async Task<SourceMaterial> GetSourceMaterial(string sourceMaterialName, string category)
         {
 
-            var result = _context.SourceMaterials.Include(sm => sm.CloudSourceFileDetails).Include(s => s.Questions).ThenInclude(q => q.CloudEvalFileDetails).FirstOrDefault(sm => sm.Name.ToLower() == sourceMaterialName.ToLower());
+            var result = await _context.SourceMaterials
+                .Select(a => new SourceMaterial 
+                { 
+                    Category = a.Category,
+                    Content = a.Content,
+                    Id = a.Id,
+                    Description = a.Description,
+                    Name = a.Name,
+                    IsDeleted = a.IsDeleted,
+                    Questions = a.Questions!.Select(b => new Question
+                    {
+                        IsDeleted = b.IsDeleted,
+                        Id = b.Id,
+                        Description= b.Description,
+                        Options = b.Options,
+                        Answer = b.Answer,
+                        SourceMaterialId = b.SourceMaterialId,
+                        
+                    }).ToList(),
+                   
+                })
+                .FirstOrDefaultAsync(sm => sm.Name.ToLower() == sourceMaterialName.ToLower() && sm.Category.Name == category);
+
             if (result == null) { throw new RepoException("No material found with the provided name"); }
             return result;
         }
@@ -106,10 +124,28 @@ namespace Boompa.Implementations.Repositories
             throw new NotImplementedException();
         }
 
-        private async Task<int> GetSourceId(string sourceName)
+        private async Task<SourceMaterial> GetSource(string sourceName,string category)
         {
-            var result = _context.SourceMaterials.First(sm => sm.Name == sourceName).Id;
+            var result = await _context.SourceMaterials.Select(sm => new SourceMaterial
+            {
+                Id = sm.Id,
+            }).FirstOrDefaultAsync(sm => sm.Name == sourceName && sm.Category.Name == category);
+            
             return result;
+        }
+
+        public async Task<bool> CategoryExists(string categoryName)
+        {
+            var result = await _context.Categories.FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower());
+            if(result != null) { return true; }else{ return false; }
+        }
+
+        public async Task<Category> GetCategory(string categoryName)
+        {
+            return await _context.Categories.Select(c => new Category
+            {
+                Id = c.Id,
+            }).FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower());
         }
     }
 }

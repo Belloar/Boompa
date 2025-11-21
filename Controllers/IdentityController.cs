@@ -14,11 +14,11 @@ namespace Boompa.Controllers
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
-        //private readonly IHttpContextAccessor _Httpcontext;
+        
         public IdentityController(IIdentityService identityService)
         {
             _identityService = identityService;
-            //_Httpcontext = httpContext;
+            
         }
 
         
