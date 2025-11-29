@@ -37,46 +37,40 @@ namespace Boompa.Implementations.Services
             {
                 UserName = model.UserName,
                 Email = model.Email,
-                PhoneNumber = "0000",
                 CreatedBy = model.UserName,
-                Hashsalt = BCrypt.Net.BCrypt.GenerateSalt(),
+                HashSalt = BCrypt.Net.BCrypt.GenerateSalt(),
                 IsEmailConfirmed = true,
 
 
             };
-            user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, user.Hashsalt);
-            _unitOfWork.Identity.CreateAsync(user);
-            user.Roles = new HashSet<UserRole>()
+            user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, user.HashSalt);
+            user.Roles = new HashSet<UserRole>
             {
                 new UserRole
                 {
                     User = user,
                     RoleId = role1.Id,
-                    Role = role1,
-                    UserId = user.Id
                 },
                 new UserRole
                 {
-                    Role = role2,
-                    RoleId = role2.Id,
                     User = user,
-                    UserId = user.Id
+                    RoleId = role2.Id,
                 }
             };
-             _unitOfWork.Identity.AddUserRole(user.Roles);
+            await _unitOfWork.Identity.CreateAsync(user);
+
             if (user == null) throw new IdentityException("this user does not exist");
 
 
             var admin = new Admin()
             {
-                User = user,
-                UserId = user.Id,
+                
                 CreatedBy = model.UserName,
                 PhoneNumber = "0000"
             };
             _unitOfWork.Admins.AddAdminAsync(admin);
             var result = await _unitOfWork.SaveChangesAsync();
-            if (result == 0) throw new ServiceException("failed to create profile");
+            if (result < 1) throw new ServiceException("failed to create profile");
             return result;
         }
 
@@ -91,12 +85,6 @@ namespace Boompa.Implementations.Services
         {
             throw new NotImplementedException();
         }
-
-        public Task<int> CreateOptionAsync(ICollection<Option> options)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<int> CreateQuestionAsync(string question)
         {
             throw new NotImplementedException();
@@ -153,16 +141,16 @@ namespace Boompa.Implementations.Services
             return admins;
         }
 
-        public async Task<Learner> GetLearnerAsync(string name)
-        {
-            var learner = await _unitOfWork.Learners.GetLearner(name);
-            if (learner == null) throw new IdentityException("This learner does not exist");
-            return learner;
-        }
+        //public async Task<Learner> GetLearnerAsync(string name)
+        //{
+        //    var learner = await _unitOfWork.Learners.GetLearner(name);
+        //    if (learner == null) throw new IdentityException("This learner does not exist");
+        //    return learner;
+        //}
 
         public Task<IEnumerable<Learner>> GetLearnersAsync()
         {
-            var result = _unitOfWork.Learners.GetLearners();
+            var result = _unitOfWork.Learners.GetLearners(false);
             if (result == null) throw new ServiceException("An error was encountered during the process");
             return result;
         }

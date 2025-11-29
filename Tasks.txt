@@ -1,4 +1,10 @@
 Stopped at the method that will add the evaluation files in the source material repository and i was also resolving the errors there.
 
 
+//////////////////////////////////////////////
+///////////points to improve/////////////////
+
+i'd like to add question type, which will specify the structure of a question. it can be ordinary mcq where the question and the options will be  string,
+the question is string and the options are images, or audio.   or the question could have just one answer instead of options etc sha
+
 

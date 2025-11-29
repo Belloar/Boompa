@@ -11,24 +11,22 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Boompa.Migrations
 {
     [DbContext(typeof(BoompaContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    partial class BoompaContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.6")
+                .HasAnnotation("ProductVersion", "9.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Boompa.Entities.Admin", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -41,6 +39,10 @@ namespace Boompa.Migrations
 
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -66,44 +68,16 @@ namespace Boompa.Migrations
                     b.Property<string>("ProfilePicture")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -114,86 +88,11 @@ namespace Boompa.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.CloudEvalFileDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("FileType")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("CloudEvalFiles");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.CloudSourceFileDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("FileType")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("SourceMaterialId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SourceMaterialId");
-
-                    b.ToTable("CloudSourceFileDetails");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.Diary", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("TotalVists")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Diaries");
-                });
-
             modelBuilder.Entity("Boompa.Entities.Identity.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -231,17 +130,17 @@ namespace Boompa.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("77f04eeb-e4e7-489a-a219-022b7b882b2a"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "the base entity in the app",
+                            Description = "Apparently dedicated only for Authentication and authorization in the app",
                             IsDeleted = false,
                             LastModifiedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             RoleName = "User"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = new Guid("12e99949-1ffd-4892-95ca-697f9ebacaae"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the user with authority to do certain stuff on user profiles",
@@ -251,7 +150,7 @@ namespace Boompa.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            Id = new Guid("09650940-a428-4bf0-a7aa-352dc1ae2eec"),
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "the reason this app is being developed",
@@ -263,11 +162,9 @@ namespace Boompa.Migrations
 
             modelBuilder.Entity("Boompa.Entities.Identity.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -285,7 +182,7 @@ namespace Boompa.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Hashsalt")
+                    b.Property<string>("HashSalt")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -305,10 +202,6 @@ namespace Boompa.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -320,38 +213,15 @@ namespace Boompa.Migrations
 
             modelBuilder.Entity("Boompa.Entities.Identity.UserRole", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -364,11 +234,9 @@ namespace Boompa.Migrations
 
             modelBuilder.Entity("Boompa.Entities.Learner", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
@@ -388,8 +256,9 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("DiaryId")
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("ExpPoints")
                         .HasColumnType("int");
@@ -415,6 +284,10 @@ namespace Boompa.Migrations
                     b.Property<bool>("PaidInTickets")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("ProfilePicture")
                         .HasColumnType("longtext");
 
@@ -431,25 +304,37 @@ namespace Boompa.Migrations
                     b.Property<int>("TicketCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("DiaryId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Learners");
                 });
 
+            modelBuilder.Entity("Boompa.Entities.LearnerCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("LearnerId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("LearnerId");
+
+                    b.ToTable("LearnerCategories");
+                });
+
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Answer")
                         .IsRequired()
@@ -471,6 +356,9 @@ namespace Boompa.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.PrimitiveCollection<string>("Files")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -484,8 +372,8 @@ namespace Boompa.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("SourceMaterialId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("SourceMaterialId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -494,59 +382,14 @@ namespace Boompa.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.Report", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ReportedUser")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Reports");
-                });
-
             modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -568,6 +411,10 @@ namespace Boompa.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.PrimitiveCollection<string>("Files")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -583,20 +430,19 @@ namespace Boompa.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("SourceMaterials");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Visit", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CategoryVisited")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("CoinsEarned")
                         .HasColumnType("int");
@@ -604,60 +450,22 @@ namespace Boompa.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<int>("DiaryId")
-                        .HasColumnType("int");
+                    b.Property<double>("Duration")
+                        .HasColumnType("double");
 
-                    b.Property<DateTime>("Duration")
-                        .HasColumnType("datetime(6)");
+                    b.Property<Guid>("LearnerId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("TicketsEarned")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DiaryId");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("LearnerId");
 
                     b.ToTable("Visits");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.Admin", b =>
-                {
-                    b.HasOne("Boompa.Entities.Identity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.CloudEvalFileDetails", b =>
-                {
-                    b.HasOne("Boompa.Entities.Question", null)
-                        .WithMany("CloudEvalFileDetails")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Boompa.Entities.CloudSourceFileDetails", b =>
-                {
-                    b.HasOne("Boompa.Entities.SourceMaterial", null)
-                        .WithMany("CloudSourceFileDetails")
-                        .HasForeignKey("SourceMaterialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Boompa.Entities.Diary", b =>
-                {
-                    b.HasOne("Boompa.Entities.Identity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Identity.UserRole", b =>
@@ -679,59 +487,80 @@ namespace Boompa.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.Learner", b =>
+            modelBuilder.Entity("Boompa.Entities.LearnerCategory", b =>
                 {
-                    b.HasOne("Boompa.Entities.Diary", "Diary")
-                        .WithMany()
-                        .HasForeignKey("DiaryId")
+                    b.HasOne("Boompa.Entities.Category", "Category")
+                        .WithMany("LearnerCategories")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Boompa.Entities.Identity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                    b.HasOne("Boompa.Entities.Learner", "Learner")
+                        .WithMany("LearnerCategories")
+                        .HasForeignKey("LearnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Diary");
+                    b.Navigation("Category");
 
-                    b.Navigation("User");
+                    b.Navigation("Learner");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
-                    b.HasOne("Boompa.Entities.SourceMaterial", null)
+                    b.HasOne("Boompa.Entities.SourceMaterial", "SourceMaterial")
                         .WithMany("Questions")
                         .HasForeignKey("SourceMaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("Boompa.Entities.Visit", b =>
-                {
-                    b.HasOne("Boompa.Entities.Diary", "Diary")
-                        .WithMany("Visit")
-                        .HasForeignKey("DiaryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Diary");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.Diary", b =>
-                {
-                    b.Navigation("Visit");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.Question", b =>
-                {
-                    b.Navigation("CloudEvalFileDetails");
+                    b.Navigation("SourceMaterial");
                 });
 
             modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
                 {
-                    b.Navigation("CloudSourceFileDetails");
+                    b.HasOne("Boompa.Entities.Category", "Category")
+                        .WithMany("SourceMaterials")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Visit", b =>
+                {
+                    b.HasOne("Boompa.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Boompa.Entities.Learner", "Learner")
+                        .WithMany()
+                        .HasForeignKey("LearnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Learner");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Category", b =>
+                {
+                    b.Navigation("LearnerCategories");
+
+                    b.Navigation("SourceMaterials");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Learner", b =>
+                {
+                    b.Navigation("LearnerCategories");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
+                {
                     b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618

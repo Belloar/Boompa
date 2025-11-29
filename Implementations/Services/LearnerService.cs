@@ -3,6 +3,7 @@ using Boompa.DTO;
 using Boompa.Entities;
 using Boompa.Entities.Identity;
 using Boompa.Exceptions;
+using Boompa.Interfaces;
 using Boompa.Interfaces.IRepository;
 using Boompa.Interfaces.IService;
 
@@ -13,23 +14,28 @@ namespace Boompa.Services
     {
         private readonly ILearnerRepository _learnerRepository;
         private readonly IIdentityRepository _identityRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IVisitService _visitService;
         
-        public LearnerService(ILearnerRepository repository,IIdentityRepository identityRepository)
+        
+        public LearnerService(ILearnerRepository repository,IIdentityRepository identityRepository,IUnitOfWork unitOfWork,IVisitService visitService)
         {
             _learnerRepository = repository;
             _identityRepository = identityRepository;
+            _unitOfWork = unitOfWork;
+            _visitService = visitService;
+            
         }
-        public Task<IEnumerable<SourceMaterial>> ConversationCompiler(string MaterialName)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public async Task<int> CreateLearner(LearnerDTO.CreateRequest model)
         {
             
             
-            var role1 = await _identityRepository.GetRoleAsync("user");
-            var role2 = await _identityRepository.GetRoleAsync("learner");
+            var role1 = await _identityRepository.GetRoleAsync("User");
+            var role2 = await _identityRepository.GetRoleAsync("Learner");
+
+
             if (await _identityRepository.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
 
             var user = new User
@@ -37,54 +43,47 @@ namespace Boompa.Services
                 UserName = model.UserName,
                 Email = model.Email,
                 CreatedBy = model.UserName,
-                PhoneNumber = model.PhoneNumber,
-                Hashsalt = BCrypt.Net.BCrypt.GenerateSalt(),
+                HashSalt = BCrypt.Net.BCrypt.GenerateSalt(),
                 IsEmailConfirmed = true,
                 
-
             };
-            user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, user.Hashsalt);
-            await _identityRepository.CreateAsync(user);
-            user.Roles = new HashSet<UserRole>()
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, user.HashSalt);
+            user.Roles = new HashSet<UserRole>
             {
                 new UserRole
                 {
                     User = user,
                     RoleId = role1.Id,
-                    Role = role1,
-                    UserId = user.Id
                 },
                 new UserRole
                 {
-                    Role = role2,
-                    RoleId = role2.Id,
                     User = user,
-                    UserId = user.Id
+                    RoleId = role2.Id,
                 }
             };
-            await _identityRepository.AddUserRole(user.Roles);
-            var diary = new Diary()
-            {
-                UserId = user.Id,
-                User = user
-            };
+
+
             var learner = new Learner
             {
-                UserId = user.Id,
+                Email = model.Email,
                 Age = model.Age,
-                DiaryId = diary.Id,
-                Diary = diary,
+                PhoneNumber = model.PhoneNumber,
                 CreatedBy = model.UserName,
                 CreatedOn = DateTime.UtcNow,
                 CoinCount = 100,
                 TicketCount = 20
+               
             };
+            await _unitOfWork.Identity.AddUserRoles(user.Roles);
+            await _unitOfWork.Identity.CreateAsync(user);
+            await _unitOfWork.Learners.AddLearner(learner);
+            var result = await _unitOfWork.SaveChangesAsync();
 
-            var result = await _learnerRepository.AddLearner(learner);
             if (result == 0) throw new ServiceException("unable to add learner");
             return result;
         }
-        public async Task<int> DeleteLearner(int id)
+        public async Task<int> DeleteLearner(Guid id)
         {
             var user = await _identityRepository.GetUserAsync(id);
             if (user == null) throw new IdentityException("a user with this username or email address does not exist");
@@ -99,45 +98,52 @@ namespace Boompa.Services
             return result;
         }
 
-        public async Task<Learner> GetLearner(int id)
+        public async Task<Learner> GetLearner(Guid id)
         {
             var result = await _learnerRepository.GetLearner(id);
             if (result == null || result.IsDeleted == true) throw new ServiceException("learner not found");
             return result;
         }
 
-        public async Task<LearnerDTO.LearnerInfo> GetLearner(string checkString)
+        public async Task<Response> GetLearner(string checkString)
         {
-            var user = await _identityRepository.GetUserAsync(checkString);
-           
-            if (user == null || user.IsDeleted == true) throw new IdentityException("a learner with this username or email does not exist");
-            var learner = await _learnerRepository.GetLearner(user.Id);
-            var serviceLearner = new LearnerDTO.LearnerInfo
-            {
-                FirstName = learner.FirstName,
-                LastName = learner.LastName,
-                Status = learner.Status,
-                School = learner.School,
-                Rank = learner.Rank,
-
-            };
-            foreach (var userRole in user.Roles)
-            {
-                serviceLearner.Roles.Add(userRole.Role);
-            }
+            var response = new Response();
+            
+            var learner = await _learnerRepository.GetLearner(checkString);
+            response.Data = learner;
+            
             if (learner == null)  throw new ServiceException("this learner does not exist");
-            return serviceLearner ;
+            return response ;
         }
 
-        public async Task<IEnumerable<Learner>> GetLearners()
+        public async Task<Response> GetLearners(int skipCount)
         {
-            var learners = await _learnerRepository.GetLearners();
+            var response = new Response();
+            var result = new List<LearnerDTO.ReturnLearner>();
+            var learners = await _learnerRepository.GetLearners(skipCount);
             if(learners == null) throw new ServiceException("no learners found");
-            return learners;
+
+            foreach(var learner in learners)
+            {
+                var lea = new LearnerDTO.ReturnLearner
+                {
+                    LastName = learner.LastName,
+                    FirstName = learner.FirstName,
+                    Email = learner.Email,
+                    Age = learner.Age,
+                    PhoneNumber = learner.PhoneNumber,
+                };
+
+                result.Add(lea);
+            }
+            response.StatusMessages.Add("success");
+            response.Data = result;
+
+            return response;
         }
         public async Task<IEnumerable<LearnerDTO.LearnerInfo>> GetLearnersInfo()
         {
-            var learners = await _learnerRepository.GetLearners(true);
+            var learners = await _unitOfWork.Learners.GetLearners(false);
             var result = learners.Select(learner => new LearnerDTO.LearnerInfo
             {
                 FirstName = learner .FirstName,
@@ -155,26 +161,10 @@ namespace Boompa.Services
         {
             throw new NotImplementedException();
         }
-
-        public Task<IEnumerable<SourceMaterial >> LoadCategoryMaterials(string categoryName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> Play()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Question> QuestionSelector()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<int> UpdateLearner(LearnerDTO.UpdateInfo model)
+        public async Task<int> UpdateLearner(LearnerDTO.UpdateInfo model, Guid learnerId)
         {
             
-            var learner = await _learnerRepository.GetLearner(model.UserId);
+            var learner = await _learnerRepository.GetLearner(learnerId);
 
             learner.LastModifiedBy = model.ModifierName;
             learner.LastModifiedOn= DateTime.UtcNow;
@@ -182,18 +172,44 @@ namespace Boompa.Services
             learner.FirstName = model.FirstName;
             learner.LastName = model.LastName;
 
-            var result = await _learnerRepository.UpdateLearner(learner);
+            await _unitOfWork.Learners.UpdateLearner(learner);
+            var result = await  _unitOfWork.SaveChangesAsync();
             return result;
         }
 
-        public async Task<int> UpdateLearner(LearnerDTO.UpdateStats model)
+        public async Task<int> UpdateLearner(LearnerDTO.UpdateStats model, string email)
         {
-            var learner = await _learnerRepository.GetLearner(model.UserId);
+            //get learner who sent the request and validate if it exists
+            var learner = await _learnerRepository.GetLearner(email);
+            if (learner == null) { throw new RepoException("database error"); }
+
+            //update learner currencies
             learner.CoinCount += model.CoinCount;
             learner.TicketCount += model.TicketCount;
 
-            var result = await _learnerRepository.UpdateLearner(learner);
+            //document learner learning session
+            await DocumentVisit(model, learner.Id);
+            await _unitOfWork.Learners.UpdateLearner(learner);
+            var result = await _unitOfWork.SaveChangesAsync();
             return result;
+
         }
+        private async Task DocumentVisit(LearnerDTO.UpdateStats statData,Guid learnerId)
+        {
+            var visit = new Visit
+            {
+                LearnerId = learnerId,
+                CategoryId = statData.CategoryId,
+                TicketsEarned = statData.TicketCount,
+                CoinsEarned = statData.CoinCount,
+                Duration = statData.Duration,
+                Date = statData.Date
+
+            };
+
+            await _visitService.AddVisit(visit);
+        }
+
+       
     }
 }

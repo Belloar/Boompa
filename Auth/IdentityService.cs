@@ -4,7 +4,6 @@ using Boompa.Entities.Identity;
 using Boompa.Exceptions;
 using Boompa.Interfaces;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -33,7 +32,7 @@ namespace Boompa.Auth
 
             }
             user.Email = model.Email;
-            user.PhoneNumber = model.PhoneNumber;
+            
             user.LastModifiedBy = credentials.UserName;
             user.LastModifiedOn = DateTime.UtcNow;
 
@@ -51,18 +50,13 @@ namespace Boompa.Auth
                 var users = await _unitOfWork.Identity.GetUsersAsync();
                 var responseModel = new List<IdentityDTO.UsersResponseModel>();
 
-                foreach (var user in users)
-                {
-                    var roles = new List<string>();
-                    if(user.Roles != null)
-                    {
-                        foreach (var role in user.Roles)
-                        {
-                            roles.Add(role.Role.RoleName);
-                        }
-                    }
-                    responseModel.Add(new IdentityDTO.UsersResponseModel(user.UserName, roles, user.Email, user.CreatedOn, user.IsDeleted));
-                }
+                //REVIEW THIS BLOCK OF CODE WHEN LESS URGENT!!!!!!!
+
+                //foreach (var user in users)
+                //{
+                    
+                //    responseModel.Add(new IdentityDTO.UsersResponseModel(user.UserName, user.roles, user.Email, user.CreatedOn, user.IsDeleted));
+                //}
 
                 response.StatusMessages.Add("Success");
                 response.Data = users;
@@ -75,7 +69,7 @@ namespace Boompa.Auth
             }
 
         }
-        public Task<User> GetUserAsync(int id)
+        public Task<User> GetUserAsync(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -84,11 +78,11 @@ namespace Boompa.Auth
             var validUser = await _unitOfWork.Identity.GetUserAsync(searchString);
             return validUser;
         }
-        public Task DeleteAsync(int id)
+        public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
-        public Task  UpdateAsync(int id, IdentityDTO.UpdateRequestModel model)
+        public Task  UpdateAsync(Guid id, IdentityDTO.UpdateRequestModel model)
         {
             throw new NotImplementedException();
         }
@@ -99,13 +93,11 @@ namespace Boompa.Auth
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
             var credentials = new SigningCredentials(securityKey,SecurityAlgorithms.HmacSha256);
 
-            IList<Claim> claims = new List<Claim>()
+            ICollection<Claim> claims = new List<Claim>()
             {
                 new Claim ("userId",validUser.UserId.ToString()),
                 new Claim(ClaimTypes.NameIdentifier,validUser.UserName),
-                new Claim(ClaimTypes.Email ,validUser.Email),
-                
-                    
+                new Claim(ClaimTypes.Email,validUser.Email),
             };
             foreach (var userRole in validUser.Roles)
             {
@@ -139,9 +131,11 @@ namespace Boompa.Auth
                 UserName = user.UserName,
                 Email = user.Email,
             };
-            foreach (var userRole in user.Roles)
+
+            
+            foreach (var role in user.Roles)
             {
-                model.Roles.Add(userRole.Role.RoleName);
+                model.Roles.Add(role.Role.RoleName);
             }
             return model;
         }
@@ -150,19 +144,20 @@ namespace Boompa.Auth
             throw new NotImplementedException();
         }
 
-        public async Task UpdateUserRole(int id,string role)
+        public async Task UpdateUserRole(Guid id,string role)
         {
             var newRole = await _unitOfWork.Identity.GetRoleAsync(role);
             if (newRole == null) throw new NotFoundException("this role does not exist or is already deleted");
              await _unitOfWork.Identity.UpdateUserRole(id,newRole);
             
         }
-        private static IEnumerable<Claim> GetClaims(string token)
+        private IEnumerable<Claim> GetClaims(string token)
         {
             var handler = new JwtSecurityTokenHandler();
             var jwtSecurityToken = handler.ReadJwtToken(token);
 
             var claims = jwtSecurityToken.Claims;
+            
             return claims;
         }
 
@@ -171,6 +166,7 @@ namespace Boompa.Auth
             var exists = await _unitOfWork.Identity.CheckUser(email);
             if (exists) throw new IdentityException("this user already exists");
             return true;
+            
         }
     }
 }

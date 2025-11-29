@@ -1,6 +1,32 @@
 [
   {
     "ContainingType": "Boompa.Controllers.AdminController",
+    "Method": "AddQuestionsAsync",
+    "RelativePath": "api/Admin/AddQuestions",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "questions",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Boompa.DTO.MaterialDTO\u002BQuestionModel, Boompa, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "sourceMaterialName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "category",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Boompa.Controllers.AdminController",
     "Method": "AddSourceMaterial",
     "RelativePath": "api/Admin/AddSourceMaterial",
     "HttpMethod": "POST",
@@ -110,23 +136,23 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
     "ContainingType": "Boompa.Controllers.AdminController",
     "Method": "GetLearners",
-    "RelativePath": "api/Admin/GetLearners",
+    "RelativePath": "api/Admin/GetLearners/{skipCount}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "skipCount",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -237,7 +263,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "",
         "IsRequired": true
       }
     ],
@@ -266,23 +292,23 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
     "ContainingType": "Boompa.Controllers.LearnerController",
     "Method": "GetLearners",
-    "RelativePath": "api/Learner/GetLearners",
+    "RelativePath": "api/Learner/GetLearners/{skipCount}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "skipCount",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -373,7 +399,7 @@
       },
       {
         "Name": "sourceMaterialId",
-        "Type": "System.Int32",
+        "Type": "System.Guid",
         "IsRequired": false
       }
     ],
@@ -434,8 +460,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "sourceMaterialName",
-        "Type": "System.String",
+        "Name": "sourceId",
+        "Type": "System.Guid",
         "IsRequired": false
       },
       {
