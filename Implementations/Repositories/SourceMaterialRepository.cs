@@ -21,29 +21,17 @@ namespace Boompa.Implementations.Repositories
         {
             throw new NotImplementedException();
         }
-
-        //public async Task AddFileDetail(List<SourceFileDetail> files)
-        //{
-        //    foreach (SourceFileDetail fileDeets in files)
-        //    {
-        //         _context.SourceFileDetails.Add(fileDeets);
-        //    }
-            
-
-        //}
-        //public async Task AddFileDetail(List<QuestionFileDetail> files)
-        //{
-        //    foreach (var fileDeets in files)
-        //    {
-        //         _context.QuestionFileDetails.Add(fileDeets);
-        //    }
-            
-        //}
         public async Task<Question> AddQuestionAsync(Question model,string sourceName,string category)
         {
             var source = await GetSource(sourceName, category);
             model.SourceMaterialId = source.Id;
             
+            _context.Questions.Add(model);
+            return model;
+
+        }
+        public async Task<Question> AddQuestionAsync(Question model)
+        {
             _context.Questions.Add(model);
             return model;
 
@@ -72,6 +60,7 @@ namespace Boompa.Implementations.Repositories
             
             var fetcher =_context.SourceMaterials.Where(sm => sm.Category.Name == categoryName).Select(sm => new MaterialDTO.SourceDescriptor
             {
+                SourceId = sm.Id,
                 SourceName = sm.Name,
                 SourceDescription = sm.Description,
             }).ToList();
@@ -91,30 +80,18 @@ namespace Boompa.Implementations.Repositories
         {
 
             var result = await _context.SourceMaterials
-                .Select(a => new SourceMaterial 
-                { 
-                    Category = a.Category,
-                    Content = a.Content,
-                    Id = a.Id,
-                    Description = a.Description,
-                    Name = a.Name,
-                    IsDeleted = a.IsDeleted,
-                    Questions = a.Questions!.Select(b => new Question
-                    {
-                        IsDeleted = b.IsDeleted,
-                        Id = b.Id,
-                        Description= b.Description,
-                        Options = b.Options,
-                        Answer = b.Answer,
-                        SourceMaterialId = b.SourceMaterialId,
-                        
-                    }).ToList(),
-                   
-                })
-                .FirstOrDefaultAsync(sm => sm.Name.ToLower() == sourceMaterialName.ToLower() && sm.Category.Name == category);
+                .Include(sm => sm.Questions)
+                .FirstOrDefaultAsync(sm => sm.Name.ToLower() == sourceMaterialName.ToLower() && !sm.IsDeleted);
 
             if (result == null) { throw new RepoException("No material found with the provided name"); }
             return result;
+        }
+
+        public async Task<SourceMaterial> GetSourceMaterial(string category,Guid sourceId)
+        {
+            var result = await _context.SourceMaterials.Include(sm => sm.Questions).FirstOrDefaultAsync(sm => sm.Id == sourceId && !sm.IsDeleted);
+            return result;
+
         }
 
 
@@ -140,12 +117,16 @@ namespace Boompa.Implementations.Repositories
             if(result != null) { return true; }else{ return false; }
         }
 
-        public async Task<Category> GetCategory(string categoryName)
+        public async Task<Category> GetCategoryId(string categoryName)
         {
-            return await _context.Categories.Select(c => new Category
-            {
-                Id = c.Id,
-            }).FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower());
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower());
+
+
+        }
+
+        public async Task AddCategory(Category category)
+        {
+            await _context.Categories.AddAsync(category);
         }
     }
 }

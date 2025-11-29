@@ -27,7 +27,7 @@ namespace Boompa.DTO
         }
         public class UpdateStats
         {
-            public string CategoryVisited { get; set; }
+            public Guid CategoryId { get; set; }
             public int TicketCount { get; set; }
             public int CoinCount { get; set; }
             public double Duration { get; set; }

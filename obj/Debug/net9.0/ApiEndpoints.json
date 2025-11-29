@@ -399,7 +399,7 @@
       },
       {
         "Name": "sourceMaterialId",
-        "Type": "System.Int32",
+        "Type": "System.Guid",
         "IsRequired": false
       }
     ],
@@ -460,8 +460,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "sourceMaterialName",
-        "Type": "System.String",
+        "Name": "sourceId",
+        "Type": "System.Guid",
         "IsRequired": false
       },
       {

@@ -97,7 +97,7 @@ namespace Boompa.Auth
             {
                 new Claim ("userId",validUser.UserId.ToString()),
                 new Claim(ClaimTypes.NameIdentifier,validUser.UserName),
-                new Claim(ClaimTypes.Email ,validUser.Email),
+                new Claim(ClaimTypes.Email,validUser.Email),
             };
             foreach (var userRole in validUser.Roles)
             {
@@ -132,11 +132,11 @@ namespace Boompa.Auth
                 Email = user.Email,
             };
 
-            //REVIEW THIS BLOCK WHEN LESS URGENT AS THIS BLOCK DOESN'T SEEM NECESSARY,IT CAN BE HANDLED IN THE REPOSITORY
-            //foreach (var role in user.Roles)
-            //{
-            //    model.Roles.Add(role.RoleName);
-            //}
+            
+            foreach (var role in user.Roles)
+            {
+                model.Roles.Add(role.Role.RoleName);
+            }
             return model;
         }
         public Task AddRoleAsync(string role)

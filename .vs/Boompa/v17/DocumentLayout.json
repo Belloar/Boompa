@@ -3,36 +3,44 @@
   "WorkspaceRootPath": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\implementations\\services\\sourcematerialservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:implementations\\services\\sourcematerialservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\implementations\\services\\learnerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:implementations\\services\\learnerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\implementations\\repositories\\visitrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:implementations\\repositories\\visitrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\interfaces\\irepository\\ivisitrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:interfaces\\irepository\\ivisitrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\interfaces\\irepository\\ilearnerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:interfaces\\irepository\\ilearnerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\controllers\\learnercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:controllers\\learnercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\implementations\\repositories\\learnerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:implementations\\repositories\\learnerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\entities\\identity\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:entities\\identity\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\auth\\identityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:auth\\identityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\entities\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:entities\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\controllers\\identitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:controllers\\identitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\entities\\learner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:entities\\learner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\auth\\identityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:auth\\identityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\interfaces\\iservice\\ilearnerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:interfaces\\iservice\\ilearnerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|c:\\users\\abdur-rahman bello\\source\\repos\\belloar\\boompa\\auth\\iidentityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B509C6CE-A97B-4BCD-97ED-37367D80C510}|Boompa.csproj|solutionrelative:auth\\iidentityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,21 +50,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 11,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "SourceMaterialService.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Services\\SourceMaterialService.cs",
-              "RelativeDocumentMoniker": "Implementations\\Services\\SourceMaterialService.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Services\\SourceMaterialService.cs",
-              "RelativeToolTip": "Implementations\\Services\\SourceMaterialService.cs",
-              "ViewState": "AgIAAGIAAAAAAAAAAAAswH0AAABVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T07:06:10.4Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
@@ -71,88 +66,131 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "IVisitRepository.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Interfaces\\IRepository\\IVisitRepository.cs",
-              "RelativeDocumentMoniker": "Interfaces\\IRepository\\IVisitRepository.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Interfaces\\IRepository\\IVisitRepository.cs",
-              "RelativeToolTip": "Interfaces\\IRepository\\IVisitRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAYAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "Learner.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\Learner.cs",
+              "RelativeDocumentMoniker": "Entities\\Learner.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\Learner.cs",
+              "RelativeToolTip": "Entities\\Learner.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAA5wBYAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T21:14:19.197Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "VisitRepository.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Repositories\\VisitRepository.cs",
-              "RelativeDocumentMoniker": "Implementations\\Repositories\\VisitRepository.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Repositories\\VisitRepository.cs",
-              "RelativeToolTip": "Implementations\\Repositories\\VisitRepository.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAQwCUAAABrAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T21:07:11.074Z"
+              "WhenOpened": "2025-11-27T13:14:00.368Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "ILearnerRepository.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Interfaces\\IRepository\\ILearnerRepository.cs",
-              "RelativeDocumentMoniker": "Interfaces\\IRepository\\ILearnerRepository.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Interfaces\\IRepository\\ILearnerRepository.cs",
-              "RelativeToolTip": "Interfaces\\IRepository\\ILearnerRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAUAAAAAAAAAA==",
+              "Title": "IdentityController.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Controllers\\IdentityController.cs",
+              "RelativeDocumentMoniker": "Controllers\\IdentityController.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Controllers\\IdentityController.cs",
+              "RelativeToolTip": "Controllers\\IdentityController.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAQwCoAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T21:05:30.046Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "LearnerRepository.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Repositories\\LearnerRepository.cs",
-              "RelativeDocumentMoniker": "Implementations\\Repositories\\LearnerRepository.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Repositories\\LearnerRepository.cs",
-              "RelativeToolTip": "Implementations\\Repositories\\LearnerRepository.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAnwC0AAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T20:59:55.323Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "LearnerService.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Services\\LearnerService.cs",
-              "RelativeDocumentMoniker": "Implementations\\Services\\LearnerService.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Services\\LearnerService.cs",
-              "RelativeToolTip": "Implementations\\Services\\LearnerService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAMUAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T16:19:06.351Z",
+              "WhenOpened": "2025-11-27T12:47:28.173Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "UserRole.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\Identity\\UserRole.cs",
-              "RelativeDocumentMoniker": "Entities\\Identity\\UserRole.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\Identity\\UserRole.cs",
-              "RelativeToolTip": "Entities\\Identity\\UserRole.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAeAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAADwvyMAAABHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T16:03:24.144Z"
+              "WhenOpened": "2025-11-27T11:56:50.633Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ILearnerService.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Interfaces\\IService\\ILearnerService.cs",
+              "RelativeDocumentMoniker": "Interfaces\\IService\\ILearnerService.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Interfaces\\IService\\ILearnerService.cs",
+              "RelativeToolTip": "Interfaces\\IService\\ILearnerService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T16:08:19.549Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "LearnerRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Repositories\\LearnerRepository.cs",
+              "RelativeDocumentMoniker": "Implementations\\Repositories\\LearnerRepository.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Repositories\\LearnerRepository.cs",
+              "RelativeToolTip": "Implementations\\Repositories\\LearnerRepository.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAgwFgAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T09:46:23.137Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IdentityService.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Auth\\IdentityService.cs",
+              "RelativeDocumentMoniker": "Auth\\IdentityService.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Auth\\IdentityService.cs",
+              "RelativeToolTip": "Auth\\IdentityService.cs",
+              "ViewState": "AgIAAFgAAAAAAAAAAAAgwGUAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-25T16:22:39.986Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IIdentityRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Auth\\IIdentityRepository.cs",
+              "RelativeDocumentMoniker": "Auth\\IIdentityRepository.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Auth\\IIdentityRepository.cs",
+              "RelativeToolTip": "Auth\\IIdentityRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T12:00:07.621Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LearnerController.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Controllers\\LearnerController.cs",
+              "RelativeDocumentMoniker": "Controllers\\LearnerController.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Controllers\\LearnerController.cs",
+              "RelativeToolTip": "Controllers\\LearnerController.cs",
+              "ViewState": "AgIAAIcAAAAAAAAAAAAgwJQAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-25T13:27:50.447Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LearnerService.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Services\\LearnerService.cs",
+              "RelativeDocumentMoniker": "Implementations\\Services\\LearnerService.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Implementations\\Services\\LearnerService.cs",
+              "RelativeToolTip": "Implementations\\Services\\LearnerService.cs",
+              "ViewState": "AgIAALoAAAAAAAAAAADwv9QAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-25T13:27:50.462Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "Category.cs",
-              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\Category.cs",
-              "RelativeDocumentMoniker": "Entities\\Category.cs",
-              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Entities\\Category.cs",
-              "RelativeToolTip": "Entities\\Category.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Title": "IdentityRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Auth\\IdentityRepository.cs",
+              "RelativeDocumentMoniker": "Auth\\IdentityRepository.cs",
+              "ToolTip": "C:\\Users\\ABDUR-RAHMAN BELLO\\source\\repos\\Belloar\\Boompa\\Auth\\IdentityRepository.cs",
+              "RelativeToolTip": "Auth\\IdentityRepository.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAgwEAAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T15:55:45.748Z"
+              "WhenOpened": "2025-11-25T16:23:28.613Z",
+              "EditorCaption": ""
             }
           ]
         }

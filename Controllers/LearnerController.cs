@@ -12,18 +12,20 @@ namespace Boompa.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    //[Authorize(Roles = "Learner")]
+    [Authorize(Roles="Learner")]
     public class LearnerController : ControllerBase
     {
         private readonly ILearnerService _learnerService;
+        private readonly IHttpContextAccessor _httpContext;
         
-        public LearnerController(ILearnerService service)
+        public LearnerController(ILearnerService service, IHttpContextAccessor httpContext)
         {
             _learnerService = service;
-            
+            _httpContext = httpContext;
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateLearner([FromBody] LearnerDTO.CreateRequest model)
         {
             
@@ -115,7 +117,7 @@ namespace Boompa.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "learner")]
+        //[Authorize(Roles = "learner")]
         public async Task<IActionResult> UpdateLearner([FromBody] LearnerDTO.UpdateInfo updateInfo)
         {
             try
@@ -134,17 +136,17 @@ namespace Boompa.Controllers
         }
 
         [HttpPut]
+        //[Authorize(Roles = "Learner")]
         public async Task<IActionResult> UpdateLearnerStats([FromBody] LearnerDTO.UpdateStats model)
         {
             if (model == null) return BadRequest("No info found");
 
             try
             {
-                var idString = HttpContext.User.FindFirstValue("userId");
-                var learnerId = Guid.Parse(idString);
-
-
-                var result = await _learnerService.UpdateLearner(model, learnerId);
+                
+                var id = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+               
+                var result = await _learnerService.UpdateLearner(model, id);
                 if (result >= 1)
                 {
                     return Ok(result);

@@ -45,16 +45,9 @@ namespace Boompa.Implementations.Repositories
         }
         public async Task<Learner> GetLearner(string searchString)
         {
-            if (searchString.Contains('@'))
-            {
-                //return await _context.Learners.FirstOrDefaultAsync(x => x.User.Email == searchString);
-            }
-
-            var result = _context.Learners.FirstOrDefault(l => l.Email == searchString);
-
-            if (result == null) throw new IdentityException("this user does not exist or has been deleted");
-            return result;
+            return await _context.Learners.FirstOrDefaultAsync(x => x.Email == searchString);
         }
+
         public async Task<IEnumerable<Learner>> GetLearners(int skipCount)
         {
             var data = _context.Learners.AsQueryable();

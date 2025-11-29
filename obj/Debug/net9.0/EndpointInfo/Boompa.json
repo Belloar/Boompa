@@ -658,8 +658,8 @@
             "name": "sourceMaterialId",
             "in": "header",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -718,10 +718,11 @@
         ],
         "parameters": [
           {
-            "name": "sourceMaterialName",
+            "name": "sourceId",
             "in": "header",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -887,9 +888,9 @@
       "UpdateStats": {
         "type": "object",
         "properties": {
-          "categoryVisited": {
+          "categoryId": {
             "type": "string",
-            "nullable": true
+            "format": "uuid"
           },
           "ticketCount": {
             "type": "integer",

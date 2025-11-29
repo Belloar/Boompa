@@ -11,7 +11,7 @@ namespace Boompa.Entities
         public Category Category { get; set; }
         public string Content { get; set; }
         public string Description { get; set; }
-        public ICollection<Question>? Questions { get; set; }
+        public ICollection<Question> Questions { get; set; } = new HashSet<Question>();
         public ICollection<string> Files { get; set; } = [];
     }
 }

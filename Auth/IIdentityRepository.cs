@@ -18,7 +18,7 @@ namespace Boompa.Auth
         Task<IEnumerable<string>> GetRolesAsync();
        
         Task UpdateUserRole(Guid id, Role role);
-        Task AddUserRole(IEnumerable<UserRole> role);
+        Task AddUserRoles(ICollection<UserRole> role);
 
 
     }

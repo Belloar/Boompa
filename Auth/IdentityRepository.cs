@@ -18,14 +18,13 @@ namespace Boompa.Auth
         {
             throw new NotImplementedException();
         }
-        public async Task AddUserRole(IEnumerable<UserRole> userRole)
+        public async Task AddUserRoles(ICollection<UserRole> userRole)
         {
             var result = 0;
             foreach(var role in userRole)
             {
                 _context.UserRoles.Add(role);
-                //result = await _context.SaveChangesAsync();
-                //if (result == 0) return 0;
+                
             }
             
             
@@ -39,10 +38,7 @@ namespace Boompa.Auth
 
         public async Task CreateAsync(User user)
         {
-            //await AddUserRole(user.Roles);
             await _context.Users.AddAsync(user);
-            //var result = await _context.SaveChangesAsync();
-            //return result;
         }
         public Task DeleteAsync(Guid id )
         {
@@ -70,14 +66,20 @@ namespace Boompa.Auth
         {
             if (isEmail)
             {
-                return _context.Users.SingleOrDefault(u => u.Email.ToLower() == searchString.ToLower());
+                return await _context.Users
+                    .Include(u => u.Roles)
+                    .ThenInclude(ur => ur.Role.RoleName)
+                    .SingleOrDefaultAsync(u => u.Email.ToLower() == searchString.ToLower());
             }
-            var user =   _context.Users.SingleOrDefault(u => u.UserName.ToLower() == searchString.ToLower());
-            //var userRoles = _context.UserRoles.Include(r => r.Role).Where(x => x.UserId == user.Id).Select(r => r);
-            //foreach (var userRole in userRoles)
-            //{
-            //    user.Roles.Add(userRole);
-            //}
+            var user =  await _context.Users
+                //.Include(u => u.Roles)
+                //.ThenInclude(ur => ur.Role.RoleName)
+                .SingleOrDefaultAsync(u => u.UserName.ToLower() == searchString.ToLower());
+            var userRoles = _context.UserRoles.Include(r => r.Role).Where(x => x.UserId == user.Id).Select(r => r);
+            foreach (var userRole in userRoles)
+            {
+                user.Roles.Add(userRole);
+            }
 
             return user;
         }

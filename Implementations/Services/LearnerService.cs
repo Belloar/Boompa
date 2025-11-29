@@ -32,8 +32,8 @@ namespace Boompa.Services
         {
             
             
-            var role1 = await _identityRepository.GetRoleAsync("user");
-            var role2 = await _identityRepository.GetRoleAsync("learner");
+            var role1 = await _identityRepository.GetRoleAsync("User");
+            var role2 = await _identityRepository.GetRoleAsync("Learner");
 
 
             if (await _identityRepository.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
@@ -75,8 +75,8 @@ namespace Boompa.Services
                 TicketCount = 20
                
             };
-
-            await _identityRepository.CreateAsync(user);
+            await _unitOfWork.Identity.AddUserRoles(user.Roles);
+            await _unitOfWork.Identity.CreateAsync(user);
             await _unitOfWork.Learners.AddLearner(learner);
             var result = await _unitOfWork.SaveChangesAsync();
 
@@ -177,25 +177,29 @@ namespace Boompa.Services
             return result;
         }
 
-        public async Task<int> UpdateLearner(LearnerDTO.UpdateStats model, Guid learnerId)
+        public async Task<int> UpdateLearner(LearnerDTO.UpdateStats model, string email)
         {
-            
-            var learner = await _learnerRepository.GetLearner(learnerId);
+            //get learner who sent the request and validate if it exists
+            var learner = await _learnerRepository.GetLearner(email);
+            if (learner == null) { throw new RepoException("database error"); }
+
+            //update learner currencies
             learner.CoinCount += model.CoinCount;
             learner.TicketCount += model.TicketCount;
 
-            
+            //document learner learning session
+            await DocumentVisit(model, learner.Id);
             await _unitOfWork.Learners.UpdateLearner(learner);
             var result = await _unitOfWork.SaveChangesAsync();
             return result;
 
         }
-        private async Task DocumentVisit(LearnerDTO.UpdateStats statData,Guid learnerId, Guid categoryId)
+        private async Task DocumentVisit(LearnerDTO.UpdateStats statData,Guid learnerId)
         {
             var visit = new Visit
             {
                 LearnerId = learnerId,
-                CategoryId = categoryId,
+                CategoryId = statData.CategoryId,
                 TicketsEarned = statData.TicketCount,
                 CoinsEarned = statData.CoinCount,
                 Duration = statData.Duration,

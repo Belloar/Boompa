@@ -6,12 +6,14 @@ namespace Boompa.Interfaces.IService
     {
         
         Task<Response> AddCategory(string category);
-        Task<Response> AddQuestion(MaterialDTO.QuestionModel model,int sourceMaterialId);
+        Task<Response> AddQuestion(MaterialDTO.QuestionModel model,Guid sourceMaterialId);
         Task<Response> AddQuestion(ICollection<MaterialDTO.QuestionModel> models,string sourceMaterialName, string category);
+        Task<Response> AddQuestion(ICollection<MaterialDTO.QuestionModel> models,Guid sourceMaterialId);
         Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material);
         Task<Response> DeleteSourceMaterial();
         Task<Response> GetAllSourceMaterials(string categoryName);
         Task<Response> GetSourceMaterial(string sourceMaterialName, string category);
+        Task<Response> GetSourceMaterial(string category, Guid sourceId);
         Task<Response> UpdateQuestion(string model);
         Task<Response> UpdateSourceMaterial(MaterialDTO rawMaterial);
         
