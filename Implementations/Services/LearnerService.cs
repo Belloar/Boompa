@@ -18,6 +18,7 @@ namespace Boompa.Services
         private readonly IVisitService _visitService;
         
         
+        
         public LearnerService(ILearnerRepository repository,IIdentityRepository identityRepository,IUnitOfWork unitOfWork,IVisitService visitService)
         {
             _learnerRepository = repository;
@@ -47,7 +48,7 @@ namespace Boompa.Services
                 IsEmailConfirmed = true,
                 
             };
-
+            
             user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, user.HashSalt);
             user.Roles = new HashSet<UserRole>
             {
