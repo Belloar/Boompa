@@ -6,19 +6,22 @@ using Boompa.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Boompa.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
         private readonly ILearnerService _learnerService;
         private readonly ISourceMaterialService _sourceMaterialService;
+        
         public AdminController(IAdminService adminService, ISourceMaterialService sourceMaterialService, ILearnerService learnerService)
         {
+            
             _adminService = adminService;
             _sourceMaterialService = sourceMaterialService;
             _learnerService = learnerService;
@@ -28,10 +31,13 @@ namespace Boompa.Controllers
         
         public async Task<IActionResult> CreateAdmin([FromForm] AdminDTO.CreateModel model)
         {
+
+            
             if(model == null)return BadRequest("please fill in credentials");
             
             try
             {
+                
                 var result = await _adminService.CreateAdminAsync(model);
                 if(result == 0)return StatusCode(500,"something don sup sha");
                 return Ok("Admin created");
@@ -101,6 +107,7 @@ namespace Boompa.Controllers
         {
             try
             {
+                material.Creator = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var response = await _sourceMaterialService.AddSourceMaterial(material);
                 return Ok(response);
             }
@@ -111,10 +118,11 @@ namespace Boompa.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetLearnerById([FromHeader] int id)
+        public async Task<IActionResult> GetLearnerById()
         {
             try
             {
+                var id = HttpContext.User.FindFirstValue("userId");
                 var learner = await _learnerService.GetLearner(id);
                 return Ok(learner);
             }
@@ -156,11 +164,25 @@ namespace Boompa.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetLearners()
+        [HttpGet("{skipCount}")]
+        public async Task<IActionResult> GetLearners([FromRoute] int skipCount)
         {
-            var learners = await _learnerService.GetLearners();
+            var learners = await _learnerService.GetLearners(skipCount);
             return Ok(learners);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddQuestionsAsync([FromForm]ICollection<MaterialDTO.QuestionModel> questions,[FromHeader]string sourceMaterialName,[FromHeader]string category)
+        {
+            var result = await _sourceMaterialService.AddQuestion(questions, sourceMaterialName,category);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> TestEndpoint()
+        {
+            var response = new Response();
+            return Ok(response);
         }
 
         

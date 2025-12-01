@@ -11,25 +11,23 @@ namespace Boompa.Implementations.Repositories
 {
     public class LearnerRepository : ILearnerRepository
     {
-        private readonly ApplicationContext _context;
-        public LearnerRepository(ApplicationContext context)
+        private readonly BoompaContext _context;
+        public LearnerRepository(BoompaContext context)
         {
             _context = context;
         }
 
-        public async Task<int> AddLearner(Learner model)
-        {
-           
+        
 
+        public async Task AddLearner(Learner model)
+        {
             await _context.Learners.AddAsync(model);
-            var result = await _context.SaveChangesAsync();
-            return result;
         }
         public async Task<int> DeleteLearner(LearnerDTO.DeleteModel model)
         {
             
 
-            var learner = _context.Learners.FirstOrDefault(x => x.UserId == model.UserId ) ;
+            var learner = _context.Learners.FirstOrDefault(l => l.Id == model.UserId ) ;
             if (learner == null) throw new ServiceException("this user is not a learner");
             learner.IsDeleted = model.IsDeleted;
             learner.DeletedOn = model.DeletedOn;
@@ -39,34 +37,55 @@ namespace Boompa.Implementations.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<Learner> GetLearner(int id)
+        public async Task<Learner> GetLearner(Guid id)
         {
-            var learner =  _context.Learners.FirstOrDefault(l => l.UserId == id);
+            var learner =  _context.Learners.FirstOrDefault(l => l.Id == id);
             if (learner == null || learner.IsDeleted == true) throw new ServiceException("a learner with this username or email address does not exist");
             return learner;
         }
         public async Task<Learner> GetLearner(string searchString)
         {
-            if (searchString.Contains('@'))
-            {
-                var _result = _context.Learners.FirstOrDefault(x => x.User.Email == searchString);
-            }
-            var result = _context.Learners.Include(d => d.Diary).ThenInclude(v => v.Visit).FirstOrDefault(x => x.User.UserName == searchString);
-            if (result == null) throw new IdentityException("this user does not exist or has been deleted");
-            return result;
+            return await _context.Learners.FirstOrDefaultAsync(x => x.Email == searchString);
         }
+
+        public async Task<IEnumerable<Learner>> GetLearners(int skipCount)
+        {
+            var data = _context.Learners.AsQueryable();
+
+            var recordCount = await data.CountAsync();
+
+            var result = data.Skip(skipCount).Take(skipCount + 50);
+
+             return result.Select(l => new Learner
+                    {
+                        FirstName = l.FirstName,
+                        LastName = l.LastName,
+                        Age = l.Age,
+                                        
+                    }
+
+             ).ToList();
+
+             
+        }
+
         public async Task<IEnumerable<Learner>> GetLearners(bool byStatus = false)
         {
-            return byStatus ? _context.Learners.Where(l => l.Status == true).ToList() : _context.Learners.ToList(); 
+            if (byStatus)
+            {
+               var result =  await _context.Learners.Where(l => l.Status == true).ToListAsync();
+                return result;
+            }
+            else
+            {
+                var result = await _context.Learners.ToListAsync();
+                return result;
+            }
         }
-        public async Task<int> UpdateLearner(Learner learner)
-        {
-            
-            _context.Update(learner);
-            var result = _context.SaveChanges();
-            return result;
-            
 
+        public async Task UpdateLearner(Learner learner)
+        {
+             _context.Update(learner);
         }
 
         

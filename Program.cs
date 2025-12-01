@@ -30,8 +30,12 @@ builder.Services.AddScoped<IAdminService,AdminService>();
 builder.Services.AddScoped<ISourceMaterialService, SourceMaterialService>();
 builder.Services.AddScoped<ISourceMaterialRepository, SourceMaterialRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IVisitRepository, VisitRepository>();
+builder.Services.AddScoped<IVisitService, VisitService>();
 
-builder.Services.AddDbContext<ApplicationContext>(options => options.UseMySql(builder.Configuration.GetConnectionString("MySqlString"), new MySqlServerVersion(
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddDbContext<BoompaContext>(options => options.UseMySql(builder.Configuration.GetConnectionString("MySqlString"), new MySqlServerVersion(
               new Version(8, 0, 29))));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

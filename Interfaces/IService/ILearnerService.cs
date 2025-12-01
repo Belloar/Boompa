@@ -7,15 +7,15 @@ namespace Boompa.Interfaces.IService
     {
         Task<int> CreateLearner(LearnerDTO.CreateRequest model);
         
-        Task<int> DeleteLearner(int id);
+        Task<int> DeleteLearner(Guid id);
         
         Task<SourceMaterial> GetMaterial(string MaterialName);
-        Task<Learner> GetLearner(int id);
-        Task<LearnerDTO.LearnerInfo> GetLearner(string checkString);
+        Task<Learner> GetLearner(Guid id);
+        Task<Response> GetLearner(string checkString);
         Task<IEnumerable<LearnerDTO.LearnerInfo>> GetLearnersInfo();
-        Task<IEnumerable<Learner>> GetLearners();
-        Task<int> UpdateLearner(LearnerDTO.UpdateInfo model);
-        Task<int> UpdateLearner(LearnerDTO.UpdateStats model);
+        Task<Response> GetLearners(int numberOfRecordsToSkip);
+        Task<int> UpdateLearner(LearnerDTO.UpdateInfo model,Guid LearnerId);
+        Task<int> UpdateLearner(LearnerDTO.UpdateStats model,string userName);
         
         
 

@@ -18,11 +18,11 @@ namespace Boompa.Auth
             public string? UserName { get; set; }
             public string? Password { get; set; }
             public string? Email { get; set; }
-            public string? PhoneNumber { get; set; }
+            
         }
         public class ValidUser
         {
-            public int UserId { get; set; }
+            public Guid UserId { get; set; }
             public string UserName { get; set; }
             public string Email { get; set; }
             public ICollection<string>? Roles = new List<string>();
@@ -32,5 +32,7 @@ namespace Boompa.Auth
             public string SearchString { get; set; }
             public string Password { get; set; }
         }
+
+        public record UsersResponseModel(string UserName, ICollection<string>Roles, string Email, DateTime CreatedOn, bool IsDeleted );
     }
 }

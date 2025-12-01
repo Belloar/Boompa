@@ -1,6 +1,4 @@
 ﻿using Amazon.S3;
-//using Microsoft.Extensions.Configuration;
-//using Microsoft.Extensions.DependencyInjection;
 
 namespace Boompa.Extensions
 {

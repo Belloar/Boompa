@@ -55,7 +55,7 @@ namespace Boompa.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddQuestion([FromForm]MaterialDTO.QuestionModel model, [FromHeader] int sourceMaterialId)
+        public async Task<IActionResult> AddQuestion([FromForm]MaterialDTO.QuestionModel model, [FromHeader] Guid sourceMaterialId)
         {
             if (model == null) { return BadRequest("Material not received"); }
             try
@@ -70,12 +70,12 @@ namespace Boompa.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSourceMaterial([FromHeader]string sourceMaterialName, [FromHeader]string category)
+        public async Task<IActionResult> GetSourceMaterial([FromHeader]Guid sourceId, [FromHeader]string category)
         {
-            if (sourceMaterialName == null) { return BadRequest("SourceMaterialName not provided"); }
+            if (sourceId == null) { return BadRequest("SourceMaterialName not provided"); }
             try
             {
-                var result  = await _sourceMaterialService.GetSourceMaterial(sourceMaterialName, category);
+                var result  = await _sourceMaterialService.GetSourceMaterial(category,sourceId);
                 return Ok(result);
             }
             catch (Exception)

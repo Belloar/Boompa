@@ -7,18 +7,18 @@ namespace Boompa.Auth
     {
         Task CreateAsync(User user);
         Task<bool> CheckUser(string email);
-        Task UpdateAsync(int id, User user);
+        Task UpdateAsync(Guid id, User user);
         Task<IEnumerable<User>> GetUsersAsync();
-        Task<User> GetUserAsync(int id);
+        Task<User> GetUserAsync(Guid id);
         Task<User> GetUserAsync(string searchString, bool isEmail = false);
         
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Guid id);
         Task<Role> AddRoleAsync(string role);
         Task<Role> GetRoleAsync(string role);
         Task<IEnumerable<string>> GetRolesAsync();
        
-        Task UpdateUserRole(int id, Role role);
-        Task AddUserRole(IEnumerable<UserRole> role);
+        Task UpdateUserRole(Guid id, Role role);
+        Task AddUserRoles(ICollection<UserRole> role);
 
 
     }

@@ -366,3 +366,4 @@ bin/
 obj/
 Properties/
 .csproj
+Migrations/

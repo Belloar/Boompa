@@ -19,7 +19,7 @@ namespace Boompa.Interfaces.IService
         Task<Admin> GetAdminAsync(int id);
         Task<Admin> GetAdminAsync(string checkString);
         Task<IEnumerable<Learner>> GetLearnersAsync();
-        Task<Learner> GetLearnerAsync(string name);
+        //Task<Learner> GetLearnerAsync(string name);
         Task<int> UpdateAdminAsync(AdminDTO.UpdateModel model);
         Task<int> UpdateQuestion();
         
