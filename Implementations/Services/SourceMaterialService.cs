@@ -113,27 +113,33 @@ namespace Boompa.Implementations.Services
         {
             try
             {
-                var response = new Response();
-                var que = new Question()
-                {
-                    SourceMaterialId = sourceMaterialId,
-                    Description = question.Description,
-                    Answer = question.Answer,
-                    Options = question.Option,
-                    
-                };
 
-                if (question.QueFiles.Count != 0)
+                var que = new Question();
+                switch (question.QuestionType)
                 {
-                    foreach(var file in question.QueFiles)
-                    {
+                    // type1 question is for pure mcq questions where the question, its answer, and options are text/string
+                    case "type1":
+                        que.SourceMaterialId = sourceMaterialId;
+                        que.Description = (string)question.Description;
+                        que.Answer = (string)question.Answer;
+                        que.Options = (string)question.Option;
+                        break;
+                        //type2 questions are for questions with images as their questions and their answers and options as text/string
+                    case "type2":
+                        var file = (IFormFile)question.Description;
                         var prefix = Guid.NewGuid().ToString();
-                        var key = prefix.Concat($"|{file.FileName}").ToString();
+                        var key = $"{prefix}/{file.FileName}";
                         que.Files.Add(key);
-                    }
+                        await _cloudService.UploadFileAsync(file);
 
+                        que.Answer = (string)question.Answer;
+                        que.Options = (string)question.Option;
+
+                        break;
                 }
-
+                
+                var response = new Response();
+                //save data to database
                 var ques = await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
                 var result = await _unitOfWork.SaveChangesAsync();
 
@@ -150,70 +156,6 @@ namespace Boompa.Implementations.Services
             }
         }
 
-        //Description:  Responsible for adding any media file to the local file system and sends the file's information to the repository
-        //
-        //Parameters: files sent from the front end, id(either for question or sourcematerial, forSource-used to detect whether the id is for question or sourcematerial)
-        //
-        //
-        //returns: 
-        //private async Task<int> AddLocalFileDetails(ICollection<IFormFile> rawFiles,int Id,bool forSource=true) 
-        //{
-        //    var result = 0;
-        //    if (rawFiles!= null && rawFiles.Count > 0)
-        //    {
-        //        if (forSource == false)
-        //        {
-        //            var queFiles = new List<QuestionFileDetail>();
-        //            foreach (var file in rawFiles)
-        //            {
-        //                //await _cloudService.UploadFileAsync(file);
-        //                var prefix = Directory.GetCurrentDirectory();
-        //                var ft = file.ContentType.Split('/')[0];
-        //                var suffix = Path.Combine(prefix, ft);
-        //                var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
-        //                Directory.CreateDirectory(suffix);
-                        
-        //                var queFile = new QuestionFileDetail()
-        //                {
-        //                    QuestionId = Id,
-        //                    FileType = file.ContentType,
-        //                    Path = basePath,
-        //                };
-        //                queFiles.Add(queFile);
-        //            }
-        //             await _unitOfWork.SourceMaterials.AddFileDetail(queFiles);
-        //        }
-        //        else
-        //        {
-        //            var sourceFiles = new List<SourceFileDetail>();
-                    
-        //            foreach (var file in rawFiles)
-        //            {
-        //                //await _cloudService.UploadFileAsync (file);
-        //                var prefix = Directory.GetCurrentDirectory();
-        //                var suffix = Path.Combine(prefix, file.ContentType.Split('/')[0]);
-        //                var basePath = Path.Combine(prefix, suffix + "/" + file.FileName);
-        //                Directory.CreateDirectory(suffix);
-                        
-        //                var sourceFile = new SourceFileDetail()
-        //                {
-        //                    SourceMaterialId = Id,
-        //                    FileType = file.ContentType,
-        //                    Path = basePath,
-        //                };
-        //                sourceFiles.Add(sourceFile);
-
-        //            }
-        //            await _unitOfWork.SourceMaterials.AddFileDetail(sourceFiles);
-
-        //        }
-        //    }
-
-            
-        //    return result;
-        //}
-
-        
         private async Task<ICollection<Stream>> GetFilesAsync(ICollection<string> keys)
         {
             try
@@ -322,8 +264,12 @@ namespace Boompa.Implementations.Services
                     Answer = a.Answer,
                     Options = a.Options,
                 }).ToList(),
-                //SourceFiles = this will be implemented in due time
+                
             };
+             foreach(var question in result.Questions)
+            {
+
+            }
 
             response.StatusCode = 200;
             response.StatusMessages.Add("success");
@@ -341,9 +287,9 @@ namespace Boompa.Implementations.Services
                 {
                     var que = new Question()
                     {
-                        Description = question.Description,
-                        Answer = question.Answer,
-                        Options = question.Option,
+                        Description = (string)question.Description,
+                        Answer = (string)question.Answer,
+                        Options = (string)question.Option,
 
                     };
 
@@ -394,9 +340,9 @@ namespace Boompa.Implementations.Services
                     var que = new Question()
                     {
                         SourceMaterialId = sourceMaterialId,
-                        Description = question.Description,
-                        Answer = question.Answer,
-                        Options = question.Option,
+                        Description = (string)question.Description,
+                        Answer = (string)question.Answer,
+                        Options = (string)question.Option,
 
                     };
 

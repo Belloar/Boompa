@@ -78,5 +78,18 @@ namespace Boompa.Implementations.Services
             }
             return result;
         }
+
+        public async Task UploadFileAsync(IFormFile file)
+        {
+            var request = new PutObjectRequest
+            {
+                BucketName = _bucketName,
+                Key = file.FileName,
+                InputStream = file.OpenReadStream(),
+                ContentType = file.ContentType
+            };
+
+             await _client.PutObjectAsync(request);
+        }
     }
 }
