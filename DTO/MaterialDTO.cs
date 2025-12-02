@@ -22,9 +22,10 @@ namespace Boompa.DTO
 
         public class QuestionModel()
         {
-            public string Description { get; set; }
-            public string Answer {  get; set; }
-            public string Option {  get; set; }
+            public object Description { get; set; }
+            public object Answer {  get; set; }
+            public object Option {  get; set; }
+            public string QuestionType { get; set; }
             public ICollection<IFormFile>? QueFiles { get; set; } = new HashSet<IFormFile>();
 
         }
@@ -42,9 +43,9 @@ namespace Boompa.DTO
 
         public class QuestionDto()
         {
-            public string Question { get; set; }
-            public string Answer { get; set; }
-            public string Options { get; set; }
+            public object Question { get; set; }
+            public object Answer { get; set; }
+            public object Options { get; set; }
 
         }
         

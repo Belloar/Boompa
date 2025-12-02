@@ -4,6 +4,7 @@ namespace Boompa.Interfaces.IService
     public interface ICloudService
     {
         Task UploadFilesAsync(ICollection<IFormFile> files);
+        Task UploadFileAsync(IFormFile file);
         Task<Stream> GetFileAsync(string Key);
         Task<ICollection<string>> ListFilesAsync();
 
