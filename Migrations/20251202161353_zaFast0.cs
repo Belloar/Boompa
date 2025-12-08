@@ -322,7 +322,7 @@ namespace Boompa.Migrations
 
             migrationBuilder.InsertData(
                 table: "Roles",
-                columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "Description", "IsDeleted", "LastModifiedBy", "LastModifiedOn", "RoleName" },
+                columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "TextDescription", "IsDeleted", "LastModifiedBy", "LastModifiedOn", "RoleName" },
                 values: new object[,]
                 {
                     { new Guid("09650940-a428-4bf0-a7aa-352dc1ae2eec"), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "the reason this app is being developed", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Learner" },

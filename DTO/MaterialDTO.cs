@@ -22,11 +22,12 @@ namespace Boompa.DTO
 
         public class QuestionModel()
         {
-            public object Description { get; set; }
-            public object Answer {  get; set; }
-            public object Option {  get; set; }
+            public string? TextDescription { get; set; }
+            public IFormFile? FileDescription { get; set; }
+            public string Answer {  get; set; }
+            public string Option {  get; set; }
             public string QuestionType { get; set; }
-            public ICollection<IFormFile>? QueFiles { get; set; } = new HashSet<IFormFile>();
+            //public ICollection<IFormFile>? QueFiles { get; set; } = new HashSet<IFormFile>();
 
         }
 
@@ -36,25 +37,21 @@ namespace Boompa.DTO
             public string Category { get; set; }
             public string MaterialName { get; set; }
             public string Content { get; set; }
-            public ICollection<QuestionDto> Questions { get; set; }
+            public ICollection<QuestionDto> Questions { get; set; } = [];
             public ICollection<IFormFile>? SourceFiles { get; set; }
             
         }
 
         public class QuestionDto()
         {
-            public object Question { get; set; }
-            public object Answer { get; set; }
-            public object Options { get; set; }
+            public string? TextQuestion { get; set; }
+            public string? FileQuestion { get; set; }
+            public string Answer { get; set; }
+            public string Options { get; set; }
+            public string QuestionType { get; set; }
 
         }
-        
-        public class RiddleModel
-        {
-            public string Description { get; set; }
-            public string Answer { get; set; }
-            
-        }
+       
         public class SourceDescriptor()
         {
             public Guid SourceId { get; set; }

@@ -5,7 +5,7 @@ using Boompa.Interfaces;
 using Boompa.Interfaces.IRepository;
 using Boompa.Interfaces.IService;
 
-//using System.IO;
+
 
 namespace Boompa.Implementations.Services
 {
@@ -16,9 +16,8 @@ namespace Boompa.Implementations.Services
         private readonly IUnitOfWork _unitOfWork;
         
 
-        public SourceMaterialService(ISourceMaterialRepository sourceMatRepository,BBb2StorageService storageService,IUnitOfWork unitOfWork)
-        {
-            _sourceMaterialRepository = sourceMatRepository; 
+        public SourceMaterialService(BBb2StorageService storageService,IUnitOfWork unitOfWork)
+        { 
             _cloudService = storageService;
             _unitOfWork = unitOfWork;
         }
@@ -72,25 +71,7 @@ namespace Boompa.Implementations.Services
             return response;
         }
 
-        private async Task<SourceMaterial> AddSourceFiles(ICollection<IFormFile> files, SourceMaterial sourceMaterial)
-        {
-            try
-            {
-                foreach (var file in files)
-                {
-                    var prefix = Guid.NewGuid().ToString();
-                    var key  = prefix.Concat($"|{file.FileName}").ToString();
-                    sourceMaterial.Files.Add(key);
-                }
-                
-                await _cloudService.UploadFilesAsync(files);
-                return sourceMaterial;
-            }
-            catch(Exception ex)
-            {
-                throw new ServiceException($"{ex.Message},{ex.InnerException?.Message}");
-            }
-        }
+       
 
         public Task<Response> DeleteSourceMaterial()
         {
@@ -120,20 +101,20 @@ namespace Boompa.Implementations.Services
                     // type1 question is for pure mcq questions where the question, its answer, and options are text/string
                     case "type1":
                         que.SourceMaterialId = sourceMaterialId;
-                        que.Description = (string)question.Description;
-                        que.Answer = (string)question.Answer;
-                        que.Options = (string)question.Option;
+                        que.Description = question.TextDescription;
+                        que.Answer = question.Answer;
+                        que.Options = question.Option;
                         break;
                         //type2 questions are for questions with images as their questions and their answers and options as text/string
                     case "type2":
-                        var file = (IFormFile)question.Description;
+                        var file = question.FileDescription;
                         var prefix = Guid.NewGuid().ToString();
                         var key = $"{prefix}/{file.FileName}";
                         que.Files.Add(key);
-                        await _cloudService.UploadFileAsync(file);
+                        await _cloudService.UploadFileAsync(file, key);
 
-                        que.Answer = (string)question.Answer;
-                        que.Options = (string)question.Option;
+                        que.Answer = question.Answer;
+                        que.Options = question.Option;
 
                         break;
                 }
@@ -155,23 +136,6 @@ namespace Boompa.Implementations.Services
                 throw new ServiceException(ex.Message);
             }
         }
-
-        private async Task<ICollection<Stream>> GetFilesAsync(ICollection<string> keys)
-        {
-            try
-            {
-
-                var result = await _cloudService.GetFilesAsync(keys);
-                return result;
-            }
-            catch(Exception ex)
-            {
-                throw new CloudException(ex.Message);
-            }
-           
-            
-        }
-
 
         public async Task<Response> AddCategory(string categoryName)
         {
@@ -195,7 +159,7 @@ namespace Boompa.Implementations.Services
         public async Task<Response> GetAllSourceMaterials(string categoryName)
         {
             var response = new Response();  
-            var result = await _sourceMaterialRepository.GetAllSourceMaterials(categoryName);
+            var result = await _unitOfWork.SourceMaterials.GetAllSourceMaterials(categoryName);
             if(result == null) { throw new ServiceException("no materials for this category yet"); }
             response.Data = result;
             response.StatusCode = 200;
@@ -226,7 +190,7 @@ namespace Boompa.Implementations.Services
                 Content = result.Content,
                 Questions = result.Questions.Select(a => new MaterialDTO.QuestionDto
                 {
-                    Question = a.Description,
+                    TextQuestion = a.Description,
                     Answer = a.Answer,
                     Options = a.Options,
                 }).ToList(),
@@ -243,7 +207,7 @@ namespace Boompa.Implementations.Services
         {
             var response = new Response();
             if (key == null) { throw new ServiceException("no identifier received"); }
-            response.Data = await _cloudService.GetFileAsync(key);
+            response.Data = await _cloudService.GetFileUrlAsync(key);
             return response;
         }
 
@@ -258,22 +222,44 @@ namespace Boompa.Implementations.Services
                 MaterialName = result.Name,
                 CategoryId = result.CategoryId,
                 Content = result.Content,
-                Questions = result.Questions.Select(a => new MaterialDTO.QuestionDto
-                {
-                    Question = a.Description,
-                    Answer = a.Answer,
-                    Options = a.Options,
-                }).ToList(),
-                
             };
-             foreach(var question in result.Questions)
-            {
 
+            foreach (var question in result.Questions)
+            {
+                switch (question.QuestionType)
+                {
+                    case "default":
+                        var queResponse = new MaterialDTO.QuestionDto
+                        {
+                            TextQuestion = question.Description,
+                            Answer = question.Answer,
+                            Options = question.Options,
+                            QuestionType = question.QuestionType,
+                        };
+                        model.Questions.Add(queResponse);
+
+
+                        break;
+
+                    case "type2":
+                        var file = await GetFileAsync(question.Description);
+                       var queResponse2 = new MaterialDTO.QuestionDto
+                        {
+                            FileQuestion = file,
+                            Answer = question.Answer,
+                            Options = question.Options,
+                            QuestionType = question.QuestionType,
+                        };
+                        model.Questions.Add(queResponse2); 
+                        break;
+                }   
+               
             }
 
             response.StatusCode = 200;
             response.StatusMessages.Add("success");
-            response.Data = model;
+             response.Data = model;
+            
 
             return response;
         }
@@ -283,28 +269,34 @@ namespace Boompa.Implementations.Services
              
             try
             {
+                var que = new Question();
                 foreach (var question in models)
                 {
-                    var que = new Question()
-                    {
-                        Description = (string)question.Description,
-                        Answer = (string)question.Answer,
-                        Options = (string)question.Option,
 
-                    };
+                    switch (question.QuestionType)
+                    {
+                        // type1 question is for pure mcq questions where the question, its answer, and options are text/string
+                        case "type1":
+                            
+                            que.Description = question.TextDescription;
+                            que.Answer = question.Answer;
+                            que.Options = question.Option;
+                            break;
+                        //type2 questions are for questions with images as their questions and their answers and options as text/string
+                        case "type2":
+                            var file = question.FileDescription;
+                            var prefix = Guid.NewGuid().ToString();
+                            var key = $"{prefix}/{file.FileName}";
+                            que.Files.Add(key);
+                            await _cloudService.UploadFileAsync(file, key);
 
-                    //var qus = await _unitOfWork.SourceMaterials.AddQuestionAsync(que, sourceMaterialName, category);
-                    if (question.QueFiles.Count != 0)
-                    {
-                        var qus = await AddEvalFiles(question.QueFiles, que);
-                        await _unitOfWork.SourceMaterials.AddQuestionAsync(qus, sourceMaterialName, category);
+                            que.Answer = question.Answer;
+                            que.Options = question.Option;
+                            break;
                     }
-                    else
-                    {
-                        response.StatusMessages.Add("No files added for this question");
-                    }
+
                 }
-
+                await _unitOfWork.SourceMaterials.AddQuestionAsync(que, sourceMaterialName, category);
                 var result = await _unitOfWork.SaveChangesAsync();
                 if(result >= 1)
                 {
@@ -335,32 +327,47 @@ namespace Boompa.Implementations.Services
 
             try
             {
+                
                 foreach (var question in models)
                 {
-                    var que = new Question()
+                    var que = new Question();
+                    switch (question.QuestionType)
                     {
-                        SourceMaterialId = sourceMaterialId,
-                        Description = (string)question.Description,
-                        Answer = (string)question.Answer,
-                        Options = (string)question.Option,
+                        // type1 question is for pure mcq questions where the question, its answer, and options are text/string
+                        case "default":
+                            que.SourceMaterialId = sourceMaterialId;
+                            que.Description = question.TextDescription;
+                            que.Answer = question.Answer;
+                            que.Options = question.Option;
+                            que.QuestionType = question.QuestionType;
 
-                    };
+                            await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
+                            break;
+                        //type2 questions are for questions with images as their questions and their answers and options as text/string
+                        case "type2":
+                            //convert from objectType to iformfile
+                            var file = question.FileDescription;
+                            //construct its key which will be used store it to the cloud
+                            var prefix = Guid.NewGuid().ToString();
+                            var key = $"{prefix}|{file.FileName}";
+                            //upload file to the database
+                            await _cloudService.UploadFileAsync(file,key);
 
-                    
-                    if (question.QueFiles.Count != 0)
-                    {
-                        var qus = await AddEvalFiles(question.QueFiles, que);
-                        //await _unitOfWork.SourceMaterials.AddQuestionAsync(qus);
+                            que.Description = key;
+                            que.SourceMaterialId = sourceMaterialId;
+                            que.Answer = question.Answer;
+                            que.Options = question.Option;
+                            que.QuestionType = question.QuestionType;
+
+                            await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
+                            break;
                     }
-                    else
-                    {
-                        response.StatusMessages.Add("No files added for this question");
-                    }
+
                 }
-
                 var result = await _unitOfWork.SaveChangesAsync();
                 if (result >= 1)
                 {
+                    response.StatusCode = 200;
                     response.StatusMessages.Add("success");
                     response.Data = result;
                     return response;
@@ -371,9 +378,6 @@ namespace Boompa.Implementations.Services
                     response.StatusMessages.Add("one or more problems occurred");
                     return response;
                 }
-
-
-
             }
             catch (Exception ex)
             {
@@ -381,29 +385,59 @@ namespace Boompa.Implementations.Services
                 return response;
             }
         }
-
-        private async Task<Question> AddEvalFiles(ICollection<IFormFile> evalFiles,Question question)
-        {
-            foreach (var file in evalFiles)
-            {
-               var prefix =  Guid.NewGuid().ToString();
-                var key = prefix.Concat($"|{file.FileName}").ToString();
-                question.Files.Add(key);
-
-            }
-            await _cloudService.UploadFilesAsync(evalFiles);
-            return question;
-        }
-
-        private async Task<bool> CategoryExists(string categoryName)
-        {
-            return await _unitOfWork.SourceMaterials.CategoryExists(categoryName);
-        }
+       
         private async Task<Category> GetCategory(string categoryName)
         {
             return await _unitOfWork.SourceMaterials.GetCategoryId(categoryName);
         }
 
-       
+        private async Task<SourceMaterial> AddSourceFiles(ICollection<IFormFile> files, SourceMaterial sourceMaterial)
+        {
+            try
+            {
+                foreach (var file in files)
+                {
+                    var prefix = Guid.NewGuid().ToString();
+                    var key = prefix.Concat($"|{file.FileName}").ToString();
+                    sourceMaterial.Files.Add(key);
+                }
+
+                await _cloudService.UploadFilesAsync(files);
+                return sourceMaterial;
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException($"{ex.Message},{ex.InnerException?.Message}");
+            }
+        }
+        private async Task<string> GetFileAsync(string key)
+        {
+            try
+            {
+                var result = await _cloudService.GetFileUrlAsync(key);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new CloudException(ex.Message);
+            }
+
+
+        }
+        private async Task<ICollection<Stream>> GetFilesAsync(ICollection<string> keys)
+        {
+            try
+            {
+
+                var result = await _cloudService.GetFilesAsync(keys);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new CloudException(ex.Message);
+            }
+
+
+        }
     }
 }
