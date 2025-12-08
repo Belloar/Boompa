@@ -19,19 +19,19 @@ namespace Boompa.Controllers
         {
             _sourceMaterialService = sourceMaterialService;            
         }
-        
+
         [HttpPost]
-        
+
         public async Task<IActionResult> AddSourceMaterial([FromForm] MaterialDTO.ArticleModel sourceMaterial)
         {
             try
             {
-                if(sourceMaterial== null ) { return BadRequest("Material not received by server"); }
+                if (sourceMaterial == null) { return BadRequest("Material not received by server"); }
                 var result = await _sourceMaterialService.AddSourceMaterial(sourceMaterial);
 
                 return Ok(result);
 
-                
+
             }
             catch (Exception ex)
             {
@@ -96,6 +96,21 @@ namespace Boompa.Controllers
                 return BadRequest(response);
             }
             var result = await _sourceMaterialService.GetAllSourceMaterials(categoryName);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddQuestionsByName([FromForm] ICollection<MaterialDTO.QuestionModel> questions, [FromHeader] string sourceMaterialName, [FromHeader] string category)
+        {
+            var result = await _sourceMaterialService.AddQuestion(questions, sourceMaterialName, category);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddQuestionsByGuid([FromForm] ICollection<MaterialDTO.QuestionModel> questions, [FromHeader] Guid sourceId)
+        {
+            if (questions == null) { return BadRequest("Payload not received"); }
+            var result = await _sourceMaterialService.AddQuestion(questions, sourceId);
             return Ok(result);
         }
     }

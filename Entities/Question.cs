@@ -11,7 +11,7 @@ namespace Boompa.Entities
         public string Answer {  get; set; }// Answer to the question
         public string Options {  get; set; } // options to be displayed along with the answer to the user
         public string QuestionType { get; set; }
-        public ICollection<string>? Files { get; set; }
+        public ICollection<string>? Files { get; set; } = [];
 
     }
 }

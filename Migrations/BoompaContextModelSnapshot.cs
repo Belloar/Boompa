@@ -106,7 +106,7 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("TextDescription")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -352,7 +352,7 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("TextDescription")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -411,7 +411,7 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("TextDescription")
                         .IsRequired()
                         .HasColumnType("longtext");
 
