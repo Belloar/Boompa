@@ -28,7 +28,7 @@ namespace Boompa.Controllers
         }
 
         [HttpPost]
-        
+        [AllowAnonymous]
         public async Task<IActionResult> CreateAdmin([FromForm] AdminDTO.CreateModel model)
         {
 
@@ -107,8 +107,8 @@ namespace Boompa.Controllers
         {
             try
             {
-                material.Creator = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                var response = await _sourceMaterialService.AddSourceMaterial(material);
+                var creator = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var response = await _sourceMaterialService.AddSourceMaterial(material,creator);
                 return Ok(response);
             }
             catch(Exception ex)

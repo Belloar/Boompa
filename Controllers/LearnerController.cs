@@ -12,7 +12,7 @@ namespace Boompa.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize(Roles="Learner")]
+    
     public class LearnerController : ControllerBase
     {
         private readonly ILearnerService _learnerService;
@@ -136,7 +136,7 @@ namespace Boompa.Controllers
         }
 
         [HttpPut]
-        //[Authorize(Roles = "Learner")]
+        [Authorize(Roles = "Learner")]
         public async Task<IActionResult> UpdateLearnerStats([FromBody] LearnerDTO.UpdateStats model)
         {
             if (model == null) return BadRequest("No info found");

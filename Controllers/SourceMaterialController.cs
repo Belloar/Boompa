@@ -5,11 +5,12 @@ using Boompa.Interfaces.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace Boompa.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class SourceMaterialController : ControllerBase
@@ -21,15 +22,26 @@ namespace Boompa.Controllers
         }
 
         [HttpPost]
-
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddSourceMaterial([FromForm] MaterialDTO.ArticleModel sourceMaterial)
         {
             try
             {
+                var creator = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (sourceMaterial == null) { return BadRequest("Material not received by server"); }
-                var result = await _sourceMaterialService.AddSourceMaterial(sourceMaterial);
 
-                return Ok(result);
+                if(creator != null)
+                {
+                    var result = await _sourceMaterialService.AddSourceMaterial(sourceMaterial, creator);
+                    return Ok(result);
+                }
+                else
+                {
+                    var result = await _sourceMaterialService.AddSourceMaterial(sourceMaterial);
+                    return Ok(result);
+                }
+
+               
 
 
             }

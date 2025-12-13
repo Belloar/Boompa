@@ -3,7 +3,10 @@ using Boompa.DTO;
 using Boompa.Entities.Identity;
 using Boompa.Exceptions;
 using Boompa.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -41,25 +44,36 @@ namespace Boompa.Auth
 
         }
        
-        public async Task<Response> GetUsersAsync()
+        public async Task<Response> GetUsersAsync(int pageNumber)
         {
             try
             {
-                
                 var response = new Response();
-                var users = await _unitOfWork.Identity.GetUsersAsync();
+                var users = await _unitOfWork.Identity.GetUsersAsync(pageNumber);
                 var responseModel = new List<IdentityDTO.UsersResponseModel>();
+                foreach (var user in users)
+                {
+                    ICollection<string> roles = [];
+                    foreach (var role in user.Roles)
+                    {
 
-                //REVIEW THIS BLOCK OF CODE WHEN LESS URGENT!!!!!!!
+                        roles.Add(role.Role.RoleName);
+                    }
 
-                //foreach (var user in users)
-                //{
+                    var returnee = new IdentityDTO.UsersResponseModel
+                    {
+                        UserName = user.UserName,
+                        Roles = roles,
+                        Email =  user.Email,
+                        CreatedOn = user.CreatedOn
+                    };
+                    responseModel.Add(returnee);
+
                     
-                //    responseModel.Add(new IdentityDTO.UsersResponseModel(user.UserName, user.roles, user.Email, user.CreatedOn, user.IsDeleted));
-                //}
-
+                }
+                response.StatusCode = 200;
                 response.StatusMessages.Add("Success");
-                response.Data = users;
+                response.Data = responseModel;
                 return response;
             }
             catch (Exception ex)
@@ -115,12 +129,7 @@ namespace Boompa.Auth
         }
         public async Task<IdentityDTO.ValidUser> AuthenticateUser(string searchString, string password)
         {
-            var isEmail = false;
-            var user = new User();
-            if (searchString.Contains('@')) isEmail = true;
-
-            if (isEmail) await _unitOfWork.Identity.GetUserAsync(searchString,true);
-            user = await _unitOfWork.Identity.GetUserAsync(searchString);
+            var user = await _unitOfWork.Identity.GetUserAsync(searchString);
             if (user == null) throw new IdentityException("User doesn't exist");
             if (!BCrypt.Net.BCrypt.Verify(password, user.Password)) throw new ServiceException("Invalid Username or Password");
 

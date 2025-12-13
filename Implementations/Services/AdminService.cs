@@ -64,9 +64,9 @@ namespace Boompa.Implementations.Services
 
             var admin = new Admin()
             {
-                
+                Email = model.Email,
                 CreatedBy = model.UserName,
-                PhoneNumber = "0000"
+                
             };
             _unitOfWork.Admins.AddAdminAsync(admin);
             var result = await _unitOfWork.SaveChangesAsync();

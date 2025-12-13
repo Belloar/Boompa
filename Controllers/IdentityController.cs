@@ -61,10 +61,10 @@ namespace Boompa.Controllers
 
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        [HttpGet("{pageNumber}")]
+        public async Task<IActionResult> GetUsers([FromRoute] int pageNumber)
         {
-            var result = await _identityService.GetUsersAsync();
+            var result = await _identityService.GetUsersAsync(pageNumber);
             return Ok(result);
         }
 
