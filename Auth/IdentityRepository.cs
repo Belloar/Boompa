@@ -64,43 +64,18 @@ namespace Boompa.Auth
         }
         public async Task<User> GetUserAsync(string searchString,bool isEmail)
         {
-            if (isEmail)
-            {
-                return await _context.Users
-                    .Include(u => u.Roles)
-                    .ThenInclude(ur => ur.Role.RoleName)
-                    .SingleOrDefaultAsync(u => u.Email.ToLower() == searchString.ToLower());
-            }
             var user =  await _context.Users
-                //.Include(u => u.Roles)
-                //.ThenInclude(ur => ur.Role.RoleName)
-                .SingleOrDefaultAsync(u => u.UserName.ToLower() == searchString.ToLower());
-            var userRoles = _context.UserRoles.Include(r => r.Role).Where(x => x.UserId == user.Id).Select(r => r);
-            foreach (var userRole in userRoles)
-            {
-                user.Roles.Add(userRole);
-            }
-
+                .Include(u => u.Roles)
+                .ThenInclude(ur => ur.Role.RoleName)
+                .FirstOrDefaultAsync(u => u.UserName.ToLower() == searchString.ToLower() || u.Email.ToLower() == searchString.ToLower());
             return user;
         }
        
-        public async Task<IEnumerable<User>> GetUsersAsync()
+        public async Task<IEnumerable<User>> GetUsersAsync(int pageNumber)
         {
-            try
-            {
-                var result = await _context.Users.Select(u => new User
-                {
-                    UserName = u.UserName,
-                    Email = u.Email,
-                    
-                }).ToListAsync();
-                return result;
-            }
-            catch(Exception ex)
-            {
-                throw new IdentityException(ex.Message);
-            }
-
+            var result = await _context.Users.Include(u => u.Roles).ThenInclude(ur => ur.Role).Skip(pageNumber).Take(pageNumber+50).ToListAsync();
+                
+            return result;
         }
         public async Task UpdateAsync(Guid id, User updatedUser)
         {

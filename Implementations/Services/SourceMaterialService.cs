@@ -4,6 +4,7 @@ using Boompa.Exceptions;
 using Boompa.Interfaces;
 using Boompa.Interfaces.IRepository;
 using Boompa.Interfaces.IService;
+using System.Data;
 
 
 
@@ -22,7 +23,7 @@ namespace Boompa.Implementations.Services
             _unitOfWork = unitOfWork;
         }
         
-        public async Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material)
+        public async Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material,string creator)
         {
             
             var response = new Response();
@@ -33,8 +34,8 @@ namespace Boompa.Implementations.Services
             {
                 sourceMaterial.Name = material.SourceMaterialName;
                 sourceMaterial.Description = material.Description;
-                sourceMaterial.Content = material.Text;
-                sourceMaterial.CreatedBy = material.Creator;
+                sourceMaterial.Content = material.TextContent;
+                sourceMaterial.CreatedBy = creator;
                 sourceMaterial.CreatedOn = material.CreatedOn;
             }
             else
@@ -187,7 +188,7 @@ namespace Boompa.Implementations.Services
                 
                 MaterialName = result.Name,
                 CategoryId = result.Category.Id,
-                Content = result.Content,
+                TextContent = result.Content,
                 Questions = result.Questions.Select(a => new MaterialDTO.QuestionDto
                 {
                     TextQuestion = a.Description,
@@ -214,16 +215,26 @@ namespace Boompa.Implementations.Services
         public async Task<Response> GetSourceMaterial(string category, Guid sourceId)
         {
             var response = new Response();
+            //get the source materaial from the database
             var result = await _unitOfWork.SourceMaterials.GetSourceMaterial(category, sourceId);
             if (result == null) { throw new ServiceException("source material not found");}
 
+            //mapping to the return entity
             var model = new MaterialDTO.ConsumptionModel()
             {
                 MaterialName = result.Name,
                 CategoryId = result.CategoryId,
-                Content = result.Content,
+                TextContent = result.Content,
             };
 
+            //mapping the file URLs
+            foreach (var file in result.Files) 
+            { 
+                var fileUrl = await GetFileAsync(file);
+                model.SourceFiles.Add(fileUrl);
+            }
+
+            //mapping the questions
             foreach (var question in result.Questions)
             {
                 switch (question.QuestionType)
@@ -255,7 +266,8 @@ namespace Boompa.Implementations.Services
                 }   
                
             }
-
+            
+            //returning the result 
             response.StatusCode = 200;
             response.StatusMessages.Add("success");
              response.Data = model;

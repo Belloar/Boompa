@@ -8,7 +8,7 @@ namespace Boompa.Auth
     {
         
         Task UpdateAsync(Guid id, IdentityDTO.UpdateRequestModel model);
-        Task<Response> GetUsersAsync();
+        Task<Response> GetUsersAsync(int numberOfRecordsToSkip);
         Task<bool> CheckUser(string email);
         Task<User> GetUserAsync(Guid id);
         Task<User> GetUserAsync(string checkString);

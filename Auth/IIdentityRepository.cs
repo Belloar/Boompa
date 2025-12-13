@@ -8,7 +8,7 @@ namespace Boompa.Auth
         Task CreateAsync(User user);
         Task<bool> CheckUser(string email);
         Task UpdateAsync(Guid id, User user);
-        Task<IEnumerable<User>> GetUsersAsync();
+        Task<IEnumerable<User>> GetUsersAsync(int numberOfRecordsToSkip);
         Task<User> GetUserAsync(Guid id);
         Task<User> GetUserAsync(string searchString, bool isEmail = false);
         

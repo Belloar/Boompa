@@ -189,6 +189,9 @@ namespace Boompa.Services
             learner.CoinCount += model.CoinCount;
             learner.TicketCount += model.TicketCount;
 
+            
+            
+
             //document learner learning session
             await DocumentVisit(model, learner.Id);
             await _unitOfWork.Learners.UpdateLearner(learner);

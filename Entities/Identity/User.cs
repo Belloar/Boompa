@@ -10,6 +10,6 @@ namespace Boompa.Entities.Identity
         public string HashSalt { get; set; } = default!;
         public bool IsEmailConfirmed { get; set; } = default!;
         
-        public ICollection<UserRole> Roles = new HashSet<UserRole>();
+        public ICollection<UserRole> Roles { get; set; } = new HashSet<UserRole>();
     }
 }
