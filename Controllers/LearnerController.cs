@@ -12,16 +12,16 @@ namespace Boompa.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    
+    [Authorize(Roles = "learner")]
     public class LearnerController : ControllerBase
     {
         private readonly ILearnerService _learnerService;
-        private readonly IHttpContextAccessor _httpContext;
+        //private readonly IHttpContextAccessor _httpContext;
         
         public LearnerController(ILearnerService service, IHttpContextAccessor httpContext)
         {
             _learnerService = service;
-            _httpContext = httpContext;
+            //_httpContext = httpContext;
         }
 
         [HttpPost]
@@ -117,7 +117,7 @@ namespace Boompa.Controllers
         }
 
         [HttpPut]
-        //[Authorize(Roles = "learner")]
+        
         public async Task<IActionResult> UpdateLearner([FromBody] LearnerDTO.UpdateInfo updateInfo)
         {
             try

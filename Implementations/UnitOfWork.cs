@@ -13,7 +13,8 @@ namespace Boompa.Implementations
         public ISourceMaterialRepository SourceMaterials { get; }
         public IIdentityRepository Identity {  get; }
         public IVisitRepository Visits { get; }
-        public UnitOfWork(BoompaContext context,ILearnerRepository learnerRepository, IAdminRepository adminRepository, ISourceMaterialRepository sourceMaterialRepository,IIdentityRepository identityRepository, IVisitRepository visitRepository)
+        public IContestRecordRepository ContestRecords { get; }
+        public UnitOfWork(BoompaContext context,ILearnerRepository learnerRepository, IAdminRepository adminRepository, ISourceMaterialRepository sourceMaterialRepository,IIdentityRepository identityRepository, IVisitRepository visitRepository,IContestRecordRepository contestRecordRepository)
         {
             _context = context;
             SourceMaterials = sourceMaterialRepository;
@@ -21,6 +22,7 @@ namespace Boompa.Implementations
             Admins = adminRepository;
             Identity = identityRepository;
             Visits = visitRepository;
+            ContestRecords = contestRecordRepository;
         }
 
 

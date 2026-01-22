@@ -2,7 +2,7 @@
 
 namespace Boompa.Entities
 {
-    public class LearnerCategory : BaseEntity
+    public class CategoryLearner : BaseEntity
     {
         public Guid LearnerId  { get; set; }
         public Learner Learner { get; set; } = default!;

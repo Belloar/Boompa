@@ -66,7 +66,7 @@ namespace Boompa.Auth
         {
             var user =  await _context.Users
                 .Include(u => u.Roles)
-                .ThenInclude(ur => ur.Role.RoleName)
+                .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.UserName.ToLower() == searchString.ToLower() || u.Email.ToLower() == searchString.ToLower());
             return user;
         }

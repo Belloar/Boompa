@@ -21,6 +21,7 @@ var connectionString = builder.Configuration.GetConnectionString("MySqlString");
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 builder.Services.AddScoped<IIdentityRepository,IdentityRepository>();
 builder.Services.AddScoped <IIdentityService, IdentityService>();
 builder.Services.AddScoped<ILearnerRepository, LearnerRepository>();
@@ -32,6 +33,9 @@ builder.Services.AddScoped<ISourceMaterialRepository, SourceMaterialRepository>(
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IVisitRepository, VisitRepository>();
 builder.Services.AddScoped<IVisitService, VisitService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IContestRecordRepository, ContestRecordRepository>();
+builder.Services.AddScoped<IContestRecordService, ContestRecordService>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -40,6 +44,8 @@ builder.Services.AddDbContext<BoompaContext>(options => options.UseMySql(builder
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddBBb2Storage(builder.Configuration);
+
+builder.Services.AddMemoryCache();
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
 {

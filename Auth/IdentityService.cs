@@ -3,6 +3,7 @@ using Boompa.DTO;
 using Boompa.Entities.Identity;
 using Boompa.Exceptions;
 using Boompa.Interfaces;
+using Boompa.Interfaces.IService;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
@@ -17,11 +18,12 @@ namespace Boompa.Auth
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
-        public IdentityService(IUnitOfWork unitOfWork, IConfiguration configuration)
+        private readonly IEmailService _emailService;
+        public IdentityService(IUnitOfWork unitOfWork, IConfiguration configuration,IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
-            
+            _emailService = emailService;
         }
        
 
@@ -127,12 +129,12 @@ namespace Boompa.Auth
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
 
         }
-        public async Task<IdentityDTO.ValidUser> AuthenticateUser(string searchString, string password)
+        public async Task<IdentityDTO.ValidUser> AuthenticateUser(string searchString, string password,string page)
         {
             var user = await _unitOfWork.Identity.GetUserAsync(searchString);
             if (user == null) throw new IdentityException("User doesn't exist");
-            if (!BCrypt.Net.BCrypt.Verify(password, user.Password)) throw new ServiceException("Invalid Username or Password");
 
+            if (!BCrypt.Net.BCrypt.Verify(password, user.Password)) throw new ServiceException("Invalid Username or Password");
 
             var model = new IdentityDTO.ValidUser
             {
@@ -146,8 +148,19 @@ namespace Boompa.Auth
             {
                 model.Roles.Add(role.Role.RoleName);
             }
-            return model;
+
+            if (model.Roles.Contains(page))
+            {
+                return model;
+            }
+            else
+            {
+                model = null;
+                return model;
+            }
+                
         }
+
         public Task AddRoleAsync(string role)
         {
             throw new NotImplementedException();
@@ -176,6 +189,52 @@ namespace Boompa.Auth
             if (exists) throw new IdentityException("this user already exists");
             return true;
             
+        }
+
+        public async Task SendEmail(string email)
+        {
+            var code = await _emailService.GenerateCode();
+
+            await _emailService.SendVerificationCode(email, code);
+            
+        }
+
+        public async Task<Response> VerifyEmail(string email,string verificationCode)
+        {
+            var response = new Response();
+
+            var result = await _emailService.VerifyCode(email, verificationCode);
+
+            response.Data = result;
+            response.StatusMessages.Add("success");
+            return response;
+
+        }
+
+        public async Task<Response> UserLogin(string username, string password,string page)
+        {
+            if (username == null && password == null) { throw new IdentityException("No data received"); }
+            try
+            {
+                var response = new Response();
+                string token = null;
+                var validUser = await AuthenticateUser(username, password,page);
+                if (validUser != null) { token = await GenerateToken(validUser); }
+
+                else
+                {
+                    throw new IdentityException($"invalid request ensure valid email and password is provided");
+
+                }
+                response.StatusCode = 200;
+                response.Data = token;
+                response.StatusMessages.Add($"Welcome {validUser.UserName}");
+                return response ;
+            }
+            catch (Exception ex)
+            {
+                throw new IdentityException(ex.Message);
+            }
         }
     }
 }
