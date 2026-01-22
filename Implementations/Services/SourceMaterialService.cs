@@ -72,8 +72,6 @@ namespace Boompa.Implementations.Services
             return response;
         }
 
-       
-
         public Task<Response> DeleteSourceMaterial()
         {
             throw new NotImplementedException();
@@ -155,8 +153,6 @@ namespace Boompa.Implementations.Services
             return response;
         }
 
-        
-
         public async Task<Response> GetAllSourceMaterials(string categoryName)
         {
             var response = new Response();  
@@ -229,9 +225,14 @@ namespace Boompa.Implementations.Services
 
             //mapping the file URLs
             foreach (var file in result.Files) 
-            { 
+            {
                 var fileUrl = await GetFileAsync(file);
-                model.SourceFiles.Add(fileUrl);
+
+                var dto = new FileDTO.ReturnDTO();
+                dto.FileURL = fileUrl;
+                dto.Index = file.Split("|")[1];
+
+                model.SourceFiles.Add(dto);
             }
 
             //mapping the questions
@@ -357,12 +358,12 @@ namespace Boompa.Implementations.Services
                             break;
                         //type2 questions are for questions with images as their questions and their answers and options as text/string
                         case "type2":
-                            //convert from objectType to iformfile
+                            
                             var file = question.FileDescription;
-                            //construct its key which will be used store it to the cloud
+
                             var prefix = Guid.NewGuid().ToString();
                             var key = $"{prefix}|{file.FileName}";
-                            //upload file to the database
+                            
                             await _cloudService.UploadFileAsync(file,key);
 
                             que.Description = key;
@@ -403,15 +404,18 @@ namespace Boompa.Implementations.Services
             return await _unitOfWork.SourceMaterials.GetCategoryId(categoryName);
         }
 
-        private async Task<SourceMaterial> AddSourceFiles(ICollection<IFormFile> files, SourceMaterial sourceMaterial)
+        private async Task<SourceMaterial> AddSourceFiles(ICollection<FileDTO> receivedFiles, SourceMaterial sourceMaterial)
         {
             try
             {
-                foreach (var file in files)
+                var files = new Dictionary<string,IFormFile>();
+                foreach (var fileDetails in receivedFiles)
                 {
                     var prefix = Guid.NewGuid().ToString();
-                    var key = prefix.Concat($"|{file.FileName}").ToString();
+                    var key = prefix.Concat($"|{fileDetails.Index}|{fileDetails.File.FileName}").ToString();
                     sourceMaterial.Files.Add(key);
+
+                    files.Add(key,fileDetails.File);
                 }
 
                 await _cloudService.UploadFilesAsync(files);
@@ -436,6 +440,7 @@ namespace Boompa.Implementations.Services
 
 
         }
+
         private async Task<ICollection<Stream>> GetFilesAsync(ICollection<string> keys)
         {
             try
@@ -450,6 +455,15 @@ namespace Boompa.Implementations.Services
             }
 
 
+        }
+
+        private async Task<string> AddSourceFile(FileDTO file)
+        {
+            var prefix = Guid.NewGuid().ToString();
+            var key = prefix.Concat($"|{file.Index}|{file.File.FileName}").ToString();
+
+            await _cloudService.UploadFileAsync(file.File, key);
+            return key;
         }
     }
 }

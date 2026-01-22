@@ -20,16 +20,16 @@ namespace Boompa.Implementations.Services
         }
 
 
-        public async Task UploadFilesAsync(ICollection<IFormFile> files)
+        public async Task UploadFilesAsync(Dictionary<string,IFormFile> files)
         {
             foreach (var file in files)
             {
                 var request = new PutObjectRequest
                 {
                     BucketName = _bucketName,
-                    Key = file.FileName,
-                    InputStream = file.OpenReadStream(),
-                    ContentType = file.ContentType
+                    Key = file.Key,
+                    InputStream = file.Value.OpenReadStream(),
+                    ContentType = file.Value.ContentType
                 };
 
                 await _client.PutObjectAsync(request);
