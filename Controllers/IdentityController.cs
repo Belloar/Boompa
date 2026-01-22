@@ -10,7 +10,7 @@ namespace Boompa.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    //[Authorize]
+    
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
@@ -21,45 +21,13 @@ namespace Boompa.Controllers
             
         }
 
-        
-
-        //var options = new CookieOptions
-        //{
-        //    Domain = "www.google.com",
-        //    Path = "/",
-        //    HttpOnly = true,
-        //    Expires = DateTime.Today.AddDays(7)
-        //};
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> UserLogin([FromHeader]string username,[FromHeader]string password)
+        public async Task<IActionResult> UserLogin([FromHeader]string username,[FromHeader]string password, [FromHeader] string page)
         {
-            
-            if (username == null && password == null) { return BadRequest("No data received"); }
-            try
-            {
-                var response = new Response();
-                string token = null;
-                var validUser = await _identityService.AuthenticateUser(username, password);
-                if (validUser != null) {token = await _identityService.GenerateToken(validUser); }
-
-                else
-                {
-                    return NotFound($"A user with the username or email does not exist");
-
-                }
-                    response.StatusCode = 200;
-                response.Data=token;
-                response.StatusMessages.Add($"Welcome {validUser.UserName}");
-                return Ok(response);
-            }
-            catch(IdentityException ex)
-            {
-                return StatusCode(500,ex.Message);
-            }
+            var response = await _identityService.UserLogin(username, password,page);
+            return Ok(response);
         }
-
-
 
         [HttpGet("{pageNumber}")]
         public async Task<IActionResult> GetUsers([FromRoute] int pageNumber)
@@ -67,6 +35,22 @@ namespace Boompa.Controllers
             var result = await _identityService.GetUsersAsync(pageNumber);
             return Ok(result);
         }
+
+        [HttpPost]
+        //[AllowAnonymous]
+        public async Task<IActionResult> SendVerificationCode([FromHeader] string email)
+        {
+            var response = _identityService.SendEmail(email);
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VerifyEmail([FromHeader] string email, [FromHeader] string userInput)
+        {
+            var response = _identityService.VerifyEmail(email, userInput);
+            return Ok(response);
+        }
+
 
 
 

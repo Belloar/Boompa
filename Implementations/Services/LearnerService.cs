@@ -12,32 +12,26 @@ namespace Boompa.Services
 {
     public class LearnerService : ILearnerService
     {
-        private readonly ILearnerRepository _learnerRepository;
-        private readonly IIdentityRepository _identityRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IVisitService _visitService;
         
         
         
-        public LearnerService(ILearnerRepository repository,IIdentityRepository identityRepository,IUnitOfWork unitOfWork,IVisitService visitService)
+        public LearnerService(IUnitOfWork unitOfWork,IVisitService visitService)
         {
-            _learnerRepository = repository;
-            _identityRepository = identityRepository;
             _unitOfWork = unitOfWork;
             _visitService = visitService;
-            
         }
-       
 
         public async Task<int> CreateLearner(LearnerDTO.CreateRequest model)
         {
             
             
-            var role1 = await _identityRepository.GetRoleAsync("User");
-            var role2 = await _identityRepository.GetRoleAsync("Learner");
+            var role1 = await _unitOfWork.Identity.GetRoleAsync("User");
+            var role2 = await _unitOfWork.Identity.GetRoleAsync("Learner");
 
 
-            if (await _identityRepository.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
+            if (await _unitOfWork.Identity.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
 
             var user = new User
             {
@@ -86,7 +80,7 @@ namespace Boompa.Services
         }
         public async Task<int> DeleteLearner(Guid id)
         {
-            var user = await _identityRepository.GetUserAsync(id);
+            var user = await _unitOfWork.Identity.GetUserAsync(id);
             if (user == null) throw new IdentityException("a user with this username or email address does not exist");
             var deleteModel = new LearnerDTO.DeleteModel()
             {
@@ -95,13 +89,13 @@ namespace Boompa.Services
                 Deletedby = user.UserName,
                 DeletedOn = DateTime.UtcNow,
             };
-            var result = await _learnerRepository.DeleteLearner(deleteModel);
+            var result = await _unitOfWork.Learners.DeleteLearner(deleteModel);
             return result;
         }
 
         public async Task<Learner> GetLearner(Guid id)
         {
-            var result = await _learnerRepository.GetLearner(id);
+            var result = await _unitOfWork.Learners.GetLearner(id);
             if (result == null || result.IsDeleted == true) throw new ServiceException("learner not found");
             return result;
         }
@@ -110,7 +104,7 @@ namespace Boompa.Services
         {
             var response = new Response();
             
-            var learner = await _learnerRepository.GetLearner(checkString);
+            var learner = await _unitOfWork.Learners.GetLearner(checkString);
             response.Data = learner;
             
             if (learner == null)  throw new ServiceException("this learner does not exist");
@@ -121,7 +115,7 @@ namespace Boompa.Services
         {
             var response = new Response();
             var result = new List<LearnerDTO.ReturnLearner>();
-            var learners = await _learnerRepository.GetLearners(skipCount);
+            var learners = await _unitOfWork.Learners.GetLearners(skipCount);
             if(learners == null) throw new ServiceException("no learners found");
 
             foreach(var learner in learners)
@@ -166,7 +160,7 @@ namespace Boompa.Services
         public async Task<int> UpdateLearner(LearnerDTO.UpdateInfo model, Guid learnerId)
         {
             
-            var learner = await _learnerRepository.GetLearner(learnerId);
+            var learner = await _unitOfWork.Learners.GetLearner(learnerId);
 
             learner.LastModifiedBy = model.ModifierName;
             learner.LastModifiedOn= DateTime.UtcNow;
@@ -182,7 +176,7 @@ namespace Boompa.Services
         public async Task<int> UpdateLearner(LearnerDTO.UpdateStats model, string email)
         {
             //get learner who sent the request and validate if it exists
-            var learner = await _learnerRepository.GetLearner(email);
+            var learner = await _unitOfWork.Learners.GetLearner(email);
             if (learner == null) { throw new RepoException("database error"); }
 
             //update learner currencies

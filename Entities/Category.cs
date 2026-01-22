@@ -6,6 +6,7 @@ namespace Boompa.Entities
     {
         public string Name {  get; set; }
         public ICollection<SourceMaterial> SourceMaterials { get; set; } = new HashSet<SourceMaterial>();
-        public ICollection<LearnerCategory> LearnerCategories { get; set; }
+        public ICollection<CategoryLearner> CategoryLearners { get; set; } = [];
+        public ICollection<CategoryChallenger> CategoryChallengers { get; set; } = [];
     }
 }

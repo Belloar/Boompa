@@ -200,7 +200,7 @@ namespace Boompa.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "LearnerCategories",
+                name: "CategoryLearners",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -332,12 +332,12 @@ namespace Boompa.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_LearnerCategories_CategoryId",
-                table: "LearnerCategories",
+                table: "CategoryLearners",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LearnerCategories_LearnerId",
-                table: "LearnerCategories",
+                table: "CategoryLearners",
                 column: "LearnerId");
 
             migrationBuilder.CreateIndex(
@@ -378,7 +378,7 @@ namespace Boompa.Migrations
                 name: "Admins");
 
             migrationBuilder.DropTable(
-                name: "LearnerCategories");
+                name: "CategoryLearners");
 
             migrationBuilder.DropTable(
                 name: "Questions");

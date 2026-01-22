@@ -16,11 +16,13 @@ namespace Boompa.Context
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Learner> Learners { get; set; }
         public DbSet<Admin> Admins { get; set; }
-        public DbSet<LearnerCategory> LearnerCategories { get; set; }
+        public DbSet<CategoryLearner> CategoryLearners { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<SourceMaterial> SourceMaterials { get; set; }
         public DbSet<Visit> Visits { get; set; }
+        public DbSet<ContestRecord> ContestRecords { get; set; }
+        public DbSet<CategoryChallenger> CategoryChallengers { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -10,6 +10,7 @@ namespace Boompa.Interfaces
         ISourceMaterialRepository SourceMaterials { get; }
         IIdentityRepository Identity { get; }
         IVisitRepository Visits { get; }
+        IContestRecordRepository ContestRecords { get; }
 
         Task<int> SaveChangesAsync();
         void Dispose();

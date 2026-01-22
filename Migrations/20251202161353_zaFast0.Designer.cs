@@ -312,7 +312,7 @@ namespace Boompa.Migrations
                     b.ToTable("Learners");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.LearnerCategory", b =>
+            modelBuilder.Entity("Boompa.Entities.CategoryLearner", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -330,7 +330,7 @@ namespace Boompa.Migrations
 
                     b.HasIndex("LearnerId");
 
-                    b.ToTable("LearnerCategories");
+                    b.ToTable("CategoryLearners");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Question", b =>
@@ -494,16 +494,16 @@ namespace Boompa.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.LearnerCategory", b =>
+            modelBuilder.Entity("Boompa.Entities.CategoryLearner", b =>
                 {
                     b.HasOne("Boompa.Entities.Category", "Category")
-                        .WithMany("LearnerCategories")
+                        .WithMany("CategoryLearners")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Boompa.Entities.Learner", "Learner")
-                        .WithMany("LearnerCategories")
+                        .WithMany("CategoryLearners")
                         .HasForeignKey("LearnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -556,14 +556,14 @@ namespace Boompa.Migrations
 
             modelBuilder.Entity("Boompa.Entities.Category", b =>
                 {
-                    b.Navigation("LearnerCategories");
+                    b.Navigation("CategoryLearners");
 
                     b.Navigation("SourceMaterials");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Learner", b =>
                 {
-                    b.Navigation("LearnerCategories");
+                    b.Navigation("CategoryLearners");
                 });
 
             modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
