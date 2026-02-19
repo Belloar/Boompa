@@ -13,7 +13,7 @@ namespace Boompa.DTO
             public string TextContent { get; set; } // the content of the article
             
             public DateTime CreatedOn { get; set; } // the date the material is being created
-            public ICollection<IFormFile>? RawFiles { get; set; } = new HashSet<IFormFile>(); // for images or audio files that will go with the source material
+            public ICollection<FileDTO>? RawFiles { get; set; } = new HashSet<FileDTO>(); // for images or audio files that will go with the source material
         }
 
         public class QuestionModel()
@@ -34,7 +34,7 @@ namespace Boompa.DTO
             public string MaterialName { get; set; }
             public string TextContent { get; set; }
             public ICollection<QuestionDto>? Questions { get; set; } = [];
-            public ICollection<string>? SourceFiles { get; set; } = [];
+            public ICollection<FileDTO.ReturnDTO>? SourceFiles { get; set; } = [];
             
         }
 
