@@ -7,7 +7,8 @@ namespace Boompa.Interfaces.IRepository
     {
         Task AddRecord(ContestRecord record);
         Task<ICollection<ContestRecord>> GetAllRecords();
+        Task<ContestRecord> GetIfExists(DateOnly date, Guid learnerId, Guid categoryId);
         Task<ICollection<ContestRecord>> GetRecordsByMonth(DateOnly date);
-         
+        Task UpdateLearnerRecord(ContestRecord record);
     }
 }

@@ -54,5 +54,18 @@ namespace Boompa.DTO
             public string SourceName { get; set; }
             public string SourceDescription { get; set; }
         }
+
+        public class TinyModel()
+        {
+            public string Category { get; set; }// the category the material will fall under
+            public string SourceMaterialName { get; set; } // the name of the article
+            public string Description { get; set; }
+            public string Content { get; set; } // the content of the article
+            public DateTime CreatedOn { get; set; } // the date the material is being created
+        }
+
+        public record TinyMedia(IFormFile file);
+
+        public record AIQueGenDTO(string Material, string Prompt);
     }
 }

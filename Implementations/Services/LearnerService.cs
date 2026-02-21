@@ -14,16 +14,18 @@ namespace Boompa.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IVisitService _visitService;
+        private readonly ICloudService _cloudService;
         
         
         
-        public LearnerService(IUnitOfWork unitOfWork,IVisitService visitService)
+        public LearnerService(IUnitOfWork unitOfWork,IVisitService visitService,ICloudService cloudService)
         {
             _unitOfWork = unitOfWork;
             _visitService = visitService;
+            _cloudService = cloudService;
         }
 
-        public async Task<int> CreateLearner(LearnerDTO.CreateRequest model)
+        public async Task<int> CreateLearner(LearnerDTO.CreateLearner model)
         {
             
             
@@ -111,6 +113,42 @@ namespace Boompa.Services
             return response ;
         }
 
+        public async Task<Response> GetLearnerInfo(string checkString)
+        {
+            var response = new Response();
+
+            try
+            {
+                var learner = await _unitOfWork.Learners.GetLearner(checkString);
+
+                var result = new LearnerDTO.LearnerInfo()
+                {
+                    FirstName = learner.FirstName,
+                    LastName = learner.LastName,
+                    Status = learner.Status,
+                    School = learner.School,
+                    Rank = learner.Rank,
+                    TicketCount = learner.TicketCount,
+                    CoinCount = learner.CoinCount,
+                    ExpPoints = learner.ExpPoints,
+                };
+
+                var profilePic = await _cloudService.GetFileUrlAsync(learner.ProfilePicture);
+                result.ProfilePicture = profilePic;
+
+                response.StatusCode = 200;
+                response.StatusMessages.Add("Success");
+                response.Data = result;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                throw new ServiceException(ex.Message);
+            }
+        }
+
         public async Task<Response> GetLearners(int skipCount)
         {
             var response = new Response();
@@ -153,7 +191,8 @@ namespace Boompa.Services
             
         }
 
-        public Task<SourceMaterial > GetMaterial(string MaterialName)
+
+        public Task<SourceMaterial> GetMaterial(string MaterialName)
         {
             throw new NotImplementedException();
         }
@@ -162,7 +201,7 @@ namespace Boompa.Services
             
             var learner = await _unitOfWork.Learners.GetLearner(learnerId);
 
-            learner.LastModifiedBy = model.ModifierName;
+            learner.LastModifiedBy = model.ModifiedBy;
             learner.LastModifiedOn= DateTime.UtcNow;
             learner.School = model.School;
             learner.FirstName = model.FirstName;

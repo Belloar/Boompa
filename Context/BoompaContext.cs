@@ -22,8 +22,6 @@ namespace Boompa.Context
         public DbSet<SourceMaterial> SourceMaterials { get; set; }
         public DbSet<Visit> Visits { get; set; }
         public DbSet<ContestRecord> ContestRecords { get; set; }
-        public DbSet<CategoryChallenger> CategoryChallengers { get; set; }
-        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Role>().HasData(

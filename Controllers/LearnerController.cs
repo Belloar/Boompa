@@ -12,7 +12,7 @@ namespace Boompa.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize(Roles = "learner")]
+    //[Authorize(Roles = "learner")]
     public class LearnerController : ControllerBase
     {
         private readonly ILearnerService _learnerService;
@@ -26,7 +26,7 @@ namespace Boompa.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> CreateLearner([FromBody] LearnerDTO.CreateRequest model)
+        public async Task<IActionResult> CreateLearner([FromBody] LearnerDTO.CreateLearner model)
         {
             
             if (model == null) return BadRequest("all fields must be filled");
@@ -102,7 +102,6 @@ namespace Boompa.Controllers
         }
 
         [HttpGet]
-        
         public async Task<IActionResult> GetLearnersInfo()
         {
             try
@@ -114,6 +113,20 @@ namespace Boompa.Controllers
             {
                 return NotFound(ex.Message);
             }
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetLearnerInfo()
+        {
+            var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+
+            if (email != null)
+            {
+                var learnersInfo = await _learnerService.GetLearnerInfo(email);
+                return Ok(learnersInfo);
+            }
+            else { return NotFound(); }
         }
 
         [HttpPut]

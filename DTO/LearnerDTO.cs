@@ -6,7 +6,7 @@ namespace Boompa.DTO
 {
     public class LearnerDTO
     {
-        public class CreateRequest
+        public class CreateLearner
         {
             public string UserName { get; set; }
             public string Password { get; set; }
@@ -17,7 +17,7 @@ namespace Boompa.DTO
         }
         public class UpdateInfo
         {
-            public string ModifierName { get; set; }
+            public string ModifiedBy { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string Email { get; set; }
@@ -25,6 +25,12 @@ namespace Boompa.DTO
             public string PhoneNumber { get; set; }
             
         }
+
+        public class ProfilePicUpdateModel
+        {
+            public IFormFile ProfilePic { get; set; }
+        }
+
         public class UpdateStats
         {
             public Guid CategoryId { get; set; }
@@ -44,13 +50,16 @@ namespace Boompa.DTO
         }
         public class LearnerInfo
         {
-            public Guid UserId { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
+            public string? ProfilePicture { get; set; }
             public bool Status { get; set; }
             public string Rank { get; set; }
             public string? School { get; set; }
-            public ICollection<Role> Roles { get; set; } = new HashSet<Role>();
+            public int CoinCount { get; set; }
+            public int TicketCount { get; set; }
+            public int ExpPoints { get; set; }
+
         }
 
         public class ReturnLearner

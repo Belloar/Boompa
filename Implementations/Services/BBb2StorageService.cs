@@ -36,15 +36,15 @@ namespace Boompa.Implementations.Services
             }
         }
 
+        
         public async Task<string> GetFileUrlAsync(string key)
         {
             var request = new GetPreSignedUrlRequest
             {
                 BucketName = _bucketName,
                 Key = key,
-                Expires = DateTime.UtcNow.AddMinutes(15)
+                Expires = DateTime.UtcNow.AddDays(7),
             };
-            var fileName = key.Split("|");
             var response = await _client.GetPreSignedURLAsync(request);
             return response;
 
@@ -88,6 +88,24 @@ namespace Boompa.Implementations.Services
             };
 
              await _client.PutObjectAsync(request);
+        }
+
+        public async Task<string> UploadFileAsync(IFormFile file)
+        {
+            var prefix = Guid.NewGuid().ToString();
+            var key = $"{prefix}|{file.FileName}";
+
+            var request = new PutObjectRequest
+            {
+                BucketName = _bucketName,
+                Key = key,
+                InputStream = file.OpenReadStream(),
+                ContentType = file.ContentType
+            };
+
+            await _client.PutObjectAsync(request);
+            var result = await GetFileUrlAsync(key);
+            return result;
         }
     }
 }

@@ -2,7 +2,8 @@
 {
     public class ContestRecordDTO
     {
-        public record ReturnRecordDTO(string speedAccuracyRatio, DateOnly date, int expEarned,int numberOfRounds);
-        public record CreateRecordDTO(Guid challengerId, Guid categoryId, string speedAccuracyRatio, DateOnly date, int expEarned,int numberOfRounds);
+        public record ReturnRecord(string userName, string speedAccuracyRatio, DateOnly date, int expEarned,int numberOfRounds);
+        public record CreateRecord( string CategoryName, DateOnly Date,DateTime LastModifiedOn, int ExpEarned,int NumberOfRounds, string? SpeedAccuracyRatio);
+        public record UpdateRecord( string CategoryName, DateTime LastModifiedOn, int ExpEarned, int NumberOfRounds, string? SpeedAccuracyRatio);
     }
 }

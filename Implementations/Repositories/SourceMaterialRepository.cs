@@ -39,7 +39,10 @@ namespace Boompa.Implementations.Repositories
 
         public async Task<SourceMaterial> AddSourceMaterial(SourceMaterial sourceMaterial)
         {
-            _context.SourceMaterials.Add(sourceMaterial);
+            var canConnect = await _context.Database.CanConnectAsync();
+            Console.WriteLine(canConnect);
+
+            await _context.SourceMaterials.AddAsync(sourceMaterial);
             return sourceMaterial;
             
         }
@@ -119,7 +122,9 @@ namespace Boompa.Implementations.Repositories
 
         public async Task<Category> GetCategoryId(string categoryName)
         {
-            return await _context.Categories.FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower());
+            
+            var res = await _context.Categories.FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower());
+            return res;
 
 
         }

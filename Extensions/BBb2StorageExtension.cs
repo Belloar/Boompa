@@ -1,4 +1,6 @@
 ﻿using Amazon.S3;
+using Boompa.Implementations.Services;
+using Boompa.Interfaces.IService;
 
 namespace Boompa.Extensions
 {
@@ -20,7 +22,10 @@ namespace Boompa.Extensions
             var client = new AmazonS3Client(keyId, applicationKey, clientConfig);
 
             services.AddSingleton<IAmazonS3>(client);
-            services.AddSingleton(sp => new Implementations.Services.BBb2StorageService(client,bucketName));
+
+            services.AddSingleton(sp => new BBb2StorageService(client,bucketName));
+
+            services.AddSingleton<ICloudService>(sp => new BBb2StorageService(client,bucketName));
 
             return services;
         }

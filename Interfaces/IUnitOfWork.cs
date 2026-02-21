@@ -3,7 +3,7 @@ using Boompa.Interfaces.IRepository;
 
 namespace Boompa.Interfaces
 {
-    public interface IUnitOfWork : IDisposable //remove this interface in due time
+    public interface IUnitOfWork
     {
         ILearnerRepository Learners {  get; }
         IAdminRepository Admins { get; }
@@ -13,6 +13,6 @@ namespace Boompa.Interfaces
         IContestRecordRepository ContestRecords { get; }
 
         Task<int> SaveChangesAsync();
-        void Dispose();
+        
     }
 }
