@@ -10,16 +10,14 @@ using System.Text.Json;
 
 namespace Boompa.Controllers
 {
-    
+
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class SourceMaterialController : ControllerBase
+    public class SourceMaterialController(ISourceMaterialService sourceMaterialService, IAIQuestionGenerator questionGenerator) : ControllerBase
     {
-        private readonly ISourceMaterialService _sourceMaterialService;
-        public SourceMaterialController(ISourceMaterialService sourceMaterialService) 
-        {
-            _sourceMaterialService = sourceMaterialService;            
-        }
+        private readonly ISourceMaterialService _sourceMaterialService = sourceMaterialService;
+
+        private readonly IAIQuestionGenerator _questionGenerator = questionGenerator;
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -30,7 +28,7 @@ namespace Boompa.Controllers
                 var creator = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (sourceMaterial == null) { return BadRequest("Material not received by server"); }
 
-                if(creator != null)
+                if (creator != null)
                 {
                     var result = await _sourceMaterialService.AddSourceMaterial(sourceMaterial, creator);
                     return Ok(result);
@@ -40,9 +38,29 @@ namespace Boompa.Controllers
                     var result = await _sourceMaterialService.AddSourceMaterial(sourceMaterial);
                     return Ok(result);
                 }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
-               
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddNewSourceMaterial([FromForm] MaterialDTO.TinyModel model)
+        {
+            var result = await _sourceMaterialService.AddSourceMaterial(model);
+            return Ok(result);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> AddCategory([FromBody] string category)
+        {
+            if (category == null) { return BadRequest("Material not received"); }
+            try
+            {
+                var result = await _sourceMaterialService.AddCategory(category);
+                return Ok(result);
 
             }
             catch (Exception ex)
@@ -52,27 +70,19 @@ namespace Boompa.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCategory([FromBody] string category)
+        public async Task<IActionResult> GenerateQuestion([FromBody] MaterialDTO.AIQueGenDTO model)
         {
-            if(category == null) { return BadRequest("Material not received"); }
-            try
-            {
-                var result = await _sourceMaterialService.AddCategory(category);
-                return Ok(result);
-
-            }catch(Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var result = _questionGenerator.GenerateQuestions(model.Material, model.Prompt);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddQuestion([FromForm]MaterialDTO.QuestionModel model, [FromHeader] Guid sourceMaterialId)
+        public async Task<IActionResult> AddQuestion([FromForm] MaterialDTO.QuestionModel model, [FromHeader] Guid sourceMaterialId)
         {
             if (model == null) { return BadRequest("Material not received"); }
             try
             {
-                var result = await _sourceMaterialService.AddQuestion(model,sourceMaterialId);
+                var result = await _sourceMaterialService.AddQuestion(model, sourceMaterialId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -82,12 +92,12 @@ namespace Boompa.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSourceMaterial([FromHeader]Guid sourceId, [FromHeader]string category)
+        public async Task<IActionResult> GetSourceMaterial([FromHeader] Guid sourceId, [FromHeader] string category)
         {
             if (sourceId == null) { return BadRequest("SourceMaterialName not provided"); }
             try
             {
-                var result  = await _sourceMaterialService.GetSourceMaterial(category,sourceId);
+                var result = await _sourceMaterialService.GetSourceMaterial(category, sourceId);
                 return Ok(result);
             }
             catch (Exception)
@@ -95,7 +105,7 @@ namespace Boompa.Controllers
                 return StatusCode(500, "An error occurred while processing your request");
             }
         }
-        
+
 
         [HttpGet]
         public async Task<IActionResult> GetSourceMaterialNames([FromHeader] string categoryName)
@@ -125,5 +135,35 @@ namespace Boompa.Controllers
             var result = await _sourceMaterialService.AddQuestion(questions, sourceId);
             return Ok(result);
         }
+
+
+        //this is an ai generated webhook endpoint. i'm leaving this method as is for now just for testing i'll learn how it works properly
+        //[Route("api/typeform")]
+        //[HttpPost("webhook")]
+        //public async Task<IActionResult> ReceiveWebhook([FromBody] JsonElement payload)
+        //{
+        //    try
+        //    {
+        //        using var reader = new StreamReader(Request.Body);
+        //        var body = await reader.ReadToEndAsync();
+
+        //        Console.WriteLine("Received from Typeform:");
+        //        Console.WriteLine(body);
+
+        //        // Deserialize if needed
+        //        var json = JsonDocument.Parse(body);
+
+        //        // TODO: Save to database here
+
+
+        //        return Ok(new { message = "Webhook received successfully" });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle any exceptions that occur during processing
+        //        return StatusCode(500, new { message = "An error occurred while processing the webhook", error = ex.Message });
+        //    }
+
+        //}
     }
 }

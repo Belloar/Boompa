@@ -25,13 +25,6 @@ namespace Boompa.Implementations
             ContestRecords = contestRecordRepository;
         }
 
-
-
-        public void Dispose()
-        {
-            _context.Dispose();
-        }
-
         public async Task<int> SaveChangesAsync()
         {
            return await _context.SaveChangesAsync();

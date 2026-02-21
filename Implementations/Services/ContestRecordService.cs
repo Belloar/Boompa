@@ -1,5 +1,6 @@
 ﻿using Boompa.DTO;
 using Boompa.Entities;
+using Boompa.Exceptions;
 using Boompa.Interfaces;
 using Boompa.Interfaces.IService;
 
@@ -13,39 +14,54 @@ namespace Boompa.Implementations.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public Task AddRecord(ContestRecordDTO.CreateRecordDTO record)
+        public async Task AddRecord(ContestRecordDTO.CreateRecord model, string email)
         {
-            throw new NotImplementedException();
-            //try
-            //{
-
-            //    var newRecord = new ContestRecord
-            //    {
-            //        ChallengerId = record.ChallengerId,
-            //        CategoryId = record.CategoryId,
-            //        SpeedAccuracyRatio = record.SpeedAccuracyRatio,
-            //        Date = record.Date,
-            //        ExpEarned = record.ExpEarned,
-            //        NumberOfRounds = record.NumberOfRounds
-            //    };
-            //}
-            //catch (Exception ex )
-            //{
-                
-            //}
-        }
-
-        public async Task<ICollection<ContestRecordDTO.ReturnRecordDTO>> GetAllRecords()
-        {
-            //throw new NotImplementedException();
             try
             {
-                var result = new List<ContestRecordDTO.ReturnRecordDTO>();
+                var learner = await _unitOfWork.Learners.GetLearner(email);
+                var category = await _unitOfWork.SourceMaterials.GetCategoryId(model.CategoryName);
+
+                var record = await _unitOfWork.ContestRecords.GetIfExists(model.Date, learner.Id, category.Id);
+
+                if (record == null)
+                {
+                    var newRecord = new ContestRecord
+                    {
+                        LearnerId = learner.Id,
+                        CategoryId = category.Id,
+                        SpeedAccuracyRatio = model.SpeedAccuracyRatio,
+                        Date = model.Date,
+                        LastModifiedOn = model.LastModifiedOn,
+                        ExpEarned = model.ExpEarned,
+                        NumberOfRounds = model.NumberOfRounds
+                    };
+
+                    await _unitOfWork.ContestRecords.AddRecord(newRecord);
+                }
+                else
+                {
+                    await UpdateRecord(record,model);
+                }
+                
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(ex.Message);
+            }
+        }
+
+        public async Task<ICollection<ContestRecordDTO.ReturnRecord>> GetAllRecords()
+        {
+            try
+            {
+                var result = new List<ContestRecordDTO.ReturnRecord>();
 
                 var records = await _unitOfWork.ContestRecords.GetAllRecords();
                 foreach (var record in records)
                 {
-                    var recordDto = new ContestRecordDTO.ReturnRecordDTO(
+                    var recordDto = new ContestRecordDTO.ReturnRecord(
+                        record.LearnerId.ToString(),
                         record.SpeedAccuracyRatio,
                         record.Date,
                         record.ExpEarned,
@@ -62,7 +78,30 @@ namespace Boompa.Implementations.Services
             }
         }
 
-        public Task<ICollection<ContestRecordDTO.ReturnRecordDTO>> GetRecordsByMonth(DateOnly date)
+        public Task<ICollection<ContestRecordDTO.ReturnRecord>> GetRecordsByMonth(DateOnly date)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateRecord(ContestRecord record, ContestRecordDTO.CreateRecord model)
+        {
+            try
+            {
+                record.SpeedAccuracyRatio = model.SpeedAccuracyRatio;
+                record.LastModifiedOn = model.LastModifiedOn;
+                record.NumberOfRounds += model.NumberOfRounds;
+                record.ExpEarned += model.ExpEarned;
+
+                await _unitOfWork.ContestRecords.UpdateLearnerRecord(record);
+
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(ex.Message);
+            }
+        }
+
+        public Task UpdateRecord(ContestRecordDTO.UpdateRecord model, string email)
         {
             throw new NotImplementedException();
         }

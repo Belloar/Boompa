@@ -213,27 +213,28 @@ namespace Boompa.Auth
 
         public async Task<Response> UserLogin(string username, string password,string page)
         {
+            var response = new Response();
             if (username == null && password == null) { throw new IdentityException("No data received"); }
             try
             {
-                var response = new Response();
                 string token = null;
                 var validUser = await AuthenticateUser(username, password,page);
-                if (validUser != null) { token = await GenerateToken(validUser); }
 
+                if (validUser != null) { response.Data = await GenerateToken(validUser); }
                 else
                 {
                     throw new IdentityException($"invalid request ensure valid email and password is provided");
 
                 }
                 response.StatusCode = 200;
-                response.Data = token;
                 response.StatusMessages.Add($"Welcome {validUser.UserName}");
                 return response ;
             }
             catch (Exception ex)
             {
-                throw new IdentityException(ex.Message);
+                response.StatusCode = 500;
+                response.StatusMessages.Add($"{ex.Message},{ex.InnerException?.Message}");
+                return response;
             }
         }
     }

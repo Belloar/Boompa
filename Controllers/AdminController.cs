@@ -102,67 +102,6 @@ namespace Boompa.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddSourceMaterial([FromForm] MaterialDTO.ArticleModel material)
-        {
-            try
-            {
-                var creator = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                var response = await _sourceMaterialService.AddSourceMaterial(material,creator);
-                return Ok(response);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetLearnerById()
-        {
-            try
-            {
-                var id = HttpContext.User.FindFirstValue("userId");
-                var learner = await _learnerService.GetLearner(id);
-                return Ok(learner);
-            }
-            catch (ServiceException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetLearner([FromHeader] string searchString)
-        {
-            try
-            {
-                var learner = await _learnerService.GetLearner(searchString);
-                return Ok(learner);
-            }
-            catch (ServiceException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (IdentityException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetLearnersInfo()
-        {
-            try
-            {
-                var learnersInfo = await _learnerService.GetLearnersInfo();
-                return Ok(learnersInfo);
-            }
-            catch (ServiceException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
 
         [HttpGet("{skipCount}")]
         public async Task<IActionResult> GetLearners([FromRoute] int skipCount)

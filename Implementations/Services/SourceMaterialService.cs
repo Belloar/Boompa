@@ -1,6 +1,7 @@
 ﻿using Boompa.DTO;
 using Boompa.Entities;
 using Boompa.Exceptions;
+using Boompa.Implementations.Repositories;
 using Boompa.Interfaces;
 using Boompa.Interfaces.IRepository;
 using Boompa.Interfaces.IService;
@@ -10,27 +11,21 @@ using System.Data;
 
 namespace Boompa.Implementations.Services
 {
-    public class SourceMaterialService : ISourceMaterialService
+    public class SourceMaterialService(ICloudService storageService, IUnitOfWork unitOfWork, ISourceMaterialRepository sourceMaterialRepository) : ISourceMaterialService
     {
-        private readonly ISourceMaterialRepository _sourceMaterialRepository;
-        private readonly ICloudService _cloudService;
-        private readonly IUnitOfWork _unitOfWork;
-        
+        private readonly ICloudService _cloudService = storageService;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly ISourceMaterialRepository _sourceMaterialRepository = sourceMaterialRepository;
 
-        public SourceMaterialService(BBb2StorageService storageService,IUnitOfWork unitOfWork)
-        { 
-            _cloudService = storageService;
-            _unitOfWork = unitOfWork;
-        }
-        
-        public async Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material,string creator)
+       
+        public async Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material, string creator)
         {
-            
+
             var response = new Response();
             //the source material object is created
             var sourceMaterial = new SourceMaterial();
 
-            if (material!= null)
+            if (material != null)
             {
                 sourceMaterial.Name = material.SourceMaterialName;
                 sourceMaterial.Description = material.Description;
@@ -64,7 +59,7 @@ namespace Boompa.Implementations.Services
             var source = await _unitOfWork.SourceMaterials.AddSourceMaterial(sourceMaterial);
             var result = await _unitOfWork.SaveChangesAsync();
 
-            if(result > 0)
+            if (result > 0)
             {
                 response.StatusMessages.Add("success");
                 response.Data = sourceMaterial.Id;
@@ -170,7 +165,7 @@ namespace Boompa.Implementations.Services
             //get the source material from the database
             var response = new Response();
             if (sourceMaterialName == null || category == null) { throw new ServiceException("no identifier received"); }
-            var result = await _sourceMaterialRepository.GetSourceMaterial(sourceMaterialName,category);
+            var result = await _unitOfWork.SourceMaterials.GetSourceMaterial(sourceMaterialName,category);
 
             //check if deleted
             if(result.IsDeleted == true)
@@ -299,7 +294,7 @@ namespace Boompa.Implementations.Services
                         case "type2":
                             var file = question.FileDescription;
                             var prefix = Guid.NewGuid().ToString();
-                            var key = $"{prefix}/{file.FileName}";
+                            var key = $"{prefix}|{file.FileName}";
                             que.Files.Add(key);
                             await _cloudService.UploadFileAsync(file, key);
 
@@ -401,7 +396,8 @@ namespace Boompa.Implementations.Services
        
         private async Task<Category> GetCategory(string categoryName)
         {
-            return await _unitOfWork.SourceMaterials.GetCategoryId(categoryName);
+            var res = await _sourceMaterialRepository.GetCategoryId(categoryName);
+            return res;
         }
 
         private async Task<SourceMaterial> AddSourceFiles(ICollection<FileDTO> receivedFiles, SourceMaterial sourceMaterial)
@@ -412,7 +408,7 @@ namespace Boompa.Implementations.Services
                 foreach (var fileDetails in receivedFiles)
                 {
                     var prefix = Guid.NewGuid().ToString();
-                    var key = prefix.Concat($"|{fileDetails.Index}|{fileDetails.File.FileName}").ToString();
+                    var key = $"{prefix}|{fileDetails.Index}|{fileDetails.File.FileName}";
                     sourceMaterial.Files.Add(key);
 
                     files.Add(key,fileDetails.File);
@@ -464,6 +460,50 @@ namespace Boompa.Implementations.Services
 
             await _cloudService.UploadFileAsync(file.File, key);
             return key;
+        }
+
+        public async Task<Response> AddSourceMaterial(MaterialDTO.TinyModel model)
+        {
+            var response = new Response();
+            try
+            {
+                if(model == null)
+                {
+                    response.StatusCode = 400;
+                    response.StatusMessages.Add("No data received");
+                    return response;
+                }
+
+                var category = await GetCategory(model.Category);
+                var material = new SourceMaterial()
+                {
+                    Name = model.SourceMaterialName,
+                    Description = model.Description,
+                    CategoryId = category.Id,
+                    Content = model.Content,
+                    CreatedOn = model.CreatedOn,
+                    CreatedBy = "warriman"
+                };
+
+                await _unitOfWork.SourceMaterials.AddSourceMaterial(material);
+                var result = await _unitOfWork.SaveChangesAsync();
+
+               if(result > 0)
+                {
+                    response.StatusCode = 200;
+                    response.StatusMessages.Add("success");
+                    response.Data = material.Id;
+                }
+            
+
+                
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(ex.Message);
+               
+            }
         }
     }
 }

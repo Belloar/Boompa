@@ -31,5 +31,16 @@ namespace Boompa.Implementations.Repositories
         {
             return await _context.ContestRecords.Where(cr => cr.Date.Month == date.Month && cr.Date.Year == date.Year).ToListAsync();
         }
+
+        public async Task<ContestRecord> GetIfExists(DateOnly date, Guid learnerId, Guid categoryId)
+        {
+            return await _context.ContestRecords.FirstOrDefaultAsync(r => r.LearnerId == learnerId && r.CategoryId == categoryId && r.Date.Month == date.Month);
+        }
+
+        public Task UpdateLearnerRecord(ContestRecord record)
+        {
+            _context.ContestRecords.Update(record);
+            return Task.CompletedTask;
+        }
     }
 }
