@@ -25,60 +25,66 @@ namespace Boompa.Services
             _cloudService = cloudService;
         }
 
-        public async Task<int> CreateLearner(LearnerDTO.CreateLearner model)
+        public async Task<Response> CreateLearner(LearnerDTO.CreateLearner model)
         {
-            
-            
-            var role1 = await _unitOfWork.Identity.GetRoleAsync("User");
-            var role2 = await _unitOfWork.Identity.GetRoleAsync("Learner");
-
-
-            if (await _unitOfWork.Identity.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
-
-            var user = new User
+            var response = new Response();
+            try
             {
-                UserName = model.UserName,
-                Email = model.Email,
-                CreatedBy = model.UserName,
-                HashSalt = BCrypt.Net.BCrypt.GenerateSalt(),
-                IsEmailConfirmed = true,
-                
-            };
-            
-            user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, user.HashSalt);
-            user.Roles = new HashSet<UserRole>
-            {
-                new UserRole
+                var role1 = await _unitOfWork.Identity.GetRoleAsync("User");
+                var role2 = await _unitOfWork.Identity.GetRoleAsync("Learner");
+
+                if (await _unitOfWork.Identity.CheckUser(model.Email)) throw new IdentityException("a user with this email already exists");
+
+                var user = new User
                 {
-                    User = user,
-                    RoleId = role1.Id,
-                },
-                new UserRole
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    CreatedBy = model.UserName,
+                    HashSalt = BCrypt.Net.BCrypt.GenerateSalt(),
+                    IsEmailConfirmed = true,
+                };
+
+                user.Password = BCrypt.Net.BCrypt.HashPassword(model.Password, user.HashSalt);
+                user.Roles = new HashSet<UserRole>
                 {
-                    User = user,
-                    RoleId = role2.Id,
-                }
-            };
+                    new UserRole
+                    {
+                        User = user,
+                        RoleId = role1.Id,
+                    },
+                    new UserRole
+                    {
+                        User = user,
+                        RoleId = role2.Id,
+                    }
+                };
 
+                var learner = new Learner
+                {
+                    Email = model.Email,
+                    CreatedBy = model.UserName,
+                    CreatedOn = DateTime.UtcNow,
+                    CoinCount = 100,
+                    TicketCount = 20
 
-            var learner = new Learner
+                };
+
+                await _unitOfWork.Identity.AddUserRoles(user.Roles);
+                await _unitOfWork.Identity.CreateAsync(user);
+                await _unitOfWork.Learners.AddLearner(learner);
+
+                response.Data = await _unitOfWork.SaveChangesAsync();
+                response.StatusCode = 200;
+                response.StatusMessages.Add("learner created successfully");
+
+                return response;
+            }
+            catch (Exception ex)
             {
-                Email = model.Email,
-                Age = model.Age,
-                PhoneNumber = model.PhoneNumber,
-                CreatedBy = model.UserName,
-                CreatedOn = DateTime.UtcNow,
-                CoinCount = 100,
-                TicketCount = 20
-               
-            };
-            await _unitOfWork.Identity.AddUserRoles(user.Roles);
-            await _unitOfWork.Identity.CreateAsync(user);
-            await _unitOfWork.Learners.AddLearner(learner);
-            var result = await _unitOfWork.SaveChangesAsync();
-
-            if (result == 0) throw new ServiceException("unable to add learner");
-            return result;
+                response.StatusCode = 500;
+                response.StatusMessages.Add($"{ex.Message},{ex.InnerException?.Message}");
+                return response;
+            }   
         }
         public async Task<int> DeleteLearner(Guid id)
         {
@@ -144,7 +150,6 @@ namespace Boompa.Services
             }
             catch (Exception ex)
             {
-
                 throw new ServiceException(ex.Message);
             }
         }
@@ -164,7 +169,6 @@ namespace Boompa.Services
                     LastName = learner.LastName,
                     FirstName = learner.FirstName,
                     Email = learner.Email,
-                    Age = learner.Age,
                     PhoneNumber = learner.PhoneNumber,
                 };
 

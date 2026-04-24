@@ -23,17 +23,19 @@ namespace Boompa.Implementations.Services
 
         public async Task SendVerificationCode(string recepientEmail, string verificationCode)
         {
+            string senderEmail = "borubello2001@gmail.com";
+            string senderPassword = "pfxq riqu rpck ishv";
             var mail = new MailMessage()
             {
-                From = new MailAddress("rahmanbello2018@gmail.com"),
+                From = new MailAddress(senderEmail),
                 Subject = "Email Verification",
                 Body = $"To complete your registration on Boompa, we need to verify that the email provided is valid and functional Your verification code is {verificationCode} ",
             };
             mail.To.Add(recepientEmail);
 
-            var smtpClient = new SmtpClient("sandbox.smtp.mailtrap.io", 587)
+            var smtpClient = new SmtpClient("smtp.gmail.com", 587)
             {
-                Credentials = new NetworkCredential("BoompaTestEnv","BoompaTestEnv123"),
+                Credentials = new NetworkCredential(senderEmail,senderPassword),
                 EnableSsl = true
             };
 

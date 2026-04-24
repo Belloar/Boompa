@@ -16,12 +16,10 @@ namespace Boompa.Controllers
     public class LearnerController : ControllerBase
     {
         private readonly ILearnerService _learnerService;
-        //private readonly IHttpContextAccessor _httpContext;
         
-        public LearnerController(ILearnerService service, IHttpContextAccessor httpContext)
+        public LearnerController(ILearnerService service)
         {
             _learnerService = service;
-            //_httpContext = httpContext;
         }
 
         [HttpPost]
@@ -117,6 +115,7 @@ namespace Boompa.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Learner")]
         public async Task<IActionResult> GetLearnerInfo()
         {
             var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);

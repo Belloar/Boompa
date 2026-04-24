@@ -207,6 +207,7 @@ namespace Boompa.Auth
 
             response.Data = result;
             response.StatusMessages.Add("success");
+            response.StatusCode = 200;
             return response;
 
         }

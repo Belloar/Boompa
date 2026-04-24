@@ -5,7 +5,7 @@ namespace Boompa.Interfaces.IService
 {
     public interface ILearnerService
     {
-        Task<int> CreateLearner(LearnerDTO.CreateLearner model);
+        Task<Response> CreateLearner(LearnerDTO.CreateLearner model);
         
         Task<int> DeleteLearner(Guid id);
         

@@ -21,15 +21,15 @@ namespace Boompa.Implementations.Repositories
         {
             throw new NotImplementedException();
         }
-        public async Task<Question> AddQuestionAsync(Question model,string sourceName,string category)
-        {
-            var source = await GetSource(sourceName, category);
-            model.SourceMaterialId = source.Id;
+        //public async Task<Question> AddQuestionAsync(Question model,string sourceName,string category)
+        //{
+        //    var source = await GetSource(sourceName, category);
+        //    model.SourceMaterialId = source.Id;
             
-            _context.Questions.Add(model);
-            return model;
+        //    _context.Questions.Add(model);
+        //    return model;
 
-        }
+        //}
         public async Task<Question> AddQuestionAsync(Question model)
         {
             _context.Questions.Add(model);
@@ -58,10 +58,10 @@ namespace Boompa.Implementations.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<MaterialDTO.SourceDescriptor>> GetAllSourceMaterials(string categoryName)
+        public async Task<ICollection<MaterialDTO.SourceDescriptor>> GetAll()
         {
-            
-            var fetcher =_context.SourceMaterials.Where(sm => sm.Category.Name == categoryName).Select(sm => new MaterialDTO.SourceDescriptor
+
+            var fetcher = _context.SourceMaterials.Select(sm => new MaterialDTO.SourceDescriptor
             {
                 SourceId = sm.Id,
                 SourceName = sm.Name,
@@ -79,6 +79,16 @@ namespace Boompa.Implementations.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<ICollection<CategorySourceMaterial>> GetByCategory(Guid Id)
+        {
+            var result = await _context.CategorySourceMaterials.Include(csm => csm.SourceMaterial).Where(csm => csm.CategoryId == Id).ToListAsync();
+            if (result == null)
+            {
+                throw new RepoException("An error occured while fetching materials");
+            }
+            return result;
+        }
+
         public async Task<SourceMaterial> GetSourceMaterial(string sourceMaterialName, string category)
         {
 
@@ -90,7 +100,7 @@ namespace Boompa.Implementations.Repositories
             return result;
         }
 
-        public async Task<SourceMaterial> GetSourceMaterial(string category,Guid sourceId)
+        public async Task<SourceMaterial> GetSourceMaterial(Guid sourceId)
         {
             var result = await _context.SourceMaterials.Include(sm => sm.Questions).FirstOrDefaultAsync(sm => sm.Id == sourceId && !sm.IsDeleted);
             return result;
@@ -104,15 +114,15 @@ namespace Boompa.Implementations.Repositories
             throw new NotImplementedException();
         }
 
-        private async Task<SourceMaterial> GetSource(string sourceName,string category)
-        {
-            var result = await _context.SourceMaterials.Select(sm => new SourceMaterial
-            {
-                Id = sm.Id,
-            }).FirstOrDefaultAsync(sm => sm.Name == sourceName && sm.Category.Name == category);
+        //private async Task<SourceMaterial> GetSource(string sourceName,string category)
+        //{
+        //    var result = await _context.SourceMaterials.Select(sm => new SourceMaterial
+        //    {
+        //        Id = sm.Id,
+        //    }).FirstOrDefaultAsync(sm => sm.Name == sourceName && sm.Category.Name == category);
             
-            return result;
-        }
+        //    return result;
+        //}
 
         public async Task<bool> CategoryExists(string categoryName)
         {

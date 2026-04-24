@@ -91,13 +91,13 @@ namespace Boompa.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetSourceMaterial([FromHeader] Guid sourceId, [FromHeader] string category)
+        [HttpGet("{sourceId}")]
+        public async Task<IActionResult> GetSourceMaterial(Guid sourceId)
         {
-            if (sourceId == null) { return BadRequest("SourceMaterialName not provided"); }
+            if (sourceId == Guid.Empty) { return BadRequest("SourceMaterialName not provided"); }
             try
             {
-                var result = await _sourceMaterialService.GetSourceMaterial(category, sourceId);
+                var result = await _sourceMaterialService.GetSourceMaterial(sourceId);
                 return Ok(result);
             }
             catch (Exception)
@@ -117,7 +117,7 @@ namespace Boompa.Controllers
                 response.StatusMessages.Add("provide a Category name");
                 return BadRequest(response);
             }
-            var result = await _sourceMaterialService.GetAllSourceMaterials(categoryName);
+            var result = await _sourceMaterialService.GetAllSourceMaterials();
             return Ok(result);
         }
 
@@ -129,7 +129,7 @@ namespace Boompa.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddQuestionsByGuid([FromForm] ICollection<MaterialDTO.QuestionModel> questions, [FromHeader] Guid sourceId)
+        public async Task<IActionResult> AddQuestionsByGuid([FromBody] ICollection<MaterialDTO.QuestionModel> questions, [FromHeader] Guid sourceId)
         {
             if (questions == null) { return BadRequest("Payload not received"); }
             var result = await _sourceMaterialService.AddQuestion(questions, sourceId);
@@ -149,7 +149,7 @@ namespace Boompa.Controllers
 
         //        Console.WriteLine("Received from Typeform:");
         //        Console.WriteLine(body);
-
+        
         //        // Deserialize if needed
         //        var json = JsonDocument.Parse(body);
 

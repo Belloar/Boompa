@@ -9,12 +9,12 @@ namespace Boompa.Entities
         public string Email { get; set; } = default!;
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public int Age { get; set; }
+        public int? Age { get; set; }
         public string? School { get; set; }
         public string? ProfilePicture { get; set; }
         public string Rank { get; set; } = "Hatchling";
         public bool Status { get; set; }
-        public string PhoneNumber { get; set; } = default!;
+        public string? PhoneNumber { get; set; } = default!;
         public bool PaidInTickets { get; set; }
         public bool PaidInCoins { get; set; }
         public int TicketCount { get; set; }

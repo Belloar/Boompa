@@ -5,14 +5,13 @@ namespace Boompa.Auth
 {
     public class IdentityDTO
     {
-        //public class CreateRequestModel
-        //{
-        //    public string UserName { get; set; }
-        //    public string Password { get; set; }
-        //    public string Email { get; set; }
-        //    public string PhoneNumber { get; set; }
+        public record EmailModel(string Email, string UserInput);
+        public class CreateRequestModel
+        {
+            public string UserName { get; set; }
+            public string Password { get; set; }
 
-        //}
+        }
         public class UpdateRequestModel
         {
             public string? UserName { get; set; }

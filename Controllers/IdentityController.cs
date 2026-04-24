@@ -10,7 +10,6 @@ namespace Boompa.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
@@ -30,24 +29,27 @@ namespace Boompa.Controllers
         }
 
         [HttpGet("{pageNumber}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsers([FromRoute] int pageNumber)
         {
             var result = await _identityService.GetUsersAsync(pageNumber);
             return Ok(result);
         }
 
-        [HttpPost]
-        //[AllowAnonymous]
-        public async Task<IActionResult> SendVerificationCode([FromHeader] string email)
+        [HttpGet("{email}")]
+        public async Task<IActionResult> SendVerificationCode(string email)
         {
-            var response = _identityService.SendEmail(email);
+            var response = new Response();
+            response.StatusCode = 200;
+
+            await _identityService.SendEmail(email);
             return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> VerifyEmail([FromHeader] string email, [FromHeader] string userInput)
+        public async Task<IActionResult> VerifyEmail([FromBody] IdentityDTO.EmailModel model)
         {
-            var response = _identityService.VerifyEmail(email, userInput);
+            var response = await _identityService.VerifyEmail(model.Email, model.UserInput);
             return Ok(response);
         }
 

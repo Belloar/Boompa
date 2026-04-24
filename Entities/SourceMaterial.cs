@@ -8,7 +8,7 @@ namespace Boompa.Entities
         
         public string Name { get; set; }  
         public Guid CategoryId { get; set; }
-        public Category Category { get; set; }
+        public ICollection<Category> Categories { get; set; } = [];
         public string Content { get; set; }
         public string Description { get; set; }
         public ICollection<Question> Questions { get; set; } = new HashSet<Question>();

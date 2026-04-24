@@ -22,6 +22,7 @@ namespace Boompa.Context
         public DbSet<SourceMaterial> SourceMaterials { get; set; }
         public DbSet<Visit> Visits { get; set; }
         public DbSet<ContestRecord> ContestRecords { get; set; }
+        public DbSet<CategorySourceMaterial> CategorySourceMaterials { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Role>().HasData(
@@ -48,27 +49,11 @@ namespace Boompa.Context
                 }
             );
 
-            
-           
-
-            
-
-            
 
             modelBuilder.Entity<SourceMaterial>()
                 .HasMany(sm => sm.Questions)
                 .WithOne(q => q.SourceMaterial)
                 .HasForeignKey(q => q.SourceMaterialId);
-
-            modelBuilder.Entity<Category>()
-                .HasMany(c => c.SourceMaterials)
-                .WithOne(c => c.Category)
-                .HasForeignKey(c => c.CategoryId);
-
-            
-
-
-
         }
     }
 }

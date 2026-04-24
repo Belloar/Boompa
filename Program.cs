@@ -30,6 +30,7 @@ builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAdminService,AdminService>();
 builder.Services.AddScoped<ISourceMaterialService, SourceMaterialService>();
 builder.Services.AddScoped<ISourceMaterialRepository, SourceMaterialRepository>();
+builder.Services.AddScoped<IAIQuestionGenerator,TypeformService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IVisitRepository, VisitRepository>();
 builder.Services.AddScoped<IVisitService, VisitService>();
@@ -44,6 +45,7 @@ builder.Services.AddDbContext<BoompaContext>(options => options.UseMySql(builder
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddBBb2Storage(builder.Configuration);
+builder.Services.AddHttpClient();
 
 builder.Services.AddMemoryCache();
 
