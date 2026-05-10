@@ -1,5 +1,6 @@
 ﻿using Boompa.Auth;
 using Boompa.DTO;
+using Boompa.Entities;
 using Boompa.Exceptions;
 using Boompa.Interfaces.IService;
 using Microsoft.AspNetCore.Authorization;
@@ -174,6 +175,17 @@ namespace Boompa.Controllers
             {
                 return NotFound(ex.Message);
             }
+        }
+
+        [HttpPut]
+        [Authorize(Roles ="Learner")]
+        public async Task<IActionResult> AddBookmark([FromHeader]Guid Id)
+        {
+            var learnerId = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            var result = await _learnerService.AddToBookmarks(Id, learnerId);
+            return Ok(result);
+            
+
         }
     }
 }

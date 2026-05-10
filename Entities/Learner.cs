@@ -21,6 +21,7 @@ namespace Boompa.Entities
         public int CoinCount { get; set; }
         public int ExpPoints { get; set; }
         //the joiner table below lets me document the categories that the learner has learnt from over time 
+        public ICollection<LearnerSourceMaterial> Bookmarks { get; set; } = [];
         public ICollection<CategoryLearner> CategoryLearners { get; set; } = [];
         
         

@@ -46,7 +46,7 @@ namespace Boompa.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddNewSourceMaterial([FromForm] MaterialDTO.TinyModel model)
         {
             var result = await _sourceMaterialService.AddSourceMaterial(model);
@@ -107,18 +107,25 @@ namespace Boompa.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetSourceMaterialNames([FromHeader] string categoryName)
+        [HttpGet("{pageNumber}")]
+        public async Task<IActionResult> GetSourceMaterialNames( int pageNumber)
         {
-            var response = new Response();
-            if (categoryName == null)
-            {
-                response.StatusCode = 500;
-                response.StatusMessages.Add("provide a Category name");
-                return BadRequest(response);
-            }
-            var result = await _sourceMaterialService.GetAllSourceMaterials();
+            var result = await _sourceMaterialService.GetAllSourceMaterials(pageNumber);
             return Ok(result);
+
+        }
+
+        [HttpGet("{categoryId}/{pageNumber}")]
+        public async Task<IActionResult> GetSourceMaterialNames(int pageNumber, Guid categoryId)
+        {
+            if (categoryId == Guid.Empty)
+            {
+                return BadRequest("something went wrong");
+                
+            }
+            var result = await _sourceMaterialService.GetAllSourceMaterials(categoryId, pageNumber);
+            return Ok(result);
+
         }
 
         [HttpPost]
@@ -136,34 +143,30 @@ namespace Boompa.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Learner")]
+        public async Task<IActionResult> GetTopCategories()
+        {
+            var learnerId= HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            if (learnerId == null) { return StatusCode(500, "invalid credentials"); }
 
-        //this is an ai generated webhook endpoint. i'm leaving this method as is for now just for testing i'll learn how it works properly
-        //[Route("api/typeform")]
-        //[HttpPost("webhook")]
-        //public async Task<IActionResult> ReceiveWebhook([FromBody] JsonElement payload)
-        //{
-        //    try
-        //    {
-        //        using var reader = new StreamReader(Request.Body);
-        //        var body = await reader.ReadToEndAsync();
+            var result = await _sourceMaterialService.GetTopCategories(learnerId);
+            return Ok(result);
+        }
 
-        //        Console.WriteLine("Received from Typeform:");
-        //        Console.WriteLine(body);
-        
-        //        // Deserialize if needed
-        //        var json = JsonDocument.Parse(body);
+        [HttpGet]
+        [Authorize(Roles = "Learner")]
+        public async Task<IActionResult> GetRandomSource()
+        {
+            var result = await _sourceMaterialService.GetRandomSource();
+            return Ok(result);
+        }
 
-        //        // TODO: Save to database here
-
-
-        //        return Ok(new { message = "Webhook received successfully" });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Handle any exceptions that occur during processing
-        //        return StatusCode(500, new { message = "An error occurred while processing the webhook", error = ex.Message });
-        //    }
-
-        //}
+        [HttpGet]
+        public async Task<IActionResult> GetCategories()
+        {
+            var result = await _sourceMaterialService.GetCategories();
+            return Ok(result);
+        }
     }
 }

@@ -44,7 +44,12 @@ namespace Boompa.Implementations.Services
                     var existingCategory = await GetCategory(category);
                     if (existingCategory != null)
                     {
-                        sourceMaterial.Categories.Add(existingCategory);
+                        var csm = new CategorySourceMaterial
+                        {
+                            Category = existingCategory,
+                            SourceMaterial = sourceMaterial
+                        };
+                        sourceMaterial.Categories.Add(csm);
                     }
                     else
                     {
@@ -150,18 +155,63 @@ namespace Boompa.Implementations.Services
             return response;
         }
 
-        public async Task<Response> GetAllSourceMaterials()
+        public async Task<Response> GetAllSourceMaterials(int pageSize)
         {
-            var response = new Response();  
-            var result = await _unitOfWork.SourceMaterials.GetAll();
-            if(result == null) { throw new ServiceException("no materials for this category yet"); }
-            response.Data = result;
-            response.StatusCode = 200;
-            response.StatusMessages.Add("success");
+            var response = new Response();
+            try
+            {
 
-            return response;
+                
+                var result = await _unitOfWork.SourceMaterials.GetAll(pageSize);
+                if (result == null)
+                {
+                    response.StatusCode = 500;
+                    response.StatusMessages.Add("No materials within this category");
+                    return response;
+                }
+
+                response.Data = result;
+                response.StatusCode = 200;
+                response.StatusMessages.Add("success");
+
+                return response;
+            }
+            catch (Exception ex) 
+            { 
+                response.StatusCode = 500;
+                response.StatusMessages.Add($"{ex.Message}");
+                response.Data = ex;
+                return response;
+            }
         }
 
+        public async Task<Response> GetAllSourceMaterials(Guid categoryId, int pageNumber)
+        {
+            var response = new Response();
+            try
+            {
+                var result = await _unitOfWork.SourceMaterials.GetAll(categoryId, pageNumber);
+                if (result == null)
+                {
+                    response.StatusCode = 500;
+                    response.StatusMessages.Add("No materials within this category");
+                    return response;
+                }
+
+                response.Data = result;
+                response.StatusCode = 200;
+                response.StatusMessages.Add("success");
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.StatusMessages.Add($"{ex.Message}");
+                response.Data = ex;
+                return response;
+            }
+        }
         public async Task<Response> GetSourceMaterial(string sourceMaterialName, string category)
         {
             //get the source material from the database
@@ -183,8 +233,8 @@ namespace Boompa.Implementations.Services
                 TextContent = result.Content,
                 Categories = result.Categories.Select( cat => new MaterialDTO.CategoryDTO
                 {
-                    Id = cat.Id,
-                    Name = cat.Name,
+                    Id = cat.CategoryId,
+                    Name = cat.Category.Name,
                 }).ToList(),
                 Questions = result.Questions.Select(a => new MaterialDTO.QuestionDTO
                 {
@@ -223,14 +273,14 @@ namespace Boompa.Implementations.Services
             //mapping to the return entity
             var model = new MaterialDTO.ConsumptionModel()
             {
-                SourceId = sourceId,
+                SourceId = result.Id,
                 MaterialName = result.Name,
                 TextContent = result.Content,
 
                 Categories = result.Categories.Select(cat => new MaterialDTO.CategoryDTO
                 {
-                    Id = cat.Id,
-                    Name = cat.Name,
+                    Id = cat.CategoryId,
+                    Name = cat.Category.Name,
                 }).ToList(),
 
                 Questions = result.Questions.Select(que => new MaterialDTO.QuestionDTO
@@ -291,7 +341,6 @@ namespace Boompa.Implementations.Services
                 var que = new Question();
                 foreach (var question in models)
                 {
-
                     switch (question.QuestionType)
                     {
                         // type1 question is for pure mcq questions where the question, its answer, and options are text/string
@@ -301,17 +350,7 @@ namespace Boompa.Implementations.Services
                             que.Answer = question.Answer;
                             que.Options = question.Option;
                             break;
-                        //type2 questions are for questions with images as their questions and their answers and options as text/string
-                        //case "type2":
-                        //    var file = question.FileDescription;
-                        //    var prefix = Guid.NewGuid().ToString();
-                        //    var key = $"{prefix}|{file.FileName}";
-                        //    que.Files.Add(key);
-                        //    await _cloudService.UploadFileAsync(file, key);
-
-                        //    que.Answer = question.Answer;
-                        //    que.Options = question.Option;
-                        //    break;
+                        
                     }
 
                 }
@@ -329,9 +368,6 @@ namespace Boompa.Implementations.Services
                     response.StatusMessages.Add("one or more problems occurred");
                     return response;
                 }
-
-                    
-
             }
             catch (Exception ex)
             {
@@ -346,7 +382,6 @@ namespace Boompa.Implementations.Services
 
             try
             {
-                
                 foreach (var question in models)
                 {
                     var que = new Question();
@@ -356,40 +391,7 @@ namespace Boompa.Implementations.Services
                     que.Options = question.Option;
                     que.QuestionType = question.QuestionType;
 
-                    //switch (question.QuestionType)
-                    //{
-                    //    // type1 question is for pure mcq questions where the question, its answer, and options are text/string
-                    //    case "default":
-                    //        que.SourceMaterialId = sourceMaterialId;
-                    //        que.Description = question.TextDescription;
-                    //        que.Answer = question.Answer;
-                    //        que.Options = question.Option;
-                    //        que.QuestionType = question.QuestionType;
-
-                    //        await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
-                    //        break;
-                    //    //type2 questions are for questions with images as their questions and their answers and options as text/string
-                    //    case "type2":
-
-                    //        var file = question.FileDescription;
-
-                    //        var prefix = Guid.NewGuid().ToString();
-                    //        var key = $"{prefix}|{file.FileName}";
-
-                    //        await _cloudService.UploadFileAsync(file, key);
-
-                    //        que.Description = key;
-                    //        que.SourceMaterialId = sourceMaterialId;
-                    //        que.Answer = question.Answer;
-                    //        que.Options = question.Option;
-                    //        que.QuestionType = question.QuestionType;
-
-                    //        await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
-                    //        break;
-                    //}
-
                     await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
-
                 }
                 var result = await _unitOfWork.SaveChangesAsync();
                 if (result >= 1)
@@ -419,68 +421,6 @@ namespace Boompa.Implementations.Services
             return res;
         }
 
-        private async Task<SourceMaterial> AddSourceFiles(ICollection<FileDTO> receivedFiles, SourceMaterial sourceMaterial)
-        {
-            try
-            {
-                var files = new Dictionary<string,IFormFile>();
-                foreach (var fileDetails in receivedFiles)
-                {
-                    var prefix = Guid.NewGuid().ToString();
-                    var key = $"{prefix}|{fileDetails.Index}|{fileDetails.File.FileName}";
-                    sourceMaterial.Files.Add(key);
-
-                    files.Add(key,fileDetails.File);
-                }
-
-                await _cloudService.UploadFilesAsync(files);
-                return sourceMaterial;
-            }
-            catch (Exception ex)
-            {
-                throw new ServiceException($"{ex.Message},{ex.InnerException?.Message}");
-            }
-        }
-        private async Task<string> GetFileAsync(string key)
-        {
-            try
-            {
-                var result = await _cloudService.GetFileUrlAsync(key);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new CloudException(ex.Message);
-            }
-
-
-        }
-
-        private async Task<ICollection<Stream>> GetFilesAsync(ICollection<string> keys)
-        {
-            try
-            {
-
-                var result = await _cloudService.GetFilesAsync(keys);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new CloudException(ex.Message);
-            }
-
-
-        }
-
-        private async Task<string> AddSourceFile(FileDTO file)
-        {
-            var prefix = Guid.NewGuid().ToString();
-            var key = prefix.Concat($"|{file.Index}|{file.File.FileName}").ToString();
-
-            await _cloudService.UploadFileAsync(file.File, key);
-            return key;
-        }
-
         public async Task<Response> AddSourceMaterial(MaterialDTO.TinyModel model)
         {
             var response = new Response();
@@ -492,18 +432,29 @@ namespace Boompa.Implementations.Services
                     response.StatusMessages.Add("No data received");
                     return response;
                 }
+                
 
-                var category = await GetCategory(model.Category);
 
                 var material = new SourceMaterial()
                 {
                     Name = model.SourceMaterialName,
                     Description = model.Description,
-                    CategoryId = category.Id,
                     Content = model.Content,
                     CreatedOn = model.CreatedOn,
-                    CreatedBy = "warriman"
+                    CreatedBy = model.CreatedBy
+                    //ADDRESS THE CREATOR FIELD SOMETIME
                 };
+
+                foreach (var category in model.Categories)
+                {
+                    var existingCategory = await _unitOfWork.SourceMaterials.GetCategory(category);
+                    var cat = new CategorySourceMaterial
+                    {
+                        Category = existingCategory,
+                        SourceMaterial = material
+                    };
+                    material.Categories.Add(cat);
+                }
 
                 await _unitOfWork.SourceMaterials.AddSourceMaterial(material);
                 var result = await _unitOfWork.SaveChangesAsync();
@@ -514,9 +465,6 @@ namespace Boompa.Implementations.Services
                     response.StatusMessages.Add("success");
                     response.Data = material.Id;
                 }
-            
-
-                
                 return response;
             }
             catch (Exception ex)
@@ -525,5 +473,72 @@ namespace Boompa.Implementations.Services
                
             }
         }
+
+        public async Task<Response> GetRandomSource()
+        {
+            var response = new Response();
+            var sourceMaterial = await _unitOfWork.SourceMaterials.GetRandomSource();
+            var result = new MaterialDTO.SourceDescriptor()
+            {
+                SourceId = sourceMaterial.Id,
+                SourceDescription = sourceMaterial.Description,
+                SourceName = sourceMaterial.Name,
+                Categories = sourceMaterial.Categories.Select(cat => new MaterialDTO.CategoryDetails
+                {
+                    CategoryId = cat.Id,
+                    Name = cat.Category.Name,
+                }).ToList()
+            };
+            response.StatusCode = 200;
+            response.StatusMessages.Add("success");
+            response.Data = result;
+
+            return response;
+        }
+
+        public async Task<Response> GetTopCategories(string learnerId)
+        {
+            var response = new Response();  
+            if(learnerId != default)
+            {
+                var result = await _unitOfWork.SourceMaterials.GetTopCategories(learnerId);
+                response.StatusCode = 200;
+                response.StatusMessages.Add("success");
+                response.Data = result;
+                return response;
+            }
+            else
+            {
+                response.StatusCode = 400;
+                response.StatusMessages.Add("An error occured while fetching resource");
+                return response;
+            }
+            
+        }
+
+        public async Task<Response> GetCategories()
+        {
+            var response = new Response();
+
+            try
+            {
+                var result = await _unitOfWork.SourceMaterials.GetCategories();
+                response.StatusCode = 200;
+                response.StatusMessages.Add("success");
+                response.Data = result;
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.StatusMessages.Add($"{ex.Message}");
+                response.Data = ex;
+
+                return response;
+            }
+        }
+
+        
     }
 }

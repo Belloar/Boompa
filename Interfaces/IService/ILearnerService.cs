@@ -17,6 +17,8 @@ namespace Boompa.Interfaces.IService
         Task<Response> GetLearners(int numberOfRecordsToSkip);
         Task<int> UpdateLearner(LearnerDTO.UpdateInfo model,Guid LearnerId);
         Task<int> UpdateLearner(LearnerDTO.UpdateStats model,string userName);
+        Task<Response> AddToBookmarks(Guid articleId,string learnerId);
+        
         
         
 

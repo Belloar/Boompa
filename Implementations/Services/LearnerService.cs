@@ -25,6 +25,33 @@ namespace Boompa.Services
             _cloudService = cloudService;
         }
 
+        public async Task<Response> AddToBookmarks(Guid articleId,string learnerId)
+        {
+            var response = new Response();
+            if (articleId != default && learnerId != default)
+            {
+                var learner = await _unitOfWork.Learners.GetLearner(learnerId);
+                var bookmark = new LearnerSourceMaterial
+                {
+                    LearnerId = learner.Id,
+                    SourceMaterialId = articleId
+                };
+                await _unitOfWork.Learners.AddToBookmarks(bookmark);
+                var result = await _unitOfWork.SaveChangesAsync();
+
+                response.StatusCode = 200;
+                response.StatusMessages.Add("success");
+                response.Data = result;
+                return response;
+
+            }
+            else
+            {
+                response.StatusMessages.Add("A problem occured saving bookmark");
+                return response;
+            }
+        }
+
         public async Task<Response> CreateLearner(LearnerDTO.CreateLearner model)
         {
             var response = new Response();
@@ -137,6 +164,13 @@ namespace Boompa.Services
                     TicketCount = learner.TicketCount,
                     CoinCount = learner.CoinCount,
                     ExpPoints = learner.ExpPoints,
+
+                    Bookmarks = learner.Bookmarks.Where(lsm => lsm.LearnerId == learner.Id).Take(10).Select(lsm => new MaterialDTO.SourceDescriptor
+                    {
+                        SourceId = lsm.SourceMaterialId,
+                        SourceName = lsm.SourceMaterial.Name,
+                        SourceDescription = lsm.SourceMaterial.Description,
+                    }).ToList()
                 };
 
                 var profilePic = await _cloudService.GetFileUrlAsync(learner.ProfilePicture);

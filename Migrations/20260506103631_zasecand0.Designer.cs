@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Boompa.Migrations
 {
     [DbContext(typeof(BoompaContext))]
-    [Migration("20260202113229_za4suh")]
-    partial class za4suh
+    [Migration("20260506103631_zasecand0")]
+    partial class zasecand0
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,6 +100,9 @@ namespace Boompa.Migrations
                     b.Property<Guid>("LearnerId")
                         .HasColumnType("char(36)");
 
+                    b.Property<int>("ReadCount")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -107,6 +110,27 @@ namespace Boompa.Migrations
                     b.HasIndex("LearnerId");
 
                     b.ToTable("CategoryLearners");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.CategorySourceMaterial", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("SourceMaterialId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("SourceMaterialId");
+
+                    b.ToTable("CategorySourceMaterials");
                 });
 
             modelBuilder.Entity("Boompa.Entities.ContestRecord", b =>
@@ -295,7 +319,7 @@ namespace Boompa.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("Age")
+                    b.Property<int?>("Age")
                         .HasColumnType("int");
 
                     b.Property<int>("CoinCount")
@@ -342,7 +366,6 @@ namespace Boompa.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("ProfilePicture")
@@ -364,6 +387,27 @@ namespace Boompa.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Learners");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.LearnerSourceMaterial", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("LearnerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("SourceMaterialId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LearnerId");
+
+                    b.HasIndex("SourceMaterialId");
+
+                    b.ToTable("LearnerSourceMaterials");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Question", b =>
@@ -428,9 +472,6 @@ namespace Boompa.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("char(36)");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -451,10 +492,6 @@ namespace Boompa.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.PrimitiveCollection<string>("Files")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -469,8 +506,6 @@ namespace Boompa.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("SourceMaterials");
                 });
@@ -527,6 +562,25 @@ namespace Boompa.Migrations
                     b.Navigation("Learner");
                 });
 
+            modelBuilder.Entity("Boompa.Entities.CategorySourceMaterial", b =>
+                {
+                    b.HasOne("Boompa.Entities.Category", "Category")
+                        .WithMany("SourceMaterials")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Boompa.Entities.SourceMaterial", "SourceMaterial")
+                        .WithMany("Categories")
+                        .HasForeignKey("SourceMaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("SourceMaterial");
+                });
+
             modelBuilder.Entity("Boompa.Entities.ContestRecord", b =>
                 {
                     b.HasOne("Boompa.Entities.Category", "Category")
@@ -565,6 +619,25 @@ namespace Boompa.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Boompa.Entities.LearnerSourceMaterial", b =>
+                {
+                    b.HasOne("Boompa.Entities.Learner", "Learner")
+                        .WithMany("Bookmarks")
+                        .HasForeignKey("LearnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Boompa.Entities.SourceMaterial", "SourceMaterial")
+                        .WithMany("BookMarkers")
+                        .HasForeignKey("SourceMaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Learner");
+
+                    b.Navigation("SourceMaterial");
+                });
+
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
                     b.HasOne("Boompa.Entities.SourceMaterial", "SourceMaterial")
@@ -574,17 +647,6 @@ namespace Boompa.Migrations
                         .IsRequired();
 
                     b.Navigation("SourceMaterial");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
-                {
-                    b.HasOne("Boompa.Entities.Category", "Category")
-                        .WithMany("SourceMaterials")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Visit", b =>
@@ -625,11 +687,17 @@ namespace Boompa.Migrations
 
             modelBuilder.Entity("Boompa.Entities.Learner", b =>
                 {
+                    b.Navigation("Bookmarks");
+
                     b.Navigation("CategoryLearners");
                 });
 
             modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
                 {
+                    b.Navigation("BookMarkers");
+
+                    b.Navigation("Categories");
+
                     b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618

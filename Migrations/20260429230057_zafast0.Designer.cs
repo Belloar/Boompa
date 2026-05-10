@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Boompa.Migrations
 {
     [DbContext(typeof(BoompaContext))]
-    [Migration("20251202161353_zaFast0")]
-    partial class zaFast0
+    [Migration("20260429230057_zafast0")]
+    partial class zafast0
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,7 +48,6 @@ namespace Boompa.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
@@ -61,11 +60,9 @@ namespace Boompa.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("ProfilePicture")
@@ -91,6 +88,87 @@ namespace Boompa.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Boompa.Entities.CategoryLearner", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("LearnerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("ReadCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("LearnerId");
+
+                    b.ToTable("CategoryLearners");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.CategorySourceMaterial", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("SourceMaterialId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("SourceMaterialId");
+
+                    b.ToTable("CategorySourceMaterials");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.ContestRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<int>("ExpEarned")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("LearnerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("NumberOfRounds")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SpeedAccuracyRatio")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("LearnerId");
+
+                    b.ToTable("ContestRecords");
+                });
+
             modelBuilder.Entity("Boompa.Entities.Identity.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -109,7 +187,7 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("TextDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -241,8 +319,12 @@ namespace Boompa.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("Age")
+                    b.Property<int?>("Age")
                         .HasColumnType("int");
+
+                    b.PrimitiveCollection<string>("Bookmarks")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("CoinCount")
                         .HasColumnType("int");
@@ -288,7 +370,6 @@ namespace Boompa.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("ProfilePicture")
@@ -310,27 +391,6 @@ namespace Boompa.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Learners");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.CategoryLearner", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("LearnerId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("LearnerId");
-
-                    b.ToTable("CategoryLearners");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Question", b =>
@@ -355,7 +415,7 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("TextDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -395,10 +455,7 @@ namespace Boompa.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("TextContent")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -414,11 +471,7 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("TextDescription")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.PrimitiveCollection<string>("Files")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -436,8 +489,6 @@ namespace Boompa.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("SourceMaterials");
                 });
@@ -475,25 +526,6 @@ namespace Boompa.Migrations
                     b.ToTable("Visits");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.Identity.UserRole", b =>
-                {
-                    b.HasOne("Boompa.Entities.Identity.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Boompa.Entities.Identity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Boompa.Entities.CategoryLearner", b =>
                 {
                     b.HasOne("Boompa.Entities.Category", "Category")
@@ -513,6 +545,63 @@ namespace Boompa.Migrations
                     b.Navigation("Learner");
                 });
 
+            modelBuilder.Entity("Boompa.Entities.CategorySourceMaterial", b =>
+                {
+                    b.HasOne("Boompa.Entities.Category", "Category")
+                        .WithMany("SourceMaterials")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Boompa.Entities.SourceMaterial", "SourceMaterial")
+                        .WithMany("Categories")
+                        .HasForeignKey("SourceMaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("SourceMaterial");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.ContestRecord", b =>
+                {
+                    b.HasOne("Boompa.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Boompa.Entities.Learner", "Learner")
+                        .WithMany()
+                        .HasForeignKey("LearnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Learner");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Identity.UserRole", b =>
+                {
+                    b.HasOne("Boompa.Entities.Identity.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Boompa.Entities.Identity.User", "User")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
                     b.HasOne("Boompa.Entities.SourceMaterial", "SourceMaterial")
@@ -522,17 +611,6 @@ namespace Boompa.Migrations
                         .IsRequired();
 
                     b.Navigation("SourceMaterial");
-                });
-
-            modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
-                {
-                    b.HasOne("Boompa.Entities.Category", "Category")
-                        .WithMany("SourceMaterials")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Visit", b =>
@@ -561,6 +639,16 @@ namespace Boompa.Migrations
                     b.Navigation("SourceMaterials");
                 });
 
+            modelBuilder.Entity("Boompa.Entities.Identity.Role", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Identity.User", b =>
+                {
+                    b.Navigation("Roles");
+                });
+
             modelBuilder.Entity("Boompa.Entities.Learner", b =>
                 {
                     b.Navigation("CategoryLearners");
@@ -568,6 +656,8 @@ namespace Boompa.Migrations
 
             modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
                 {
+                    b.Navigation("Categories");
+
                     b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618

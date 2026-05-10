@@ -7,14 +7,14 @@ namespace Boompa.DTO
     public class LearnerDTO
     {
         
-        public class CreateLearner
+        public record CreateLearner()
         {
             public string UserName { get; set; }
             public string Password { get; set; }
             public string Email { get; set; }
             
         }
-        public class UpdateInfo
+        public record UpdateInfo()
         {
             public string ModifiedBy { get; set; }
             public string FirstName { get; set; }
@@ -25,12 +25,12 @@ namespace Boompa.DTO
             
         }
 
-        public class ProfilePicUpdateModel
+        public record ProfilePicUpdateModel
         {
             public IFormFile ProfilePic { get; set; }
         }
 
-        public class UpdateStats
+        public record UpdateStats
         {
             public Guid CategoryId { get; set; }
             public int TicketCount { get; set; }
@@ -40,14 +40,14 @@ namespace Boompa.DTO
 
 
         }
-        public class DeleteModel
+        public record DeleteModel
         {
             public Guid UserId { get; set; }
             public bool IsDeleted { get; set; }
             public string Deletedby { get; set; }
             public DateTime DeletedOn { get; set; }
         }
-        public class LearnerInfo
+        public record LearnerInfo
         {
             public string FirstName { get; set; }
             public string LastName { get; set; }
@@ -58,10 +58,11 @@ namespace Boompa.DTO
             public int CoinCount { get; set; }
             public int TicketCount { get; set; }
             public int ExpPoints { get; set; }
+            public ICollection<MaterialDTO.SourceDescriptor> Bookmarks { get; set; }
 
         }
 
-        public class ReturnLearner
+        public record ReturnLearner
         {
             public string UserName { get; set; }
             public string Email { get; set; }

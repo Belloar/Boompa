@@ -12,10 +12,15 @@ namespace Boompa.Interfaces.IService
         Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material,string creator = "administrator");
         Task<Response> AddSourceMaterial(MaterialDTO.TinyModel model);
         Task<Response> DeleteSourceMaterial();
-        Task<Response> GetAllSourceMaterials();
+        Task<Response> GetAllSourceMaterials(int pageNumber);
+        Task<Response> GetAllSourceMaterials(Guid categoryId , int pageNumber);
+        Task<Response> GetCategories();
+        Task<Response> GetRandomSource();
         Task<Response> GetSourceMaterial(string sourceMaterialName, string category);
         Task<Response> GetSourceMaterial(Guid sourceId);
+        Task<Response> GetTopCategories(string learnerId);
         Task<Response> UpdateQuestion(string model);
         Task<Response> UpdateSourceMaterial(MaterialDTO rawMaterial);
+        
     }
 }

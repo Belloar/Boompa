@@ -15,7 +15,8 @@ namespace Boompa.Interfaces.IRepository
         Task<Learner> GetLearner(string searchString);
 
         Task UpdateLearner(Learner learner);
-        
+        Task AddToBookmarks(LearnerSourceMaterial bookmark);
+
         
 
 

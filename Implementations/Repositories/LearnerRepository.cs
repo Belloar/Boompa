@@ -17,16 +17,18 @@ namespace Boompa.Implementations.Repositories
             _context = context;
         }
 
-        
-
         public async Task AddLearner(Learner model)
         {
             await _context.Learners.AddAsync(model);
         }
+
+        public async Task AddToBookmarks(LearnerSourceMaterial bookmark)
+        {
+            await _context.LearnerSourceMaterials.AddAsync(bookmark);
+        }
+
         public async Task<int> DeleteLearner(LearnerDTO.DeleteModel model)
         {
-            
-
             var learner = _context.Learners.FirstOrDefault(l => l.Id == model.UserId ) ;
             if (learner == null) throw new ServiceException("this user is not a learner");
             learner.IsDeleted = model.IsDeleted;
@@ -45,7 +47,9 @@ namespace Boompa.Implementations.Repositories
         }
         public async Task<Learner> GetLearner(string searchString)
         {
-            return await _context.Learners.FirstOrDefaultAsync(x => x.Email == searchString);
+            var learner =  await _context.Learners.FirstOrDefaultAsync(x => x.Email == searchString);
+            if (learner == null || learner.IsDeleted == true) throw new ServiceException("a learner with this username or email address does not exist");
+            return learner;
         }
 
         public async Task<IEnumerable<Learner>> GetLearners(int skipCount)
@@ -60,13 +64,9 @@ namespace Boompa.Implementations.Repositories
                     {
                         FirstName = l.FirstName,
                         LastName = l.LastName,
-                        Age = l.Age,
-                                        
+                        Age = l.Age,    
                     }
-
              ).ToList();
-
-             
         }
 
         public async Task<IEnumerable<Learner>> GetLearners(bool byStatus = false)
@@ -87,7 +87,5 @@ namespace Boompa.Implementations.Repositories
         {
              _context.Update(learner);
         }
-
-        
     }
 }

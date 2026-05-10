@@ -97,6 +97,9 @@ namespace Boompa.Migrations
                     b.Property<Guid>("LearnerId")
                         .HasColumnType("char(36)");
 
+                    b.Property<int>("ReadCount")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -383,6 +386,27 @@ namespace Boompa.Migrations
                     b.ToTable("Learners");
                 });
 
+            modelBuilder.Entity("Boompa.Entities.LearnerSourceMaterial", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("LearnerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("SourceMaterialId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LearnerId");
+
+                    b.HasIndex("SourceMaterialId");
+
+                    b.ToTable("LearnerSourceMaterials");
+                });
+
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
                     b.Property<Guid>("Id")
@@ -445,9 +469,6 @@ namespace Boompa.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("char(36)");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -465,10 +486,6 @@ namespace Boompa.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.PrimitiveCollection<string>("Files")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -523,21 +540,6 @@ namespace Boompa.Migrations
                     b.ToTable("Visits");
                 });
 
-            modelBuilder.Entity("CategorySourceMaterial", b =>
-                {
-                    b.Property<Guid>("CategoriesId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("SourceMaterialsId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("CategoriesId", "SourceMaterialsId");
-
-                    b.HasIndex("SourceMaterialsId");
-
-                    b.ToTable("CategorySourceMaterial");
-                });
-
             modelBuilder.Entity("Boompa.Entities.CategoryLearner", b =>
                 {
                     b.HasOne("Boompa.Entities.Category", "Category")
@@ -560,13 +562,13 @@ namespace Boompa.Migrations
             modelBuilder.Entity("Boompa.Entities.CategorySourceMaterial", b =>
                 {
                     b.HasOne("Boompa.Entities.Category", "Category")
-                        .WithMany()
+                        .WithMany("SourceMaterials")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Boompa.Entities.SourceMaterial", "SourceMaterial")
-                        .WithMany()
+                        .WithMany("Categories")
                         .HasForeignKey("SourceMaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -614,6 +616,25 @@ namespace Boompa.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Boompa.Entities.LearnerSourceMaterial", b =>
+                {
+                    b.HasOne("Boompa.Entities.Learner", "Learner")
+                        .WithMany("Bookmarks")
+                        .HasForeignKey("LearnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Boompa.Entities.SourceMaterial", "SourceMaterial")
+                        .WithMany("BookMarkers")
+                        .HasForeignKey("SourceMaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Learner");
+
+                    b.Navigation("SourceMaterial");
+                });
+
             modelBuilder.Entity("Boompa.Entities.Question", b =>
                 {
                     b.HasOne("Boompa.Entities.SourceMaterial", "SourceMaterial")
@@ -644,24 +665,11 @@ namespace Boompa.Migrations
                     b.Navigation("Learner");
                 });
 
-            modelBuilder.Entity("CategorySourceMaterial", b =>
-                {
-                    b.HasOne("Boompa.Entities.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Boompa.Entities.SourceMaterial", null)
-                        .WithMany()
-                        .HasForeignKey("SourceMaterialsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Boompa.Entities.Category", b =>
                 {
                     b.Navigation("CategoryLearners");
+
+                    b.Navigation("SourceMaterials");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Identity.Role", b =>
@@ -676,11 +684,17 @@ namespace Boompa.Migrations
 
             modelBuilder.Entity("Boompa.Entities.Learner", b =>
                 {
+                    b.Navigation("Bookmarks");
+
                     b.Navigation("CategoryLearners");
                 });
 
             modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
                 {
+                    b.Navigation("BookMarkers");
+
+                    b.Navigation("Categories");
+
                     b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
