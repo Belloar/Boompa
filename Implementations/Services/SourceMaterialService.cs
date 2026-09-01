@@ -11,11 +11,10 @@ using System.Data;
 
 namespace Boompa.Implementations.Services
 {
-    public class SourceMaterialService(ICloudService storageService, IUnitOfWork unitOfWork, ISourceMaterialRepository sourceMaterialRepository) : ISourceMaterialService
+    public class SourceMaterialService(ICloudService storageService, IUnitOfWork unitOfWork) : ISourceMaterialService
     {
         private readonly ICloudService _cloudService = storageService;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
-        private readonly ISourceMaterialRepository _sourceMaterialRepository = sourceMaterialRepository;
 
        
         public async Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material, string creator)
@@ -62,6 +61,7 @@ namespace Boompa.Implementations.Services
 
             if (result > 0)
             {
+                response.StatusCode = 200;
                 response.StatusMessages.Add("success");
                 response.Data = sourceMaterial.Id;
             }
@@ -97,29 +97,6 @@ namespace Boompa.Implementations.Services
                 que.Options = question.Option;
                 que.QuestionType = question.QuestionType;
 
-                //switch (question.QuestionType)
-                //{
-                //    // type1 question is for pure mcq questions where the question, its answer, and options are text/string
-                //    case "mcq":
-                //        que.SourceMaterialId = sourceMaterialId;
-                //        que.Description = question.TextDescription;
-                //        que.Answer = question.Answer;
-                //        que.Options = question.Option;
-                //        break;
-                //    //type2 questions are for questions with images as their questions and their answers and options as text/string
-                //    case "type2":
-                //        var file = question.FileDescription;
-                //        var prefix = Guid.NewGuid().ToString();
-                //        var key = $"{prefix}/{file.FileName}";
-                //        que.Files.Add(key);
-                //        await _cloudService.UploadFileAsync(file, key);
-
-                //        que.Answer = question.Answer;
-                //        que.Options = question.Option;
-
-                //        break;
-                //}
-
                 var response = new Response();
                 //save data to database
                 var ques = await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
@@ -149,6 +126,7 @@ namespace Boompa.Implementations.Services
             var result = await _unitOfWork.SaveChangesAsync();
             if(result > 0)
             {
+                response.StatusCode = 200;
                 response.StatusMessages.Add("success");
                 response.Data = result;
             }
@@ -289,43 +267,10 @@ namespace Boompa.Implementations.Services
                     Answer = que.Answer,
                     Options = que.Options,
                     QuestionType = que.QuestionType,
+                    OptionType = que.OptionType,
                 }).ToList()
             };
 
-            //mapping the questions
-            //foreach (var question in result.Questions)
-            //{
-            //    switch (question.QuestionType)
-            //    {
-            //        case "default":
-            //            var queResponse = new MaterialDTO.QuestionDTO
-            //            {
-            //                TextQuestion = question.Description,
-            //                Answer = question.Answer,
-            //                Options = question.Options,
-            //                QuestionType = question.QuestionType,
-            //            };
-            //            model.Questions.Add(queResponse);
-
-
-            //            break;
-
-            //        case "type2":
-            //            var file = await GetFileAsync(question.Description);
-            //           var queResponse2 = new MaterialDTO.QuestionDTO
-            //            {
-            //                FileQuestion = file,
-            //                Answer = question.Answer,
-            //                Options = question.Options,
-            //                QuestionType = question.QuestionType,
-            //            };
-            //            model.Questions.Add(queResponse2); 
-            //            break;
-            //    }   
-               
-            //}
-            
-            //returning the result 
             response.StatusCode = 200;
             response.StatusMessages.Add("success");
             response.Data = model;
@@ -390,6 +335,7 @@ namespace Boompa.Implementations.Services
                     que.Answer = question.Answer;
                     que.Options = question.Option;
                     que.QuestionType = question.QuestionType;
+                    que.OptionType = question.OptionType;
 
                     await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
                 }
@@ -417,7 +363,7 @@ namespace Boompa.Implementations.Services
        
         private async Task<Category> GetCategory(string categoryName)
         {
-            var res = await _sourceMaterialRepository.GetCategoryId(categoryName);
+            var res = await _unitOfWork.SourceMaterials.GetCategoryId(categoryName);
             return res;
         }
 
@@ -432,8 +378,6 @@ namespace Boompa.Implementations.Services
                     response.StatusMessages.Add("No data received");
                     return response;
                 }
-                
-
 
                 var material = new SourceMaterial()
                 {
@@ -448,12 +392,19 @@ namespace Boompa.Implementations.Services
                 foreach (var category in model.Categories)
                 {
                     var existingCategory = await _unitOfWork.SourceMaterials.GetCategory(category);
+                    if(existingCategory == null)
+                    {
+                        //response.StatusMessages.Add($"the category {category} does not exist");
+                        //continue;
+                        throw new ServiceException($"the category {category} does not exist");
+                    }
                     var cat = new CategorySourceMaterial
                     {
                         Category = existingCategory,
                         SourceMaterial = material
                     };
                     material.Categories.Add(cat);
+                    //if (existingCategory == null) response.StatusMessages.Add($"the category {category} does not exist");
                 }
 
                 await _unitOfWork.SourceMaterials.AddSourceMaterial(material);

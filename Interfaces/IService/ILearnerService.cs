@@ -15,8 +15,8 @@ namespace Boompa.Interfaces.IService
         Task<IEnumerable<LearnerDTO.LearnerInfo>> GetLearnersInfo();
         Task<Response> GetLearnerInfo(string checkString);
         Task<Response> GetLearners(int numberOfRecordsToSkip);
-        Task<int> UpdateLearner(LearnerDTO.UpdateInfo model,Guid LearnerId);
-        Task<int> UpdateLearner(LearnerDTO.UpdateStats model,string userName);
+        Task<Response> UpdateLearner(LearnerDTO.UpdateInfo model,Guid LearnerId);
+        Task<Response> UpdateLearner(LearnerDTO.UpdateStats model,string userName);
         Task<Response> AddToBookmarks(Guid articleId,string learnerId);
         
         

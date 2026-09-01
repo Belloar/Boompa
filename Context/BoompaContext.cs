@@ -1,6 +1,5 @@
 ﻿using Boompa.Entities;
 using Boompa.Entities.Identity;
-//using Boompa.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Boompa.Context

@@ -11,6 +11,7 @@ namespace Boompa.Interfaces
         IIdentityRepository Identity { get; }
         IVisitRepository Visits { get; }
         IContestRecordRepository ContestRecords { get; }
+        ICategoryRepository CategoryRecords { get; }
 
         Task<int> SaveChangesAsync();
         

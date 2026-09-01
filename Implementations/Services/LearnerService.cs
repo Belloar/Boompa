@@ -2,6 +2,7 @@
 using Boompa.DTO;
 using Boompa.Entities;
 using Boompa.Entities.Identity;
+using Boompa.Enums;
 using Boompa.Exceptions;
 using Boompa.Interfaces;
 using Boompa.Interfaces.IRepository;
@@ -156,6 +157,7 @@ namespace Boompa.Services
 
                 var result = new LearnerDTO.LearnerInfo()
                 {
+                    Email = learner.Email,
                     FirstName = learner.FirstName,
                     LastName = learner.LastName,
                     Status = learner.Status,
@@ -234,8 +236,9 @@ namespace Boompa.Services
         {
             throw new NotImplementedException();
         }
-        public async Task<int> UpdateLearner(LearnerDTO.UpdateInfo model, Guid learnerId)
+        public async Task<Response> UpdateLearner(LearnerDTO.UpdateInfo model, Guid learnerId)
         {
+            var response = new Response();
             
             var learner = await _unitOfWork.Learners.GetLearner(learnerId);
 
@@ -247,27 +250,55 @@ namespace Boompa.Services
 
             await _unitOfWork.Learners.UpdateLearner(learner);
             var result = await  _unitOfWork.SaveChangesAsync();
-            return result;
+
+            response.StatusCode = 200;
+            response.StatusMessages.Add("Success");
+            response.Data = result;
+            return response;
         }
 
-        public async Task<int> UpdateLearner(LearnerDTO.UpdateStats model, string email)
+        public async Task<Response> UpdateLearner(LearnerDTO.UpdateStats model, string email)
         {
+            var response = new Response();
+
             //get learner who sent the request and validate if it exists
             var learner = await _unitOfWork.Learners.GetLearner(email);
             if (learner == null) { throw new RepoException("database error"); }
 
             //update learner currencies
-            learner.CoinCount += model.CoinCount;
-            learner.TicketCount += model.TicketCount;
-
-            
             
 
             //document learner learning session
-            await DocumentVisit(model, learner.Id);
+            //await DocumentVisit(model, learner.Id);
+
+            var favouriteCategories = learner.CategoryLearners;
+            foreach(var visitedCategory in model.Categories)
+            {
+                var faves = favouriteCategories.SingleOrDefault(cl => cl.CategoryId == visitedCategory);
+                if (faves != null)
+                {
+                    faves.ReadCount++;
+                }
+                else 
+                {
+                    var newFavourite = new CategoryLearner
+                    {
+                        LearnerId = learner.Id,
+                        CategoryId = visitedCategory,
+                        ReadCount = 1
+                    };
+                    await _unitOfWork.CategoryRecords.AddFavouriteCategory(newFavourite);
+                }
+            }
+            learner.CoinCount += model.CoinCount;
+            learner.TicketCount += model.TicketCount;
             await _unitOfWork.Learners.UpdateLearner(learner);
+
             var result = await _unitOfWork.SaveChangesAsync();
-            return result;
+            response.StatusCode = 200;
+            response.StatusMessages.Add("success");
+            response.Data = result;
+            return response;
 
         }
         private async Task DocumentVisit(LearnerDTO.UpdateStats statData,Guid learnerId)
@@ -275,17 +306,34 @@ namespace Boompa.Services
             var visit = new Visit
             {
                 LearnerId = learnerId,
-                CategoryId = statData.CategoryId,
                 TicketsEarned = statData.TicketCount,
                 CoinsEarned = statData.CoinCount,
-                Duration = statData.Duration,
-                Date = statData.Date
+                //Duration = statData.Duration,
+                //Date = statData.Date
 
             };
 
             await _visitService.AddVisit(visit);
         }
 
-       
+        //private async Task UpdateFavouriteCategories(Learner learner, Guid categoryId)
+        //{
+        //    var favouriteCategory = await _unitOfWork.CategoryRecords.GetFavouriteCategory(categoryId, learnerId);
+        //    if (favouriteCategory != null)
+        //    {
+        //        favouriteCategory.ReadCount += 1;
+        //    }
+        //    else
+        //    {
+        //        var newFavourite = new CategoryLearner
+        //        {
+        //            LearnerId = learnerId,
+        //            CategoryId = categoryId,
+        //        };
+        //        await _unitOfWork.CategoryRecords.AddFavouriteCategory(newFavourite);
+        //    }
+            
+        //}
+
     }
 }

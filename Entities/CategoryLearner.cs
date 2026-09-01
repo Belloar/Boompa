@@ -5,9 +5,9 @@ namespace Boompa.Entities
     public class CategoryLearner : BaseEntity
     {
         public Guid LearnerId  { get; set; }
-        public Learner Learner { get; set; } = default!;
+        public Learner Learner { get; set; } 
         public int ReadCount { get; set; }
         public Guid CategoryId { get; set; }
-        public Category Category { get; set; } = default!;
+        public Category Category { get; set; } 
     }
 }

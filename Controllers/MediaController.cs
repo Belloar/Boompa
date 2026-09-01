@@ -14,7 +14,7 @@ namespace Boompa.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadMedia([FromForm] MaterialDTO.TinyMedia file)
         {
-            var result = await _cloudService.UploadFileAsync(file.file);
+            var result = await _cloudService.UploadFileAsync(file.File);
             return Ok(new { location = result});
         }
     }

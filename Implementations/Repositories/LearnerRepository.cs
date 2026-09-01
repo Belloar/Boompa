@@ -47,8 +47,10 @@ namespace Boompa.Implementations.Repositories
         }
         public async Task<Learner> GetLearner(string searchString)
         {
-            var learner =  await _context.Learners.FirstOrDefaultAsync(x => x.Email == searchString);
-            if (learner == null || learner.IsDeleted == true) throw new ServiceException("a learner with this username or email address does not exist");
+            var learner =  await _context.Learners
+                .Include(learner => learner.CategoryLearners)
+                .FirstOrDefaultAsync(x => x.Email == searchString);
+            if (learner == null || learner.IsDeleted == true) throw new RepoException("a learner with this username or email address does not exist");
             return learner;
         }
 

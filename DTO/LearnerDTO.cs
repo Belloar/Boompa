@@ -32,11 +32,11 @@ namespace Boompa.DTO
 
         public record UpdateStats
         {
-            public Guid CategoryId { get; set; }
+            public ICollection<Guid> Categories { get; set; } = [];
             public int TicketCount { get; set; }
             public int CoinCount { get; set; }
-            public double Duration { get; set; }
-            public DateOnly Date { get; set; }
+            //public double Duration { get; set; }
+            //public DateOnly Date { get; set; }
 
 
         }
@@ -49,7 +49,8 @@ namespace Boompa.DTO
         }
         public record LearnerInfo
         {
-            public string FirstName { get; set; }
+            public string Email { get; set; } = default!;
+            public string FirstName { get; set; } = default!;
             public string LastName { get; set; }
             public string? ProfilePicture { get; set; }
             public bool Status { get; set; }

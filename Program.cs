@@ -19,7 +19,6 @@ var services = new ServiceCollection();
 
 var connectionString = builder.Configuration.GetConnectionString("MySqlString");
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IIdentityRepository,IdentityRepository>();
@@ -37,11 +36,14 @@ builder.Services.AddScoped<IVisitService, VisitService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IContestRecordRepository, ContestRecordRepository>();
 builder.Services.AddScoped<IContestRecordService, ContestRecordService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddDbContext<BoompaContext>(options => options.UseMySql(builder.Configuration.GetConnectionString("MySqlString"), new MySqlServerVersion(
-              new Version(8, 0, 29))));
+builder.Services.AddDbContext<BoompaContext>(options => 
+            options.UseMySql(builder.Configuration.GetConnectionString("MySqlString"), new MySqlServerVersion(
+            new Version(8, 0, 29)))
+        );
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddBBb2Storage(builder.Configuration);
@@ -116,3 +118,4 @@ app.MapControllers();
 
 app.Run();
 
+public partial class Program { } // Make the Program class public so that it can be accessed from the test project

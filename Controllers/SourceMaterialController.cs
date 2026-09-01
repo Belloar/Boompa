@@ -155,7 +155,7 @@ namespace Boompa.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Learner")]
+        //[Authorize(Roles = "Learner")]
         public async Task<IActionResult> GetRandomSource()
         {
             var result = await _sourceMaterialService.GetRandomSource();

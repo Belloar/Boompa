@@ -7,14 +7,16 @@ namespace Boompa.Implementations
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly BoompaContext _context;       
+        private readonly BoompaContext _context;
         public ILearnerRepository Learners { get; }
         public IAdminRepository Admins { get; }
         public ISourceMaterialRepository SourceMaterials { get; }
-        public IIdentityRepository Identity {  get; }
+        public IIdentityRepository Identity { get; }
         public IVisitRepository Visits { get; }
         public IContestRecordRepository ContestRecords { get; }
-        public UnitOfWork(BoompaContext context,ILearnerRepository learnerRepository, IAdminRepository adminRepository, ISourceMaterialRepository sourceMaterialRepository,IIdentityRepository identityRepository, IVisitRepository visitRepository,IContestRecordRepository contestRecordRepository)
+        public ICategoryRepository CategoryRecords { get; }
+
+        public UnitOfWork(BoompaContext context, ILearnerRepository learnerRepository, IAdminRepository adminRepository, ISourceMaterialRepository sourceMaterialRepository, IIdentityRepository identityRepository, IVisitRepository visitRepository, IContestRecordRepository contestRecordRepository,ICategoryRepository categoryRecords)
         {
             _context = context;
             SourceMaterials = sourceMaterialRepository;
@@ -23,6 +25,7 @@ namespace Boompa.Implementations
             Identity = identityRepository;
             Visits = visitRepository;
             ContestRecords = contestRecordRepository;
+            CategoryRecords = categoryRecords;
         }
 
         public async Task<int> SaveChangesAsync()

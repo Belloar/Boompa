@@ -133,51 +133,29 @@ namespace Boompa.Controllers
         
         public async Task<IActionResult> UpdateLearner([FromBody] LearnerDTO.UpdateInfo updateInfo)
         {
-            try
-            {
-                var idString = HttpContext.User.FindFirstValue("userId");
-                var learnerId = Guid.Parse(idString);
+            var idString = HttpContext.User.FindFirstValue("userId");
+            var learnerId = Guid.Parse(idString);
 
-                var result = await _learnerService.UpdateLearner(updateInfo,learnerId);
-                if (result == 1) return Ok("update successful");
-                return BadRequest(result);
-            }
-            catch (ServiceException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var result = await _learnerService.UpdateLearner(updateInfo, learnerId);
+            
+            return BadRequest(result);
+           
         }
 
-        [HttpPut]
+        [HttpPatch]
         [Authorize(Roles = "Learner")]
         public async Task<IActionResult> UpdateLearnerStats([FromBody] LearnerDTO.UpdateStats model)
         {
             if (model == null) return BadRequest("No info found");
 
-            try
-            {
-                
-                var id = HttpContext.User.FindFirstValue(ClaimTypes.Email);
-               
-                var result = await _learnerService.UpdateLearner(model, id);
-                if (result >= 1)
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest("An error occured during the process");
-                }
+            var id = HttpContext.User.FindFirstValue(ClaimTypes.Email);
 
-                    
-            }
-            catch(Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var result = await _learnerService.UpdateLearner(model, id);
+            return Ok(result);
+
         }
 
-        [HttpPut]
+        [HttpPatch]
         [Authorize(Roles ="Learner")]
         public async Task<IActionResult> AddBookmark([FromHeader]Guid Id)
         {
