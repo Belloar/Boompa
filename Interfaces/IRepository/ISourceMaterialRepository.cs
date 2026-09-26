@@ -1,5 +1,6 @@
 ﻿using Boompa.DTO;
 using Boompa.Entities;
+using Boompa.Entities.Question;
 
 
 namespace Boompa.Interfaces.IRepository
@@ -8,7 +9,7 @@ namespace Boompa.Interfaces.IRepository
     {
         Task AddCategory(Category category);
         Task<SourceMaterial> AddSourceMaterial(SourceMaterial sourceMaterial);
-        Task<Question> AddQuestionAsync(Question model);
+        Task<BaseQuestion> AddQuestionAsync(BaseQuestion model);
         //Task<Question> AddQuestionAsync(Question model,string sourceName, string category);
 
         Task<bool> CategoryExists(string categoryName);

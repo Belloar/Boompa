@@ -1,6 +1,7 @@
 ﻿using Boompa.Context;
 using Boompa.DTO;
 using Boompa.Entities;
+using Boompa.Entities.Question;
 using Boompa.Exceptions;
 using Boompa.Interfaces.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,7 @@ namespace Boompa.Implementations.Repositories
         //    return model;
 
         //}
-        public async Task<Question> AddQuestionAsync(Question model)
+        public async Task<BaseQuestion> AddQuestionAsync(BaseQuestion model)
         {
             _context.Questions.Add(model);
             return model;

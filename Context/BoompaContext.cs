@@ -1,5 +1,6 @@
 ﻿using Boompa.Entities;
 using Boompa.Entities.Identity;
+using Boompa.Entities.Question;
 using Microsoft.EntityFrameworkCore;
 
 namespace Boompa.Context
@@ -16,7 +17,7 @@ namespace Boompa.Context
         public DbSet<Learner> Learners { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<CategoryLearner> CategoryLearners { get; set; }
-        public DbSet<Question> Questions { get; set; }
+        public DbSet<BaseQuestion> Questions { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<SourceMaterial> SourceMaterials { get; set; }
         public DbSet<Visit> Visits { get; set; }
