@@ -11,10 +11,12 @@ using System.Data;
 
 namespace Boompa.Implementations.Services
 {
-    public class SourceMaterialService(ICloudService storageService, IUnitOfWork unitOfWork) : ISourceMaterialService
+    public class SourceMaterialService(ICloudService storageService, IUnitOfWork unitOfWork, QuestionBuilder builder) : ISourceMaterialService
     {
         private readonly ICloudService _cloudService = storageService;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
+        private readonly QuestionBuilder _builder = builder;
 
        
         public async Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material, string creator)
@@ -90,12 +92,8 @@ namespace Boompa.Implementations.Services
             try
             {
 
-                var que = new Question();
-                que.SourceMaterialId = sourceMaterialId;
-                que.Description = question.TextDescription;
-                que.Answer = question.Answer;
-                que.Options = question.Option;
-                que.QuestionType = question.QuestionType;
+                var que = new MCQBuilder();
+                que.BuildQuestion();
 
                 var response = new Response();
                 //save data to database

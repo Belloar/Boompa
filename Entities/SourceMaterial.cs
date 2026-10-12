@@ -1,4 +1,5 @@
 ﻿using Boompa.Entities.Base;
+using Boompa.Entities.Question;
 using Boompa.Enums;
 
 namespace Boompa.Entities
@@ -11,6 +12,6 @@ namespace Boompa.Entities
         public string Description { get; set; }
         public ICollection<CategorySourceMaterial> Categories { get; set; } = [];
         public ICollection<LearnerSourceMaterial> BookMarkers { get; set; } = [];
-        public ICollection<Question> Questions { get; set; } = new HashSet<Question>();
+        public ICollection<BaseQuestion> Questions { get; set; } = new HashSet<BaseQuestion>();
     }
 }

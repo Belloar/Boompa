@@ -5,6 +5,6 @@ namespace Boompa.Interfaces.Abstractions
 {
     public interface IQuestion
     {
-        Task<BaseQuestion> CreateQuestion(MaterialDTO.QuestionDTO model);
+        BaseQuestion Create(MaterialDTO.QuestionDTO model);
     }
 }
