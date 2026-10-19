@@ -4,7 +4,7 @@ using Boompa.Interfaces.Abstractions;
 
 namespace Boompa.Implementations.Services
 {
-    public class MRQuestion : IQuestion
+    public class MultiResponseQuestionProduct : IQuestion
     {
         public BaseQuestion Create(MaterialDTO.QuestionDTO model)
         {

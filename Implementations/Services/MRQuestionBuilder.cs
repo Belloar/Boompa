@@ -6,7 +6,7 @@ namespace Boompa.Implementations.Services
     {
         protected override IQuestion Build()
         {
-            return new MRQuestion();
+            return new MultiResponseQuestionProduct();
         }
     }
 }

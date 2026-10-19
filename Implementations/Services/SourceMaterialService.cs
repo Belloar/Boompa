@@ -87,17 +87,17 @@ namespace Boompa.Implementations.Services
         }
 
         
-        public async Task<Response> AddQuestion(MaterialDTO.QuestionModel question,Guid sourceMaterialId)
+        public async Task<Response> AddQuestion(MaterialDTO.QuestionModel request,Guid sourceMaterialId)
         {
             try
             {
 
                 var que = new MCQBuilder();
-                que.BuildQuestion();
+                var zaQue = que.BuildQuestion(request);
 
                 var response = new Response();
                 //save data to database
-                var ques = await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
+                var ques = await _unitOfWork.SourceMaterials.AddQuestionAsync(zaQue);
                 var result = await _unitOfWork.SaveChangesAsync();
 
                 if (result > 0)

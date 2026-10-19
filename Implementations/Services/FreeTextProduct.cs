@@ -4,7 +4,7 @@ using Boompa.Interfaces.Abstractions;
 
 namespace Boompa.Implementations.Services
 {
-    public class FreeText : IQuestion
+    public class FreeTextProduct : IQuestion
     {
         public BaseQuestion Create(MaterialDTO.QuestionDTO model)
         {
@@ -12,6 +12,7 @@ namespace Boompa.Implementations.Services
             {
                 Prompt = model.TextQuestion
             };
+            return question;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Boompa.Entities.Question.Question
 {
-    public class McqQuestion : BaseQuestion 
+    public class MultiChoiceQuestion : BaseQuestion 
     {
         public string Prompt { get; set; } = default!;
         public ICollection<BaseOption> Option { get; set; } = default!;

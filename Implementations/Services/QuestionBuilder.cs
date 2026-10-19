@@ -1,4 +1,5 @@
 ﻿using Boompa.DTO;
+using Boompa.Entities.Question;
 using Boompa.Interfaces.Abstractions;
 
 namespace Boompa.Implementations.Services
@@ -7,10 +8,11 @@ namespace Boompa.Implementations.Services
     {
         protected abstract IQuestion Build();
 
-        public void BuildQuestion(MaterialDTO.QuestionDTO model)
+        public BaseQuestion BuildQuestion(MaterialDTO.QuestionModel model)
         {
             var builder = Build();
             var question = builder.Create(model);
+            return question;
         }
     }
 }
