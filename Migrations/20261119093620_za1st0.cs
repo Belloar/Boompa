@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Boompa.Migrations
 {
     /// <inheritdoc />
-    public partial class zafast0 : Migration
+    public partial class za1st0 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -88,8 +88,6 @@ namespace Boompa.Migrations
                     TicketCount = table.Column<int>(type: "int", nullable: false),
                     CoinCount = table.Column<int>(type: "int", nullable: false),
                     ExpPoints = table.Column<int>(type: "int", nullable: false),
-                    Bookmarks = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -308,37 +306,24 @@ namespace Boompa.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Questions",
+                name: "LearnerSourceMaterials",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    SourceMaterialId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Answer = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Options = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    QuestionType = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Files = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    DeletedBy = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    LearnerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SourceMaterialId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Questions", x => x.Id);
+                    table.PrimaryKey("PK_LearnerSourceMaterials", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Questions_SourceMaterials_SourceMaterialId",
+                        name: "FK_LearnerSourceMaterials_Learners_LearnerId",
+                        column: x => x.LearnerId,
+                        principalTable: "Learners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LearnerSourceMaterials_SourceMaterials_SourceMaterialId",
                         column: x => x.SourceMaterialId,
                         principalTable: "SourceMaterials",
                         principalColumn: "Id",
@@ -372,6 +357,84 @@ namespace Boompa.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "BaseQuestion",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SourceMaterialId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Discriminator = table.Column<string>(type: "varchar(34)", maxLength: 34, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Prompt = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AnswerId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    MultipleResponseQuestion_Prompt = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MultiChoiceQuestion_Prompt = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeletedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BaseQuestion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BaseQuestion_SourceMaterials_SourceMaterialId",
+                        column: x => x.SourceMaterialId,
+                        principalTable: "SourceMaterials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Option",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    QuestionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    OptionType = table.Column<int>(type: "int", nullable: false),
+                    Value = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MediaType = table.Column<int>(type: "int", nullable: true),
+                    IsAnswer = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    MultiChoiceQuestionId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeletedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Option", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Option_BaseQuestion_MultiChoiceQuestionId",
+                        column: x => x.MultiChoiceQuestionId,
+                        principalTable: "BaseQuestion",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Option_BaseQuestion_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "BaseQuestion",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "CreatedBy", "CreatedOn", "DeletedBy", "DeletedOn", "Description", "IsDeleted", "LastModifiedBy", "LastModifiedOn", "RoleName" },
@@ -381,6 +444,16 @@ namespace Boompa.Migrations
                     { new Guid("12e99949-1ffd-4892-95ca-697f9ebacaae"), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "the user with authority to do certain stuff on user profiles", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin" },
                     { new Guid("77f04eeb-e4e7-489a-a219-022b7b882b2a"), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Apparently dedicated only for Authentication and authorization in the app", false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "User" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseQuestion_AnswerId",
+                table: "BaseQuestion",
+                column: "AnswerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseQuestion_SourceMaterialId",
+                table: "BaseQuestion",
+                column: "SourceMaterialId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryLearners_CategoryId",
@@ -413,9 +486,24 @@ namespace Boompa.Migrations
                 column: "LearnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Questions_SourceMaterialId",
-                table: "Questions",
+                name: "IX_LearnerSourceMaterials_LearnerId",
+                table: "LearnerSourceMaterials",
+                column: "LearnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LearnerSourceMaterials_SourceMaterialId",
+                table: "LearnerSourceMaterials",
                 column: "SourceMaterialId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Option_MultiChoiceQuestionId",
+                table: "Option",
+                column: "MultiChoiceQuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Option_QuestionId",
+                table: "Option",
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
@@ -436,11 +524,23 @@ namespace Boompa.Migrations
                 name: "IX_Visits_LearnerId",
                 table: "Visits",
                 column: "LearnerId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_BaseQuestion_Option_AnswerId",
+                table: "BaseQuestion",
+                column: "AnswerId",
+                principalTable: "Option",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_BaseQuestion_Option_AnswerId",
+                table: "BaseQuestion");
+
             migrationBuilder.DropTable(
                 name: "Admins");
 
@@ -454,16 +554,13 @@ namespace Boompa.Migrations
                 name: "ContestRecords");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "LearnerSourceMaterials");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
                 name: "Visits");
-
-            migrationBuilder.DropTable(
-                name: "SourceMaterials");
 
             migrationBuilder.DropTable(
                 name: "Roles");
@@ -476,6 +573,15 @@ namespace Boompa.Migrations
 
             migrationBuilder.DropTable(
                 name: "Learners");
+
+            migrationBuilder.DropTable(
+                name: "Option");
+
+            migrationBuilder.DropTable(
+                name: "BaseQuestion");
+
+            migrationBuilder.DropTable(
+                name: "SourceMaterials");
         }
     }
 }

@@ -2,7 +2,7 @@
 using Boompa.Interfaces.IService;
 using System.Net.Http.Headers;
 
-namespace Boompa.Implementations.Services
+namespace Boompa.Implementations.Services.UtilityServices
 {
     public class OpenAIService(HttpClient httpClient, IConfiguration config) : IAIQuestionGenerator
     {

@@ -2,16 +2,16 @@
 using Boompa.Entities.Question;
 using Boompa.Interfaces.Abstractions;
 
-namespace Boompa.Implementations.Services
+namespace Boompa.Implementations.Services.AppServices
 {
     public class MultiResponseQuestionProduct : IQuestion
     {
-        public BaseQuestion Create(MaterialDTO.QuestionDTO model)
+        public BaseQuestion Create(MaterialDTO.QuestionModel model)
         {
             var question = new MultipleResponseQuestion
             {
-                Prompt = model.TextQuestion,
-                SourceMaterialId = Guid.NewGuid()
+                Prompt = model.TextDescription,
+                SourceMaterialId = model.SourceMaterialId 
             };
 
             return question;

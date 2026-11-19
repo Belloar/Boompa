@@ -3,16 +3,15 @@ using Boompa.Entities.Question;
 using Boompa.Entities.Question.Question;
 using Boompa.Interfaces.Abstractions;
 
-namespace Boompa.Implementations.Services
+namespace Boompa.Implementations.Services.AppServices
 {
     public class MultiChoiceQuestionProduct : IQuestion
     {
-        public BaseQuestion Create(MaterialDTO.QuestionDTO model)
+        public BaseQuestion Create(MaterialDTO.QuestionModel model)
         {
             var question = new MultiChoiceQuestion()
             {
-                Prompt = model.TextQuestion,
-                SourceMaterialId = Guid.NewGuid()
+                Prompt = model.TextDescription,
                 
 
             };

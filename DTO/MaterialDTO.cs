@@ -15,13 +15,12 @@ namespace Boompa.DTO
 
         public class QuestionModel()
         {
+            public Guid SourceMaterialId { get; set; }
             public string TextDescription { get; set; } = default!;
             public string Answer { get; set; } = default!;
             public string Option { get; set; } = default!;
             public string QuestionType { get; set; } = default!;
             public string OptionType { get; set; } = default!;
-            
-
         }
 
         public class ConsumptionModel()

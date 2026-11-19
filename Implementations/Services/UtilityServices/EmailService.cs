@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Net;
 using System.Net.Mail;
 
-namespace Boompa.Implementations.Services
+namespace Boompa.Implementations.Services.UtilityServices
 {
     public class EmailService : IEmailService
     {

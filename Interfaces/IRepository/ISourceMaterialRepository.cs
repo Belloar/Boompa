@@ -9,8 +9,6 @@ namespace Boompa.Interfaces.IRepository
     {
         Task AddCategory(Category category);
         Task<SourceMaterial> AddSourceMaterial(SourceMaterial sourceMaterial);
-        Task<BaseQuestion> AddQuestionAsync(BaseQuestion model);
-        //Task<Question> AddQuestionAsync(Question model,string sourceName, string category);
 
         Task<bool> CategoryExists(string categoryName);
         Task<Category> GetCategoryId(string categoryName);

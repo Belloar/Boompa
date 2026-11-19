@@ -2,7 +2,6 @@
 using Boompa.Entities;
 using Boompa.Exceptions;
 using Boompa.Interfaces.IService;
-using Boompa.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -110,12 +109,12 @@ namespace Boompa.Controllers
             return Ok(learners);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddQuestionsAsync([FromForm]ICollection<MaterialDTO.QuestionModel> questions,[FromHeader]string sourceMaterialName,[FromHeader]string category)
-        {
-            var result = await _sourceMaterialService.AddQuestion(questions, sourceMaterialName,category);
-            return Ok(result);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> AddQuestionsAsync([FromForm]ICollection<MaterialDTO.QuestionModel> questions,[FromHeader]string sourceMaterialName,[FromHeader]string category)
+        //{
+        //    var result = await questionService.AddQuestion(questions, sourceMaterialName,category);
+        //    return Ok(result);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> TestEndpoint()

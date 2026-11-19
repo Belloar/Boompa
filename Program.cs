@@ -5,14 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Boompa.Auth;
 using Boompa.Interfaces.IRepository;
-using Boompa.Services;
 using Boompa.Interfaces.IService;
-using Boompa.Implementations.Services;
 using Boompa.Implementations.Repositories;
 using Microsoft.OpenApi.Models;
 using Boompa.Interfaces;
 using Boompa.Implementations;
 using Boompa.Extensions;
+using Boompa.Implementations.Services.AppServices;
+using Boompa.Implementations.Services.UtilityServices;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = new ServiceCollection();
@@ -37,6 +37,10 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IContestRecordRepository, ContestRecordRepository>();
 builder.Services.AddScoped<IContestRecordService, ContestRecordService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<FreeTextQuestionBuilder>();
+builder.Services.AddScoped<MCQuestionBuilder>();
+builder.Services.AddScoped<MRQuestionBuilder>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

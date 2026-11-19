@@ -9,15 +9,12 @@ using System.Data;
 
 
 
-namespace Boompa.Implementations.Services
+namespace Boompa.Implementations.Services.AppServices
 {
-    public class SourceMaterialService(ICloudService storageService, IUnitOfWork unitOfWork, QuestionBuilder builder) : ISourceMaterialService
+    public class SourceMaterialService(ICloudService storageService, IUnitOfWork unitOfWork) : ISourceMaterialService
     {
         private readonly ICloudService _cloudService = storageService;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
-        private readonly QuestionBuilder _builder = builder;
-
        
         public async Task<Response> AddSourceMaterial(MaterialDTO.ArticleModel material, string creator)
         {
@@ -84,33 +81,6 @@ namespace Boompa.Implementations.Services
         {
             
             throw new NotImplementedException();
-        }
-
-        
-        public async Task<Response> AddQuestion(MaterialDTO.QuestionModel request,Guid sourceMaterialId)
-        {
-            try
-            {
-
-                var que = new MCQBuilder();
-                var zaQue = que.BuildQuestion(request);
-
-                var response = new Response();
-                //save data to database
-                var ques = await _unitOfWork.SourceMaterials.AddQuestionAsync(zaQue);
-                var result = await _unitOfWork.SaveChangesAsync();
-
-                if (result > 0)
-                {
-                    response.StatusMessages.Add("success");
-                    
-                }
-                
-                    return response;
-            }catch(Exception ex)
-            {
-                throw new ServiceException(ex.Message);
-            }
         }
 
         public async Task<Response> AddCategory(string categoryName)
@@ -212,13 +182,6 @@ namespace Boompa.Implementations.Services
                     Id = cat.CategoryId,
                     Name = cat.Category.Name,
                 }).ToList(),
-                Questions = result.Questions.Select(a => new MaterialDTO.QuestionDTO
-                {
-                    TextQuestion = a.Description,
-                    Answer = a.Answer,
-                    Options = a.Options,
-                    QuestionType = a.QuestionType,
-                }).ToList(),
             };
 
             response.StatusCode = 200;
@@ -258,15 +221,6 @@ namespace Boompa.Implementations.Services
                     Id = cat.CategoryId,
                     Name = cat.Category.Name,
                 }).ToList(),
-
-                Questions = result.Questions.Select(que => new MaterialDTO.QuestionDTO
-                {
-                    TextQuestion = que.Description,
-                    Answer = que.Answer,
-                    Options = que.Options,
-                    QuestionType = que.QuestionType,
-                    OptionType = que.OptionType,
-                }).ToList()
             };
 
             response.StatusCode = 200;
@@ -274,89 +228,6 @@ namespace Boompa.Implementations.Services
             response.Data = model;
 
             return response;
-        }
-        public async Task<Response> AddQuestion(ICollection<MaterialDTO.QuestionModel> models,string sourceMaterialName,string category)
-        {
-            var response = new Response();
-             
-            try
-            {
-                var que = new Question();
-                foreach (var question in models)
-                {
-                    switch (question.QuestionType)
-                    {
-                        // type1 question is for pure mcq questions where the question, its answer, and options are text/string
-                        case "type1":
-                            
-                            que.Description = question.TextDescription;
-                            que.Answer = question.Answer;
-                            que.Options = question.Option;
-                            break;
-                        
-                    }
-
-                }
-                //await _unitOfWork.SourceMaterials.AddQuestionAsync(que, sourceMaterialName, category);
-                var result = await _unitOfWork.SaveChangesAsync();
-                if(result >= 1)
-                {
-                    response.StatusMessages.Add("success");
-                    response.Data = result;
-                    return response;
-                }
-                else
-                {
-                    response.StatusCode = 500;
-                    response.StatusMessages.Add("one or more problems occurred");
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                response.StatusMessages.Add(ex.Message);
-                return response;
-            }
-        }
-
-        public async Task<Response> AddQuestion(ICollection<MaterialDTO.QuestionModel> models,Guid sourceMaterialId)
-        {
-            var response = new Response();
-
-            try
-            {
-                foreach (var question in models)
-                {
-                    var que = new Question();
-                    que.SourceMaterialId = sourceMaterialId;
-                    que.Description = question.TextDescription;
-                    que.Answer = question.Answer;
-                    que.Options = question.Option;
-                    que.QuestionType = question.QuestionType;
-                    que.OptionType = question.OptionType;
-
-                    await _unitOfWork.SourceMaterials.AddQuestionAsync(que);
-                }
-                var result = await _unitOfWork.SaveChangesAsync();
-                if (result >= 1)
-                {
-                    response.StatusCode = 200;
-                    response.StatusMessages.Add("success");
-                    response.Data = result;
-                    return response;
-                }
-                else
-                {
-                    response.StatusCode = 500;
-                    response.StatusMessages.Add("one or more problems occurred");
-                    return response;
-                }
-            }
-            catch (Exception ex)
-            {
-                response.StatusMessages.Add(ex.Message);
-                return response;
-            }
         }
        
         private async Task<Category> GetCategory(string categoryName)

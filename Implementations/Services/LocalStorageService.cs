@@ -1,6 +1,0 @@
-﻿namespace Boompa.Implementations.Services
-{
-    public class LocalStorageService
-    {
-    }
-}

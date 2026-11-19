@@ -13,11 +13,11 @@ namespace Boompa.Controllers
 
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class SourceMaterialController(ISourceMaterialService sourceMaterialService, IAIQuestionGenerator questionGenerator) : ControllerBase
+    public class SourceMaterialController(
+        ISourceMaterialService sourceMaterialService,
+        IAIQuestionGenerator questionGenerator,
+        IQuestionService questionService) : ControllerBase
     {
-        private readonly ISourceMaterialService _sourceMaterialService = sourceMaterialService;
-
-        private readonly IAIQuestionGenerator _questionGenerator = questionGenerator;
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -30,12 +30,12 @@ namespace Boompa.Controllers
 
                 if (creator != null)
                 {
-                    var result = await _sourceMaterialService.AddSourceMaterial(sourceMaterial, creator);
+                    var result = await sourceMaterialService.AddSourceMaterial(sourceMaterial, creator);
                     return Ok(result);
                 }
                 else
                 {
-                    var result = await _sourceMaterialService.AddSourceMaterial(sourceMaterial);
+                    var result = await sourceMaterialService.AddSourceMaterial(sourceMaterial);
                     return Ok(result);
                 }
             }
@@ -49,7 +49,7 @@ namespace Boompa.Controllers
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddNewSourceMaterial([FromForm] MaterialDTO.TinyModel model)
         {
-            var result = await _sourceMaterialService.AddSourceMaterial(model);
+            var result = await sourceMaterialService.AddSourceMaterial(model);
             return Ok(result);
         }
 
@@ -59,7 +59,7 @@ namespace Boompa.Controllers
             if (category == null) { return BadRequest("Material not received"); }
             try
             {
-                var result = await _sourceMaterialService.AddCategory(category);
+                var result = await sourceMaterialService.AddCategory(category);
                 return Ok(result);
 
             }
@@ -72,18 +72,18 @@ namespace Boompa.Controllers
         [HttpPost]
         public async Task<IActionResult> GenerateQuestion([FromBody] MaterialDTO.AIQueGenDTO model)
         {
-            var result = _questionGenerator.GenerateQuestions(model.Material, model.Prompt);
+            var result = questionGenerator.GenerateQuestions(model.Material, model.Prompt);
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddQuestion([FromForm] MaterialDTO.QuestionModel model, [FromHeader] Guid sourceMaterialId)
+        public async Task<IActionResult> AddQuestion([FromForm] MaterialDTO.QuestionModel model)
         {
             if (model == null) { return BadRequest("Material not received"); }
             try
             {
-                var result = await _sourceMaterialService.AddQuestion(model, sourceMaterialId);
-                return Ok(result);
+                await questionService.AddQuestion(model);
+                return Created();
             }
             catch (Exception ex)
             {
@@ -97,7 +97,7 @@ namespace Boompa.Controllers
             if (sourceId == Guid.Empty) { return BadRequest("SourceMaterialName not provided"); }
             try
             {
-                var result = await _sourceMaterialService.GetSourceMaterial(sourceId);
+                var result = await sourceMaterialService.GetSourceMaterial(sourceId);
                 return Ok(result);
             }
             catch (Exception)
@@ -110,7 +110,7 @@ namespace Boompa.Controllers
         [HttpGet("{pageNumber}")]
         public async Task<IActionResult> GetSourceMaterialNames( int pageNumber)
         {
-            var result = await _sourceMaterialService.GetAllSourceMaterials(pageNumber);
+            var result = await sourceMaterialService.GetAllSourceMaterials(pageNumber);
             return Ok(result);
 
         }
@@ -123,7 +123,7 @@ namespace Boompa.Controllers
                 return BadRequest("something went wrong");
                 
             }
-            var result = await _sourceMaterialService.GetAllSourceMaterials(categoryId, pageNumber);
+            var result = await sourceMaterialService.GetAllSourceMaterials(categoryId, pageNumber);
             return Ok(result);
 
         }
@@ -131,16 +131,19 @@ namespace Boompa.Controllers
         [HttpPost]
         public async Task<IActionResult> AddQuestionsByName([FromForm] ICollection<MaterialDTO.QuestionModel> questions, [FromHeader] string sourceMaterialName, [FromHeader] string category)
         {
-            var result = await _sourceMaterialService.AddQuestion(questions, sourceMaterialName, category);
-            return Ok(result);
+            //await questionService.AddQuestion(questions, sourceMaterialName, category);
+            //return Created();
+            throw new NotImplementedException();
         }
 
         [HttpPost]
         public async Task<IActionResult> AddQuestionsByGuid([FromBody] ICollection<MaterialDTO.QuestionModel> questions, [FromHeader] Guid sourceId)
         {
-            if (questions == null) { return BadRequest("Payload not received"); }
-            var result = await _sourceMaterialService.AddQuestion(questions, sourceId);
-            return Ok(result);
+            //if (questions == null) { return BadRequest("Payload not received"); }
+            //var result = await sourceMaterialService.AddQuestion(questions, sourceId);
+            //return Ok(result);
+
+            throw new NotImplementedException();
         }
 
         [HttpGet]
@@ -150,7 +153,7 @@ namespace Boompa.Controllers
             var learnerId= HttpContext.User.FindFirstValue(ClaimTypes.Email);
             if (learnerId == null) { return StatusCode(500, "invalid credentials"); }
 
-            var result = await _sourceMaterialService.GetTopCategories(learnerId);
+            var result = await sourceMaterialService.GetTopCategories(learnerId);
             return Ok(result);
         }
 
@@ -158,14 +161,14 @@ namespace Boompa.Controllers
         //[Authorize(Roles = "Learner")]
         public async Task<IActionResult> GetRandomSource()
         {
-            var result = await _sourceMaterialService.GetRandomSource();
+            var result = await sourceMaterialService.GetRandomSource();
             return Ok(result);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCategories()
         {
-            var result = await _sourceMaterialService.GetCategories();
+            var result = await sourceMaterialService.GetCategories();
             return Ok(result);
         }
     }

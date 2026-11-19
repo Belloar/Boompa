@@ -19,22 +19,7 @@ namespace Boompa.Implementations.Repositories
        
 
        
-        //public async Task<Question> AddQuestionAsync(Question model,string sourceName,string category)
-        //{
-        //    var source = await GetSource(sourceName, category);
-        //    model.SourceMaterialId = source.Id;
-            
-        //    _context.Questions.Add(model);
-        //    return model;
-
-        //}
-        public async Task<BaseQuestion> AddQuestionAsync(BaseQuestion model)
-        {
-            _context.Questions.Add(model);
-            return model;
-
-        }
-
+       
         public async Task<SourceMaterial> AddSourceMaterial(SourceMaterial sourceMaterial)
         {
             var canConnect = await _context.Database.CanConnectAsync();

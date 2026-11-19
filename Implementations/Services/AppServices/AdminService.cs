@@ -7,7 +7,7 @@ using Boompa.Interfaces;
 using Boompa.Interfaces.IRepository;
 using Boompa.Interfaces.IService;
 
-namespace Boompa.Implementations.Services
+namespace Boompa.Implementations.Services.AppServices
 {
     public class AdminService : IAdminService
     {

@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Boompa.Migrations
 {
     [DbContext(typeof(BoompaContext))]
-    [Migration("20260511084302_zathaad0")]
-    partial class zathaad0
+    [Migration("20261119093620_za1st0")]
+    partial class za1st0
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.11")
+                .HasAnnotation("ProductVersion", "9.0.17")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -410,15 +410,11 @@ namespace Boompa.Migrations
                     b.ToTable("LearnerSourceMaterials");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.Question", b =>
+            modelBuilder.Entity("Boompa.Entities.Option", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -432,9 +428,8 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<bool>("IsAnswer")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
@@ -445,17 +440,62 @@ namespace Boompa.Migrations
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("OptionType")
+                    b.Property<int?>("MediaType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("MultiChoiceQuestionId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("OptionType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Options")
-                        .IsRequired()
+                    b.HasKey("Id");
+
+                    b.HasIndex("MultiChoiceQuestionId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Option");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Question.BaseQuestion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("QuestionType")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeletedBy")
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(34)
+                        .HasColumnType("varchar(34)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("LastModifiedOn")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("SourceMaterialId")
                         .HasColumnType("char(36)");
@@ -464,7 +504,11 @@ namespace Boompa.Migrations
 
                     b.HasIndex("SourceMaterialId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("BaseQuestion");
+
+                    b.HasDiscriminator().HasValue("BaseQuestion");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Boompa.Entities.SourceMaterial", b =>
@@ -542,6 +586,56 @@ namespace Boompa.Migrations
                     b.HasIndex("LearnerId");
 
                     b.ToTable("Visits");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Question.FreeTextQuestion", b =>
+                {
+                    b.HasBaseType("Boompa.Entities.Question.BaseQuestion");
+
+                    b.Property<Guid>("AnswerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Prompt")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasIndex("AnswerId");
+
+                    b.HasDiscriminator().HasValue("FreeTextQuestion");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Question.MultipleResponseQuestion", b =>
+                {
+                    b.HasBaseType("Boompa.Entities.Question.BaseQuestion");
+
+                    b.Property<string>("Prompt")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.ToTable("BaseQuestion", t =>
+                        {
+                            t.Property("Prompt")
+                                .HasColumnName("MultipleResponseQuestion_Prompt");
+                        });
+
+                    b.HasDiscriminator().HasValue("MultipleResponseQuestion");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Question.Question.MultiChoiceQuestion", b =>
+                {
+                    b.HasBaseType("Boompa.Entities.Question.BaseQuestion");
+
+                    b.Property<string>("Prompt")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.ToTable("BaseQuestion", t =>
+                        {
+                            t.Property("Prompt")
+                                .HasColumnName("MultiChoiceQuestion_Prompt");
+                        });
+
+                    b.HasDiscriminator().HasValue("MultiChoiceQuestion");
                 });
 
             modelBuilder.Entity("Boompa.Entities.CategoryLearner", b =>
@@ -639,7 +733,22 @@ namespace Boompa.Migrations
                     b.Navigation("SourceMaterial");
                 });
 
-            modelBuilder.Entity("Boompa.Entities.Question", b =>
+            modelBuilder.Entity("Boompa.Entities.Option", b =>
+                {
+                    b.HasOne("Boompa.Entities.Question.Question.MultiChoiceQuestion", null)
+                        .WithMany("Options")
+                        .HasForeignKey("MultiChoiceQuestionId");
+
+                    b.HasOne("Boompa.Entities.Question.BaseQuestion", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Question.BaseQuestion", b =>
                 {
                     b.HasOne("Boompa.Entities.SourceMaterial", "SourceMaterial")
                         .WithMany("Questions")
@@ -667,6 +776,17 @@ namespace Boompa.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Learner");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Question.FreeTextQuestion", b =>
+                {
+                    b.HasOne("Boompa.Entities.Option", "Answer")
+                        .WithMany()
+                        .HasForeignKey("AnswerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Answer");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Category", b =>
@@ -700,6 +820,11 @@ namespace Boompa.Migrations
                     b.Navigation("Categories");
 
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("Boompa.Entities.Question.Question.MultiChoiceQuestion", b =>
+                {
+                    b.Navigation("Options");
                 });
 #pragma warning restore 612, 618
         }

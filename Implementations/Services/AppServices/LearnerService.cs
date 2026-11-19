@@ -9,7 +9,7 @@ using Boompa.Interfaces.IRepository;
 using Boompa.Interfaces.IService;
 
 
-namespace Boompa.Services
+namespace Boompa.Implementations.Services.AppServices
 {
     public class LearnerService : ILearnerService
     {

@@ -1,8 +1,8 @@
 ﻿using Boompa.Interfaces.Abstractions;
 
-namespace Boompa.Implementations.Services
+namespace Boompa.Implementations.Services.AppServices
 {
-    public class MCQBuilder : QuestionBuilder
+    public class MCQuestionBuilder : QuestionBuilder
     {
         protected override IQuestion Build() => new MultiChoiceQuestionProduct();
 

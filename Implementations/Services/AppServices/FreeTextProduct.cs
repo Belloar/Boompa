@@ -2,15 +2,15 @@
 using Boompa.Entities.Question;
 using Boompa.Interfaces.Abstractions;
 
-namespace Boompa.Implementations.Services
+namespace Boompa.Implementations.Services.AppServices
 {
     public class FreeTextProduct : IQuestion
     {
-        public BaseQuestion Create(MaterialDTO.QuestionDTO model)
+        public BaseQuestion Create(MaterialDTO.QuestionModel model)
         {
             var question = new FreeTextQuestion
             {
-                Prompt = model.TextQuestion
+                Prompt = model.TextDescription,
             };
             return question;
         }

@@ -1,5 +1,6 @@
 ﻿using Amazon.S3;
 using Boompa.Implementations.Services;
+using Boompa.Implementations.Services.UtilityServices;
 using Boompa.Interfaces.IService;
 
 namespace Boompa.Extensions

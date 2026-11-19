@@ -10,5 +10,8 @@ namespace Boompa.Interfaces.IService
         Task<MultipleResponseQuestion> AddMultiResponseQuestion(MaterialDTO.QuestionModel request);
         Task<FreeTextQuestion> AddFreeQuestion(MaterialDTO.QuestionModel request);
         Task<int> DeleteQuestion(Guid QuestionId);
+
+        Task AddQuestion(MaterialDTO.QuestionModel request);
+        Task<ICollection<BaseQuestion>> GetQuestions(Guid sourceId);
     }
 }

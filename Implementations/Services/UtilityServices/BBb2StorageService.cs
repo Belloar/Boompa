@@ -4,7 +4,7 @@ using Amazon.S3.Model;
 using Boompa.Interfaces.IService;
 
 
-namespace Boompa.Implementations.Services 
+namespace Boompa.Implementations.Services.UtilityServices 
 {
     public class BBb2StorageService: ICloudService
     {

@@ -2,7 +2,7 @@
 using Boompa.Interfaces;
 using Boompa.Interfaces.IService;
 
-namespace Boompa.Implementations.Services
+namespace Boompa.Implementations.Services.AppServices
 {
     public class VisitService : IVisitService
     {
