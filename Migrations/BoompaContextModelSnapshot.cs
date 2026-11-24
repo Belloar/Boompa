@@ -459,7 +459,7 @@ namespace Boompa.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Option");
+                    b.ToTable("Options");
                 });
 
             modelBuilder.Entity("Boompa.Entities.Question.BaseQuestion", b =>

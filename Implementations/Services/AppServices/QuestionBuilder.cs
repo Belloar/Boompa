@@ -16,10 +16,14 @@ namespace Boompa.Implementations.Services.AppServices
         //Concrete implementations of this class
         //will provide the specific IQuestion implementation to use for building the question.
         protected abstract IQuestion Build();
-        public QuestionType Type { get; set; }
+        public abstract QuestionType Type { get;}
 
-        public BaseQuestion BuildQuestion(MaterialDTO.QuestionModel model)
+        public BaseQuestion BuildQuestion(MaterialDTO.QuestionModel model, QuestionType type)
         {
+            if(type != Type)
+            {
+                throw new InvalidOperationException($"This builder can only build questions of type {Type}, but received {type}.");
+            }
             var builder = Build();
             var question = builder.Create(model);
             return question;

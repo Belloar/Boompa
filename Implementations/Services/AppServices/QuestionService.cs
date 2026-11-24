@@ -7,13 +7,12 @@ using Boompa.Interfaces.IService;
 namespace Boompa.Implementations.Services.AppServices
 {
     public class QuestionService(
-        FreeTextQuestionBuilder freeTextbuilder,
-        MCQuestionBuilder mcqBuilder,
+        QuestionBuilder builder,
         ISourceMaterialRepository _repo) : IQuestionService
     {
         public Task<FreeTextQuestion> AddFreeQuestion(MaterialDTO.QuestionModel request)
         {
-            var question = freeTextbuilder.BuildQuestion(request);
+            //var question = freeTextbuilder.BuildQuestion(request);
 
             throw new NotImplementedException();
         }
@@ -28,8 +27,9 @@ namespace Boompa.Implementations.Services.AppServices
             throw new NotImplementedException();
         }
 
-        public Task AddQuestion(MaterialDTO.QuestionModel request)
+        public Task AddQuestion(MaterialDTO.QuestionModel request,QuestionType type)
         {
+            var result = builder.BuildQuestion(request, type);
             throw new NotImplementedException();
         }
 

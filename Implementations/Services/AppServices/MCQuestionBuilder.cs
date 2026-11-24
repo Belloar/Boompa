@@ -4,7 +4,9 @@ namespace Boompa.Implementations.Services.AppServices
 {
     public class MCQuestionBuilder : QuestionBuilder
     {
-        protected override IQuestion Build() => new MultiChoiceQuestionProduct();
+        public override QuestionType Type => QuestionType.MultipleChoice;
+
+        protected override IQuestion Build(QuestionType type) => new MultiChoiceQuestionProduct();
 
     }
 }

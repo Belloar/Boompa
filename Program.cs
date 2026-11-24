@@ -21,26 +21,7 @@ var connectionString = builder.Configuration.GetConnectionString("MySqlString");
 // Add services to the container.
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IIdentityRepository,IdentityRepository>();
-builder.Services.AddScoped <IIdentityService, IdentityService>();
-builder.Services.AddScoped<ILearnerRepository, LearnerRepository>();
-builder.Services.AddScoped<ILearnerService, LearnerService>();
-builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-builder.Services.AddScoped<IAdminService,AdminService>();
-builder.Services.AddScoped<ISourceMaterialService, SourceMaterialService>();
-builder.Services.AddScoped<ISourceMaterialRepository, SourceMaterialRepository>();
-builder.Services.AddScoped<IAIQuestionGenerator,TypeformService>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IVisitRepository, VisitRepository>();
-builder.Services.AddScoped<IVisitService, VisitService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IContestRecordRepository, ContestRecordRepository>();
-builder.Services.AddScoped<IContestRecordService, ContestRecordService>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IQuestionService, QuestionService>();
-builder.Services.AddScoped<FreeTextQuestionBuilder>();
-builder.Services.AddScoped<MCQuestionBuilder>();
-builder.Services.AddScoped<MRQuestionBuilder>();
+builder.Services.AddBoompaServices();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

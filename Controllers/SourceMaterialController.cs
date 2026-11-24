@@ -1,6 +1,7 @@
 ﻿using Boompa.DTO;
 using Boompa.Entities;
 using Boompa.Implementations.Services;
+using Boompa.Implementations.Services.AppServices;
 using Boompa.Interfaces.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -76,13 +77,16 @@ namespace Boompa.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddQuestion([FromForm] MaterialDTO.QuestionModel model)
+        [HttpPost("questionType")]
+        public async Task<IActionResult> AddQuestion(
+            [FromForm] MaterialDTO.QuestionModel model,
+            [FromQuery] string questionType)
         {
             if (model == null) { return BadRequest("Material not received"); }
             try
             {
-                await questionService.AddQuestion(model);
+                var questionTypeEnum = ResolveQuestionType(questionType);
+                await questionService.AddQuestion(model, questionTypeEnum);
                 return Created();
             }
             catch (Exception ex)
@@ -108,7 +112,7 @@ namespace Boompa.Controllers
 
 
         [HttpGet("{pageNumber}")]
-        public async Task<IActionResult> GetSourceMaterialNames( int pageNumber)
+        public async Task<IActionResult> GetSourceMaterialNames(int pageNumber)
         {
             var result = await sourceMaterialService.GetAllSourceMaterials(pageNumber);
             return Ok(result);
@@ -121,7 +125,7 @@ namespace Boompa.Controllers
             if (categoryId == Guid.Empty)
             {
                 return BadRequest("something went wrong");
-                
+
             }
             var result = await sourceMaterialService.GetAllSourceMaterials(categoryId, pageNumber);
             return Ok(result);
@@ -150,7 +154,7 @@ namespace Boompa.Controllers
         [Authorize(Roles = "Learner")]
         public async Task<IActionResult> GetTopCategories()
         {
-            var learnerId= HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            var learnerId = HttpContext.User.FindFirstValue(ClaimTypes.Email);
             if (learnerId == null) { return StatusCode(500, "invalid credentials"); }
 
             var result = await sourceMaterialService.GetTopCategories(learnerId);
@@ -171,5 +175,20 @@ namespace Boompa.Controllers
             var result = await sourceMaterialService.GetCategories();
             return Ok(result);
         }
+
+        private QuestionType ResolveQuestionType(string type)
+        {
+            return type.Trim().ToLower() switch
+            {
+                "freetext" => QuestionType.FreeText,
+                "multiplechoice" => QuestionType.MultipleChoice,
+                "multipleresponse" => QuestionType.MultipleResponse,
+                _ => throw new ArgumentException($"Invalid question type: {type}")
+            };
+
+
+        }
     }
+
+    
 }
